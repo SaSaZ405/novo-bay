@@ -38,7 +38,7 @@
             z-index: 1;
         }
 
-        /* 3. لایه روی ویدیو برای چیدن گل‌میخ‌ها */
+        /* 3. لایه روی ویدیو برای چیدن گل‌میخ‌ها (فعلاً خالی) */
         .interactive-layer {
             position: absolute;
             top: 0;
@@ -48,10 +48,10 @@
             z-index: 2;
         }
 
-        /* 4. استایل ظاهر هر گل‌میخ (کوچک و شبیه شاسی کنترل) */
+        /* 4. استایل ظاهر هر گل‌میخ (برای استفاده‌های بعدی محفوظ است) */
         .stud-button {
             position: absolute;
-            width: 28px;  /* اندازه کوچک و ظریف */
+            width: 28px;  
             height: 28px;
             transform: translate(-50%, -50%);
             cursor: pointer;
@@ -67,38 +67,8 @@
             filter: drop-shadow(0 2px 5px rgba(0,0,0,0.9));
         }
         .stud-button:active {
-            transform: translate(-50%, -50%) scale(0.85); /* حس فشردن دکمه */
+            transform: translate(-50%, -50%) scale(0.85);
         }
-
-        /* --------------------------------------------------
-           5. مختصات دقیق درصدی بر اساس نقشه شماره ۱ تا ۱۳ شما
-           (تنها شماره‌های تیک‌خورده ✅ آیکون می‌گیرند)
-        -------------------------------------------------- */
-        
-        /* شماره ۱: دسته کتاب سمت چپ پایین */
-        .pos-1 { top: 68%; left: 22%; }
-
-        /* شماره ۲: قفسه کتاب‌ایستاده سمت چپ */
-        .pos-2 { top: 32%; left: 27%; }
-
-        /* شماره ۳: کتاب تکی وسط بالا */
-        .pos-3 { top: 18%; left: 44%; }
-
-        /* شماره ۴: دسته کتاب سمت راست بالا */
-        .pos-4 { top: 12%; left: 57%; }
-
-        /* شماره ۵: قاب عکس سمت راست */
-        .pos-5 { top: 31%; left: 68%; }
-
-        /* شماره ۶: کره جغرافیایی پایین راست */
-        .pos-6 { top: 58%; left: 74%; }
-
-        /* شماره ۹: لبه راست کتاب مرکزی (دکمه کنترل) */
-        .pos-9 { top: 69%; left: 54%; }
-
-        /* شماره ۱۰: لبه چپ کتاب مرکزی (دکمه کنترل) */
-        .pos-10 { top: 69%; left: 43%; }
-
     </style>
 </head>
 <body>
@@ -109,58 +79,13 @@
             <source src="fireplace-desk.mp4" type="video/mp4">
         </video>
 
-        <!-- نقاط تعاملی گل‌میخ‌ها روی میز -->
+        <!-- نقاط تعاملی گل‌میخ‌ها (فعلاً خالی برای پاک‌سازی) -->
         <div class="interactive-layer">
-            
-            <!-- شماره ۱ ✅ -->
-            <button class="stud-button pos-1" onclick="clickItem(1)">
-                <img src="golmix.png" alt="کلید ۱">
-            </button>
-
-            <!-- شماره ۲ ✅ -->
-            <button class="stud-button pos-2" onclick="clickItem(2)">
-                <img src="golmix.png" alt="کلید ۲">
-            </button>
-
-            <!-- شماره ۳ ✅ -->
-            <button class="stud-button pos-3" onclick="clickItem(3)">
-                <img src="golmix.png" alt="کلید ۳">
-            </button>
-
-            <!-- شماره ۴ ✅ -->
-            <button class="stud-button pos-4" onclick="clickItem(4)">
-                <img src="golmix.png" alt="کلید ۴">
-            </button>
-
-            <!-- شماره ۵ ✅ -->
-            <button class="stud-button pos-5" onclick="clickItem(5)">
-                <img src="golmix.png" alt="کلید ۵">
-            </button>
-
-            <!-- شماره ۶ ✅ -->
-            <button class="stud-button pos-6" onclick="clickItem(6)">
-                <img src="golmix.png" alt="کلید ۶">
-            </button>
-
-            <!-- شماره ۹ ✅ -->
-            <button class="stud-button pos-9" onclick="clickItem(9)">
-                <img src="golmix.png" alt="کلید ۹">
-            </button>
-
-            <!-- شماره ۱۰ ✅ -->
-            <button class="stud-button pos-10" onclick="clickItem(10)">
-                <img src="golmix.png" alt="کلید ۱۰">
-            </button>
-
         </div>
     </div>
 
     <script>
-        // عملکرد دکمه‌ها موقع لمس/کلیک
-        function clickItem(number) {
-            console.log("دکمه شماره " + number + " لمس شد.");
-            alert("شما روی نقطه تعاملی شماره " + number + " کلیک کردید!");
-        }
+        // اسکریپت‌ها برای مرحله بعد آماده خواهند شد
     </script>
 </body>
 </html>
