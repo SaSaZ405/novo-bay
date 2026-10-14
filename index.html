@@ -13,8 +13,8 @@
         }
 
         body {
-            background-color: #0b0d12;
-            color: #f0f2f5;
+            background-color: #ffffff; /* پس‌زمینه سفید خالص */
+            color: #1f2430; /* متن تیره برای خوانایی روی سفید */
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -28,9 +28,9 @@
             position: absolute;
             top: 20px;
             left: 20px;
-            background: #1f2430;
-            border: 1px solid #30363d;
-            color: #c9d1d9;
+            background: #f8f9fa;
+            border: 1px solid #d0d7de;
+            color: #24292f;
             padding: 6px 12px;
             border-radius: 8px;
             font-size: 13px;
@@ -38,15 +38,15 @@
             z-index: 100;
         }
 
-        /* بخش اول: درگاه ورودی دو گزینه‌ای */
+        /* درگاه ورودی اولیه (صفحه دو گزینه‌ای) */
         .gateway-container {
             width: 100%;
             max-width: 480px;
-            background: #151821;
-            border: 1px solid #232736;
+            background: #ffffff;
+            border: 1px solid #e1e4e8;
             border-radius: 20px;
             padding: 40px 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             text-align: center;
         }
 
@@ -54,13 +54,13 @@
             font-size: 28px;
             font-weight: 800;
             letter-spacing: 2px;
-            color: #ffffff;
+            color: #111827;
             margin-bottom: 8px;
         }
 
         .brand-subtitle {
             font-size: 14px;
-            color: #8b949e;
+            color: #6b7280;
             margin-bottom: 30px;
         }
 
@@ -84,26 +84,26 @@
         .btn-primary {
             background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
             color: #ffffff;
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.25);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35);
         }
 
         .btn-secondary {
-            background: #1f2430;
-            color: #c9d1d9;
-            border: 1px solid #30363d;
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
         }
 
         .btn-secondary:hover {
-            background: #282e3d;
-            color: #ffffff;
+            background: #e5e7eb;
+            color: #111827;
         }
 
-        /* بخش دوم: لایه توضیحات روی عکس چالش */
+        /* لایه توضیحات روی عکس چالش */
         .view-section {
             display: none;
             width: 100%;
@@ -112,54 +112,56 @@
         }
 
         .challenge-overlay {
-            background: rgba(21, 24, 33, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border: 1px solid #30363d;
+            border: 1px solid #e1e4e8;
             border-radius: 16px;
             padding: 30px;
             text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
         }
 
         .challenge-overlay h2 {
             font-size: 20px;
-            color: #f39c12;
+            color: #b45309;
             margin-bottom: 15px;
         }
 
         .challenge-overlay p {
             font-size: 14px;
-            color: #c9d1d9;
+            color: #4b5563;
             line-height: 1.8;
             margin-bottom: 25px;
             text-align: justify;
         }
 
-        /* بخش سوم: پنل نقشه، تایمر و باکس کلمه */
+        /* صفحه نقشه، تایمر و باکس کلمه */
         .map-game-panel {
             display: none;
             width: 100%;
             max-width: 600px;
-            background: #151821;
-            border: 1px solid #30363d;
+            background: #ffffff;
+            border: 1px solid #e1e4e8;
             border-radius: 16px;
             padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
         }
 
         .game-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #0b0d12;
+            background: #f9fafb;
             padding: 12px 16px;
             border-radius: 10px;
-            border: 1px solid #232736;
+            border: 1px solid #e5e7eb;
             margin-bottom: 15px;
             gap: 10px;
         }
 
         .timer-box {
             font-size: 13px;
-            color: #f39c12;
+            color: #b45309;
             font-weight: bold;
         }
 
@@ -171,16 +173,16 @@
 
         .word-input-box input {
             flex: 1;
-            background: #1f2430;
-            border: 1px solid #30363d;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
             border-radius: 8px;
             padding: 8px 12px;
-            color: #fff;
+            color: #1f2937;
             font-size: 14px;
         }
 
         .word-input-box button {
-            background: #27ae60;
+            background: #10b981;
             color: white;
             border: none;
             padding: 8px 16px;
@@ -192,14 +194,14 @@
         .map-placeholder {
             width: 100%;
             height: 300px;
-            background: #1f2430;
+            background: #f3f4f6;
             border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #8b949e;
+            color: #6b7280;
             font-size: 14px;
-            border: 1px dashed #30363d;
+            border: 1px dashed #d1d5db;
         }
     </style>
 </head>
@@ -272,7 +274,6 @@
         }
 
         function goToMainSite() {
-            // اینجا می‌توانید لینک یا کدهای لندینگ اصلیِ قبلی را قرار دهید یا به صفحه دیگری هدایت کنید
             alert("انتقال به لندینگ اصلی و وب‌سایت نوو-بی...");
         }
 
