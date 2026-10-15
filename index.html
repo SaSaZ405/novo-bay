@@ -68,18 +68,18 @@
             animation: pulse-glow 2s infinite;
         }
 
-        /* تنظیم دقیق روی گونه خورشید */
+        /* دکمه روی گونه خورشید (منتهاالیه سمت چپ تصویر) */
         .sun-cheek-btn {
             top: 55%;
-            left: 38%;
+            left: 22%;
             background: radial-gradient(circle, #ffcc00 0%, #ff6600 100%);
             box-shadow: 0 0 12px #ff9900;
         }
 
-        /* تنظیم دقیق روی گونه ماه */
+        /* دکمه روی گونه ماه (منتهاالیه سمت راست تصویر) */
         .moon-cheek-btn {
-            top: 54%;
-            left: 66%;
+            top: 51%;
+            left: 78%;
             background: radial-gradient(circle, #a5f3fc 0%, #38bdf8 100%);
             box-shadow: 0 0 12px #38bdf8;
         }
@@ -99,7 +99,7 @@
             }
         }
 
-        /* عنوان کوچک هنگام نگه‌داشتن روی دکمه‌ها */
+        /* پاپ‌آپ کوچک مینیمال برای نمایش عنوان (چالش / وب‌سایت) روی دکمه‌ها */
         .tooltip {
             position: absolute;
             bottom: 30px;
@@ -122,7 +122,7 @@
             opacity: 1;
         }
 
-        /* پنل بازی چالش */
+        /* پنل چالش و نقشه (مخفی در ابتدا) */
         .map-game-panel {
             display: none;
             position: fixed;
@@ -214,30 +214,30 @@
 </head>
 <body>
 
-    <!-- منوی زبان در گوشه بالای صفحه -->
+    <!-- منوی زبان بسیار کوچک در گوشه بالای صفحه -->
     <div class="lang-container">
         <select class="lang-switcher" id="langSelect" onchange="changeLanguage()">
-            <option value="fa">FA</option>
-            <option value="en">EN</option>
-            <option value="ar">AR</option>
-            <option value="ru">RU</option>
-            <option value="zh">ZH</option>
-            <option value="fr">FR</option>
-            <option value="de">DE</option>
-            <option value="it">IT</option>
+            <option value="fa">فارسی</option>
+            <option value="en">English</option>
+            <option value="ar">العربية (الإمارات)</option>
+            <option value="ru">Русский</option>
+            <option value="zh">中文</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="it">Italiano</option>
         </select>
     </div>
 
-    <!-- پس‌زمینه تصویر خورشید و ماه -->
+    <!-- پس‌زمینه تصویر خورشید و ماه (تمام صفحه) -->
     <div class="bg-container">
         <img src="sun-moon.jpg" alt="NOVO-BAY Universe">
         
-        <!-- دکمه روی گونه خورشید (چالش) -->
+        <!-- دکمه روی گونه خورشید (منتهاالیه سمت چپ) -->
         <button class="pulse-btn sun-cheek-btn" onclick="openChallenge()">
             <span class="tooltip">چالش</span>
         </button>
 
-        <!-- دکمه روی گونه ماه (وب‌سایت) -->
+        <!-- دکمه روی گونه ماه (منتهاالیه سمت راست) -->
         <button class="pulse-btn moon-cheek-btn" onclick="openWebsite()">
             <span class="tooltip">وب‌سایت</span>
         </button>
@@ -283,7 +283,7 @@
             let word = document.getElementById('userWord').value;
             if(word.trim() !== "") {
                 alert("کلمه ثبت شد: " + word);
-                document.getElementById('userWord').value = "";
+                document.getElementById('userWord',).value = "";
             }
         }
 
