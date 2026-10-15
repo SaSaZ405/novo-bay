@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOVO-BAY | نوو-بی</title>
+    <title>NOVO-BAY</title>
     <style>
         * {
             margin: 0;
@@ -12,156 +12,148 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        body {
-            background-color: #ffffff; /* پس‌زمینه سفید خالص */
-            color: #1f2430; /* متن تیره برای خوانایی روی سفید */
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            position: relative;
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #05070b;
         }
 
-        /* منوی انتخاب زبان (۸ زبان) بالای صفحه */
-        .lang-switcher {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: #f8f9fa;
-            border: 1px solid #d0d7de;
-            color: #24292f;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            cursor: pointer;
+        /* پس‌زمینه تمام صفحه با تصویر خورشید و ماه */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .bg-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.9);
+        }
+
+        /* آیکون بسیار کوچک انتخاب زبان در گوشه بالای صفحه */
+        .lang-container {
+            position: fixed;
+            top: 15px;
+            right: 15px;
             z-index: 100;
         }
 
-        /* درگاه ورودی اولیه (صفحه دو گزینه‌ای) */
-        .gateway-container {
-            width: 100%;
-            max-width: 480px;
-            background: #ffffff;
-            border: 1px solid #e1e4e8;
-            border-radius: 20px;
-            padding: 40px 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            text-align: center;
-        }
-
-        .brand-title {
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: #111827;
-            margin-bottom: 8px;
-        }
-
-        .brand-subtitle {
-            font-size: 14px;
-            color: #6b7280;
-            margin-bottom: 30px;
-        }
-
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 18px 20px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+        .lang-switcher {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: #ffffff;
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.25);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            outline: none;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35);
+        /* دکمه‌های گرد چشمک‌زن روی گونه‌ها */
+        .pulse-btn {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+            animation: pulse-glow 2s infinite;
         }
 
-        .btn-secondary {
-            background: #f3f4f6;
-            color: #374151;
-            border: 1px solid #d1d5db;
+        /* دکمه روی گونه خورشید (سمت چپ تصویر - رنگ طلایی/آتشین) */
+        .sun-cheek-btn {
+            top: 53%;
+            left: 45%;
+            background: radial-gradient(circle, #ffcc00 0%, #ff6600 100%);
+            box-shadow: 0 0 12px #ff9900;
         }
 
-        .btn-secondary:hover {
-            background: #e5e7eb;
-            color: #111827;
+        /* دکمه روی گونه ماه (سمت راست تصویر - رنگ نقره‌ای/آبی ملایم) */
+        .moon-cheek-btn {
+            top: 52%;
+            left: 58%;
+            background: radial-gradient(circle, #a5f3fc 0%, #38bdf8 100%);
+            box-shadow: 0 0 12px #38bdf8;
         }
 
-        /* لایه توضیحات روی عکس چالش */
-        .view-section {
-            display: none;
-            width: 100%;
-            max-width: 600px;
-            text-align: right;
+        @keyframes pulse-glow {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+            }
+            70% {
+                transform: scale(1.15);
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
         }
 
-        .challenge-overlay {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid #e1e4e8;
-            border-radius: 16px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        /* پاپ‌آپ کوچک مینیمال برای نمایش عنوان (وب‌سایت / چالش) روی دکمه‌ها */
+        .tooltip {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
-        .challenge-overlay h2 {
-            font-size: 20px;
-            color: #b45309;
-            margin-bottom: 15px;
+        .pulse-btn:hover .tooltip {
+            opacity: 1;
         }
 
-        .challenge-overlay p {
-            font-size: 14px;
-            color: #4b5563;
-            line-height: 1.8;
-            margin-bottom: 25px;
-            text-align: justify;
-        }
-
-        /* صفحه نقشه، تایمر و باکس کلمه */
+        /* پنل چالش و نقشه (مخفی در ابتدا) */
         .map-game-panel {
             display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 600px;
-            background: #ffffff;
-            border: 1px solid #e1e4e8;
-            border-radius: 16px;
+            height: 100%;
+            background: rgba(5, 7, 11, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 50;
             padding: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            box-sizing: border-box;
+            color: #fff;
         }
 
         .game-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #f9fafb;
+            background: #111827;
             padding: 12px 16px;
             border-radius: 10px;
-            border: 1px solid #e5e7eb;
-            margin-bottom: 15px;
-            gap: 10px;
+            border: 1px solid #1f2937;
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin: 20px auto;
         }
 
         .timer-box {
             font-size: 13px;
-            color: #b45309;
+            color: #f59e0b;
             font-weight: bold;
         }
 
@@ -169,15 +161,16 @@
             display: flex;
             gap: 8px;
             flex: 1;
+            margin-right: 15px;
         }
 
         .word-input-box input {
             flex: 1;
-            background: #ffffff;
-            border: 1px solid #d1d5db;
+            background: #1f2937;
+            border: 1px solid #374151;
             border-radius: 8px;
             padding: 8px 12px;
-            color: #1f2937;
+            color: #fff;
             font-size: 14px;
         }
 
@@ -193,59 +186,65 @@
 
         .map-placeholder {
             width: 100%;
-            height: 300px;
-            background: #f3f4f6;
-            border-radius: 10px;
+            max-width: 600px;
+            height: 350px;
+            margin: 0 auto;
+            background: #111827;
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #6b7280;
+            color: #9ca3af;
             font-size: 14px;
-            border: 1px dashed #d1d5db;
+            border: 1px dashed #374151;
+        }
+
+        .back-btn {
+            display: block;
+            width: max-content;
+            margin: 20px auto 0;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 6px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <!-- منوی انتخاب ۸ زبان -->
-    <select class="lang-switcher" id="langSelect" onchange="changeLanguage()">
-        <option value="fa">فارسی</option>
-        <option value="en">English</option>
-        <option value="ru">Русский</option>
-        <option value="zh">中文</option>
-        <option value="ar">العربية (الإمارات)</option>
-        <option value="fr">Français</option>
-        <option value="de">Deutsch</option>
-        <option value="it">Italiano</option>
-    </select>
-
-    <!-- درگاه ورودی اولیه (صفحه دو گزینه‌ای) -->
-    <div class="gateway-container" id="gatewayMenu">
-        <h1 class="brand-title">NOVO-BAY</h1>
-        <p class="brand-subtitle">پلتفرم جامع نوو-بی</p>
-
-        <div class="btn-group">
-            <button class="btn btn-primary" onclick="showChallengeIntro()">
-                فکر می‌کنی اینجا قراره چی ببینی؟ (ورود به چالش)
-            </button>
-            <button class="btn btn-secondary" onclick="goToMainSite()">
-                ورود به وب‌سایت اصلی
-            </button>
-        </div>
+    <!-- منوی زبان بسیار کوچک در گوشه بالای صفحه -->
+    <div class="lang-container">
+        <select class="lang-switcher" id="langSelect" onchange="changeLanguage()">
+            <option value="fa">FA</option>
+            <option value="en">EN</option>
+            <option value="ar">AR</option>
+            <option value="ru">RU</option>
+            <option value="zh">ZH</option>
+            <option value="fr">FR</option>
+            <option value="de">DE</option>
+            <option value="it">IT</option>
+        </select>
     </div>
 
-    <!-- لایه توضیحات روی عکس چالش -->
-    <div class="view-section" id="challengeIntro">
-        <div class="challenge-overlay">
-            <h2>خوش آمدید به چالش پیش‌بینی نوو-بی</h2>
-            <p>
-                در این بخش شما وارد یک جریان پویا و تعاملی می‌شوید. با حدس زدن کلمات کلیدی، در پویایی و شکل‌گیری محتوای آینده پلتفرم سهیم باشید. کلمات شما تحلیل شده و روند حرکتی بازار و موضوعات را مشخص می‌کند.
-            </p>
-            <button class="btn btn-primary" onclick="startChallengeMap()">شروع کن</button>
-        </div>
+    <!-- پس‌زمینه تصویر خورشید و ماه (تمام صفحه) -->
+    <div class="bg-container">
+        <!-- نام فایل تصویر را با نام فایل خودتان در گیت‌هاب هماهنگ کنید -->
+        <img src="sun-moon.jpg" alt="NOVO-BAY Universe">
+        
+        <!-- دکمه گرد روی گونه خورشید (ورود به چالش) -->
+        <button class="pulse-btn sun-cheek-btn" onclick="openChallenge()">
+            <span class="tooltip">چالش</span>
+        </button>
+
+        <!-- دکمه گرد روی گونه ماه (ورود به وب‌سایت) -->
+        <button class="pulse-btn moon-cheek-btn" onclick="openWebsite()">
+            <span class="tooltip">وب‌سایت</span>
+        </button>
     </div>
 
-    <!-- صفحه نقشه، تایمر و باکس کلمه -->
+    <!-- پنل بازی چالش (پس از کلیک روی گونه خورشید باز می‌شود) -->
     <div class="map-game-panel" id="mapGamePanel">
         <div class="game-bar">
             <div class="timer-box">
@@ -259,22 +258,21 @@
         <div class="map-placeholder">
             [ نمای نقشه تعاملی و نمودار زنده کلمات ]
         </div>
+        <button class="back-btn" onclick="closeChallenge()">بازگشت به صفحه اصلی</button>
     </div>
 
     <script>
-        function showChallengeIntro() {
-            document.getElementById('gatewayMenu').style.display = 'none';
-            document.getElementById('challengeIntro').style.display = 'block';
-        }
-
-        function startChallengeMap() {
-            document.getElementById('challengeIntro').style.display = 'none';
+        function openChallenge() {
             document.getElementById('mapGamePanel').style.display = 'block';
             startTimer();
         }
 
-        function goToMainSite() {
-            alert("انتقال به لندینگ اصلی و وب‌سایت نوو-بی...");
+        function closeChallenge() {
+            document.getElementById('mapGamePanel').style.display = 'none';
+        }
+
+        function openWebsite() {
+            alert("انتقال به وب‌سایت اصلی...");
         }
 
         function changeLanguage() {
@@ -285,16 +283,18 @@
         function submitWord() {
             let word = document.getElementById('userWord').value;
             if(word.trim() !== "") {
-                alert("کلمه شما با موفقیت ثبت شد: " + word);
+                alert("کلمه ثبت شد: " + word);
                 document.getElementById('userWord').value = "";
             }
         }
 
         // تایمر یک‌ساعته
+        let timerInterval;
         function startTimer() {
+            if(timerInterval) return;
             let totalSeconds = 3600;
             let rounds = 1;
-            setInterval(() => {
+            timerInterval = setInterval(() => {
                 let minutes = Math.floor(totalSeconds / 60);
                 let seconds = totalSeconds % 60;
                 document.getElementById('timer').innerText = 
