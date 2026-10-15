@@ -99,7 +99,7 @@
             }
         }
 
-        /* راهنما (Tooltip) که با یک بار لمس ظاهر می‌شود */
+        /* راهنما (Tooltip) که با تک‌ضرب ظاهر می‌شود */
         .tooltip {
             position: absolute;
             bottom: 30px;
@@ -120,95 +120,6 @@
 
         .tooltip.show {
             opacity: 1;
-        }
-
-        /* پنل چالش و نقشه */
-        .map-game-panel {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(5, 7, 11, 0.92);
-            backdrop-filter: blur(12px);
-            z-index: 50;
-            padding: 20px;
-            box-sizing: border-box;
-            color: #fff;
-        }
-
-        .game-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #111827;
-            padding: 12px 16px;
-            border-radius: 10px;
-            border: 1px solid #1f2937;
-            margin-bottom: 20px;
-            max-width: 600px;
-            margin: 20px auto;
-        }
-
-        .timer-box {
-            font-size: 13px;
-            color: #f59e0b;
-            font-weight: bold;
-        }
-
-        .word-input-box {
-            display: flex;
-            gap: 8px;
-            flex: 1;
-            margin-right: 15px;
-        }
-
-        .word-input-box input {
-            flex: 1;
-            background: #1f2937;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 8px 12px;
-            color: #fff;
-            font-size: 14px;
-        }
-
-        .word-input-box button {
-            background: #10b981;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .map-placeholder {
-            width: 100%;
-            max-width: 600px;
-            height: 350px;
-            margin: 0 auto;
-            background: #111827;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #9ca3af;
-            font-size: 14px;
-            border: 1px dashed #374151;
-        }
-
-        .back-btn {
-            display: block;
-            width: max-content;
-            margin: 20px auto 0;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #fff;
-            padding: 6px 16px;
-            border-radius: 6px;
-            cursor: pointer;
         }
     </style>
 </head>
@@ -232,48 +143,29 @@
     <div class="bg-container">
         <img src="sun-moon.jpg" alt="NOVO-BAY Universe">
         
-        <!-- دکمه خورشید (چالش) با قابلیت تشخیص تک‌ضرب و دوبار ضربه -->
+        <!-- دکمه خورشید (چالش) -->
         <button class="pulse-btn sun-cheek-btn" onclick="handleSunClick(event)">
             <span class="tooltip" id="sunTooltip">چالش</span>
         </button>
 
-        <!-- دکمه ماه (وب‌سایت) با قابلیت تشخیص تک‌ضرب و دوبار ضربه -->
+        <!-- دکمه ماه (وب‌سایت) -->
         <button class="pulse-btn moon-cheek-btn" onclick="handleMoonClick(event)">
             <span class="tooltip" id="moonTooltip">وب‌سایت</span>
         </button>
     </div>
 
-    <!-- پنل بازی چالش -->
-    <div class="map-game-panel" id="mapGamePanel">
-        <div class="game-bar">
-            <div class="timer-box">
-                ⏳ دور: <span id="roundCount">۱</span> | <span id="timer">59:59</span>
-            </div>
-            <div class="word-input-box">
-                <input type="text" id="userWord" placeholder="کلمه خود را بنویسید...">
-                <button onclick="submitWord()">ثبت</button>
-            </div>
-        </div>
-        <div class="map-placeholder" id="mapPlaceholderText">
-            [ نمای نقشه تعاملی و نمودار زنده کلمات ]
-        </div>
-        <button class="back-btn" id="backBtnText" onclick="closeChallenge()">بازگشت به صفحه اصلی</button>
-    </div>
-
     <script>
-        // دیکشنری ساده برای ۸ زبان انتخابی شما
         const translations = {
-            fa: { challenge: "چالش", website: "وب‌سایت", placeholder: "کلمه خود را بنویسید...", submit: "ثبت", back: "بازگشت به صفحه اصلی", mapText: "[ نمای نقشه تعاملی و نمودار زنده کلمات ]" },
-            en: { challenge: "Challenge", website: "Website", placeholder: "Type your word...", submit: "Submit", back: "Back to Home", mapText: "[ Interactive Map & Live Word Chart ]" },
-            ar: { challenge: "تحدي", website: "موقع الكتروني", placeholder: "اكتب كلمتك...", submit: "إرسال", back: "العودة للرئيسية", mapText: "[ خريطة تفاعلية ورسم بياني للكلمات ]" },
-            ru: { challenge: "Вызов", website: "Сайт", placeholder: "Введите слово...", submit: "Отправить", back: "Назад", mapText: "[ Интерактивная карта и график ]" },
-            zh: { challenge: "挑战", website: "网站", placeholder: "输入您的单词...", submit: "提交", back: "返回首页", mapText: "[ 交互式地图与实时词图 ]" },
-            fr: { challenge: "Défi", website: "Site web", placeholder: "Tapez votre mot...", submit: "Soumettre", back: "Retour", mapText: "[ Carte interactive et graphique ]" },
-            de: { challenge: "Herausforderung", website: "Webseite", placeholder: "Wort eingeben...", submit: "Senden", back: "Zurück", mapText: "[ Interaktive Karte & Live-Diagramm ]" },
-            it: { challenge: "Sfida", website: "Sito web", placeholder: "Digita la tua parola...", submit: "Invia", back: "Torna indietro", mapText: "[ Mappa interattiva e grafico ]" }
+            fa: { challenge: "چالش", website: "وب‌سایت" },
+            en: { challenge: "Challenge", website: "Website" },
+            ar: { challenge: "تحدي", website: "موقع الكتروني" },
+            ru: { challenge: "Вызов", website: "Сайт" },
+            zh: { challenge: "挑战", website: "网站" },
+            fr: { challenge: "Défi", website: "Site web" },
+            de: { challenge: "Herausforderung", website: "Webseite" },
+            it: { challenge: "Sfida", website: "Sito web" }
         };
 
-        // اعمال زبان ذخیره‌شده به محض لود صفحه
         window.onload = function() {
             const savedLang = localStorage.getItem('novobay_lang') || 'fa';
             document.getElementById('langSelect').value = savedLang;
@@ -282,7 +174,7 @@
 
         function changeLanguage() {
             const lang = document.getElementById('langSelect').value;
-            localStorage.setItem('novobay_lang', lang); // ذخیره زبان انتخابی در حافظه مرورگر
+            localStorage.setItem('novobay_lang', lang);
             applyLanguage(lang);
         }
 
@@ -290,7 +182,6 @@
             const t = translations[lang];
             if (!t) return;
 
-            // تنظیم جهت صفحه (RTL برای فارسی و عربی، LTR برای بقیه)
             const htmlRoot = document.getElementById('htmlRoot');
             if (lang === 'fa' || lang === 'ar') {
                 htmlRoot.setAttribute('dir', 'rtl');
@@ -300,100 +191,55 @@
                 htmlRoot.setAttribute('lang', lang);
             }
 
-            // به‌روزرسانی متن‌ها در کل بخش‌های سایت
             document.getElementById('sunTooltip').innerText = t.challenge;
             document.getElementById('moonTooltip').innerText = t.website;
-            document.getElementById('userWord').placeholder = t.placeholder;
-            document.querySelector('.word-input-box button').innerText = t.submit;
-            document.getElementById('mapPlaceholderText').innerText = t.mapText;
-            document.getElementById('backBtnText').innerText = t.back;
         }
 
-        // مدیریت تک‌کلیک (نمایش عنوان) و دوبار کلیک (ورود) برای خورشید (چالش)
+        // مدیریت تک‌کلیک (نمایش نام دکمه) و دوبار کلیک (هدایت به لینک چالش) برای خورشید
         let sunClicks = 0;
         let sunTimer = null;
         function handleSunClick(event) {
             event.stopPropagation();
             sunClicks++;
+            
             if (sunClicks === 1) {
-                // کلیک اول: نمایش عنوان روی دکمه
+                // ضربه اول: نمایش نام دکمه به زبان انتخابی
                 document.getElementById('sunTooltip').classList.add('show');
                 sunTimer = setTimeout(() => {
                     sunClicks = 0;
                     document.getElementById('sunTooltip').classList.remove('show');
-                }, 1500);
+                }, 1500); // پس از 1.5 ثانیه راهنما محو می‌شود
             } else if (sunClicks === 2) {
-                // کلیک دوم (دوبار ضربه): ورود به چالش
+                // ضربه دوم (سریع): هدایت مستقیم به لینک چالش
                 clearTimeout(sunTimer);
                 sunClicks = 0;
                 document.getElementById('sunTooltip').classList.remove('show');
-                openChallenge();
+                window.location.href = "https://sasaz405.github.io/novo-bay-showcase/";
             }
         }
 
-        // مدیریت تک‌کلیک و دوبار کلیک برای ماه (وب‌سایت)
+        // مدیریت تک‌کلیک و دوبار کلیک برای ماه (وب‌سایت اصلی)
         let moonClicks = 0;
         let moonTimer = null;
         function handleMoonClick(event) {
             event.stopPropagation();
             moonClicks++;
+            
             if (moonClicks === 1) {
-                // کلیک اول: نمایش عنوان روی دکمه
+                // ضربه اول: نمایش نام وب‌سایت
                 document.getElementById('moonTooltip').classList.add('show');
                 moonTimer = setTimeout(() => {
                     moonClicks = 0;
                     document.getElementById('moonTooltip').classList.remove('show');
                 }, 1500);
             } else if (moonClicks === 2) {
-                // کلیک دوم (دوبار ضربه): ورود به وب‌سایت اصلی
+                // ضربه دوم: اطلاع‌رسانی حضور در سایت اصلی
                 clearTimeout(moonTimer);
                 moonClicks = 0;
                 document.getElementById('moonTooltip').classList.remove('show');
-                openWebsite();
+                alert("شما در حال حاضر در وب‌سایت اصلی هستید.");
             }
-        }
-
-        function openChallenge() {
-            document.getElementById('mapGamePanel').style.display = 'block';
-            startTimer();
-        }
-
-        function closeChallenge() {
-            document.getElementById('mapGamePanel').style.display = 'none';
-        }
-
-        function openWebsite() {
-            alert("انتقال به وب‌سایت اصلی...");
-        }
-
-        function submitWord() {
-            let word = document.getElementById('userWord').value;
-            if(word.trim() !== "") {
-                alert("کلمه ثبت شد: " + word);
-                document.getElementById('userWord').value = "";
-            }
-        }
-
-        let timerInterval;
-        function startTimer() {
-            if(timerInterval) return;
-            let totalSeconds = 3600;
-            let rounds = 1;
-            timerInterval = setInterval(() => {
-                let minutes = Math.floor(totalSeconds / 60);
-                let seconds = totalSeconds % 60;
-                document.getElementById('timer').innerText = 
-                    (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-                
-                totalSeconds--;
-                if (totalSeconds < 0) {
-                    totalSeconds = 3600;
-                    rounds++;
-                    document.getElementById('roundCount').innerText = rounds;
-                }
-            }, 1000);
         }
     </script>
-
 </body>
 </html>
