@@ -68,7 +68,7 @@
             animation: pulse-glow 2s infinite;
         }
 
-        /* دکمه روی گونه خورشید (سمت چپ) */
+        /* دکمه روی گونه خورشید (سمت چپ) -> هدایت به چالش */
         .sun-cheek-btn {
             top: 55%;
             left: 22%;
@@ -76,7 +76,7 @@
             box-shadow: 0 0 12px #ff9900;
         }
 
-        /* دکمه روی گونه ماه (سمت راست) */
+        /* دکمه روی گونه ماه (سمت راست) -> وب‌سایت اصلی */
         .moon-cheek-btn {
             top: 51%;
             left: 78%;
@@ -203,17 +203,16 @@
             sunClicks++;
             
             if (sunClicks === 1) {
-                // ضربه اول: نمایش نام دکمه به زبان انتخابی
                 document.getElementById('sunTooltip').classList.add('show');
                 sunTimer = setTimeout(() => {
                     sunClicks = 0;
                     document.getElementById('sunTooltip').classList.remove('show');
-                }, 1500); // پس از 1.5 ثانیه راهنما محو می‌شود
+                }, 1500);
             } else if (sunClicks === 2) {
-                // ضربه دوم (سریع): هدایت مستقیم به لینک چالش
                 clearTimeout(sunTimer);
                 sunClicks = 0;
                 document.getElementById('sunTooltip').classList.remove('show');
+                // هدایت دقیق به مخزن شوکیس
                 window.location.href = "https://sasaz405.github.io/novo-bay-showcase/";
             }
         }
@@ -226,14 +225,12 @@
             moonClicks++;
             
             if (moonClicks === 1) {
-                // ضربه اول: نمایش نام وب‌سایت
                 document.getElementById('moonTooltip').classList.add('show');
                 moonTimer = setTimeout(() => {
                     moonClicks = 0;
                     document.getElementById('moonTooltip').classList.remove('show');
                 }, 1500);
             } else if (moonClicks === 2) {
-                // ضربه دوم: اطلاع‌رسانی حضور در سایت اصلی
                 clearTimeout(moonTimer);
                 moonClicks = 0;
                 document.getElementById('moonTooltip').classList.remove('show');
