@@ -1,78 +1,104 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOVO-BAY | Global Preview & Landing</title>
+    <title>NOVO-BAY | Global Cross-Border Infrastructure</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* پس‌زمینه تصویر هنری خورشید و ماه */
+        body {
+            background-image: url('https://raw.githubusercontent.com/SaSaZ405/novo_bay/main/artwork.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
 </head>
-<body class="font-sans antialiased bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white min-h-screen flex flex-col justify-between p-6">
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between p-6 select-none relative bg-gray-900 text-white">
 
-    <!-- هدر صفحه اول با کنترلر موسیقی و انتخاب زبان -->
-    <header class="max-w-7xl mx-auto w-full flex items-center justify-between">
-        <div class="flex items-center space-x-2 space-x-reverse">
-            <!-- ویجت پخش‌کننده موسیقی یکپارچه -->
-            <div class="flex items-center bg-white/10 backdrop-blur-md p-1.5 rounded-xl border border-white/20 space-x-2 space-x-reverse">
-                <button onclick="toggleAudio()" id="audioBtn" class="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition">
-                    <i id="playIcon" class="fa-solid fa-play"></i>
-                    <span id="audioStatus">پخش موزیک</span>
-                </button>
-                <select onchange="changeTrack(this.value)" class="text-[11px] font-bold bg-transparent outline-none text-gray-200 cursor-pointer max-w-[140px] truncate">
-                    <option value="0" class="bg-gray-800">🎵 روز برفی (مجید انتظامی)</option>
-                    <option value="1" class="bg-gray-800">🎵 شب‌های زاینده‌رود</option>
-                    <option value="2" class="bg-gray-800">🎼 Experience (Einaudi)</option>
-                    <option value="3" class="bg-gray-800">🎼 Nostalgia (Yanni)</option>
-                </select>
-            </div>
+    <!-- لایه اورلی ملایم برای خوانایی بهتر متون -->
+    <div class="fixed inset-0 bg-black/30 backdrop-blur-[2px] pointer-events-none z-0"></div>
+
+    <!-- هدر بالای صفحه -->
+    <header class="relative z-10 max-w-7xl mx-auto w-full flex items-center justify-between">
+        
+        <!-- عنوان اصلی برند -->
+        <div class="bg-black/40 backdrop-blur-md px-5 py-2 rounded-2xl border border-white/20 shadow-lg">
+            <h1 class="text-xl md:text-2xl font-black tracking-widest text-amber-400">NOVO-BAY</h1>
+            <p class="text-[9px] text-gray-300 uppercase tracking-widest">Cross-Border Omnichannel Infrastructure</p>
         </div>
 
-        <div class="text-center">
-            <h1 class="text-2xl font-black tracking-widest">NOVO-BAY</h1>
-            <p class="text-[10px] text-gray-400 uppercase tracking-widest">Global Cross-Border Infrastructure</p>
-        </div>
-
-        <div class="flex items-center space-x-2 space-x-reverse">
-            <select class="bg-white/10 backdrop-blur-md text-white border border-white/20 p-2.5 rounded-xl text-xs font-bold outline-none cursor-pointer">
-                <option value="fa" class="bg-gray-800">فارسی (FA)</option>
-                <option value="en" class="bg-gray-800">English (EN)</option>
-                <option value="zh" class="bg-gray-800">中文 (ZH)</option>
+        <!-- بخش ابزارها: انتخاب زبان -->
+        <div class="flex items-center gap-3">
+            <select id="langSelector" onchange="changeLanguage(this.value)" class="bg-black/50 backdrop-blur-md text-white border border-white/30 px-3 py-2 rounded-xl text-xs font-bold outline-none cursor-pointer hover:bg-black/70 transition">
+                <option value="fa" class="bg-gray-900">فارسی (FA)</option>
+                <option value="en" class="bg-gray-900">English (EN)</option>
+                <option value="zh" class="bg-gray-900">中文 (ZH)</option>
             </select>
         </div>
     </header>
 
-    <!-- محتوای اصلی لندینگ پیش‌نمایش -->
-    <main class="max-w-4xl mx-auto text-center space-y-8 my-auto py-12">
-        <div class="space-y-4">
-            <span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">
-                نسخه پیش‌نمایش و درگاه ورودی
+    <!-- محتوای کارت مرکزی لندینگ -->
+    <main class="relative z-10 max-w-3xl mx-auto text-center my-auto py-12 px-4">
+        <div class="bg-black/50 backdrop-blur-lg p-8 md:p-12 rounded-3xl border border-white/20 shadow-2xl space-y-6">
+            
+            <span class="inline-block bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-wider">
+                پیش‌نمایش رسمی پلتفرم نووبی
             </span>
-            <h2 class="text-4xl md:text-5xl font-black tracking-tight leading-tight">
-                پلتفرم هوشمند تحلیل و سرمایه‌گذاری <span class="text-amber-400">نووبی</span>
-            </h2>
-            <p class="text-gray-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-                آماده‌سازی ایده‌ها، چالش‌های ۱۰ روزه کلمات و عناوین، و تخصیص سهام خرد (Micro-Equity) در بستری امن و یکپارچه.
-            </p>
-        </div>
 
-        <!-- دکمه ورود به محیط اصلی چالش (شوکیس) -->
-        <div>
-            <a href="https://sasaz405.github.io/novo-bay-showcase/" class="inline-flex items-center gap-3 bg-amber-500 hover:bg-amber-600 text-gray-950 font-black text-sm px-8 py-4 rounded-2xl shadow-xl transition-all transform hover:scale-105">
-                <span>ورود به محیط اصلی چالش و نقشه GIS</span>
-                <i class="fa-solid fa-arrow-left"></i>
-            </a>
+            <h2 class="text-3xl md:text-5xl font-black text-white leading-tight tracking-wide">
+                مرکز تعاملی <span class="text-amber-400">ایده‌پردازی، تحلیل</span> و سرمایه‌گذاری
+            </h2>
+
+            <p class="text-gray-200 text-xs md:text-sm leading-relaxed max-w-2xl mx-auto font-medium">
+                چرخه ۱۰ روزه استخراج کلمات طلایی، تعیین و تحلیل عناوین ارگانیک، و تخصیص سهام خرد (Micro-Equity) با پشتیبانی سیستم هوشمند GIS و آنالیز فضایی.
+            </p>
+
+            <!-- دکمه هدایت به محیط اصلی چالش (شوکیس) -->
+            <div class="pt-4">
+                <a href="https://sasaz405.github.io/novo-bay-showcase/" class="inline-flex items-center gap-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-gray-950 font-black text-xs md:text-sm px-8 py-4 rounded-2xl shadow-2xl transition-all transform hover:scale-105 border border-amber-300/40">
+                    <span>ورود به شوکیس چالش و نقشه GIS</span>
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
+
         </div>
     </main>
 
-    <!-- فوتر صفحه -->
-    <footer class="max-w-7xl mx-auto w-full text-center text-xs text-gray-500 border-t border-white/10 pt-4">
-        <p>© تمامی حقوق برای هلتینگ نووبی محفوظ است.</p>
+    <!-- فوتر پایین صفحه -->
+    <footer class="relative z-10 max-w-7xl mx-auto w-full text-center text-[11px] text-gray-300 font-medium">
+        <p>© تمامی حقوق برای مجموعه NOVO-BAY محفوظ است.</p>
     </footer>
 
-    <!-- اسکریپت داخلی کنترلر موسیقی (بدون نیاز به فایل جداگانه) -->
+    <!-- ویجت شناور پخش‌کننده موسیقی (پایین سمت راست) -->
+    <div id="floatingAudioPlayer" class="fixed bottom-6 right-6 z-50 bg-black/80 backdrop-blur-xl text-white p-3 rounded-2xl shadow-2xl border border-white/20 flex items-center gap-3">
+        
+        <!-- دکمه پخش / توقف -->
+        <button onclick="toggleAudio()" id="audioBtn" class="bg-amber-500 hover:bg-amber-600 text-gray-950 w-10 h-10 rounded-xl font-bold flex items-center justify-center transition shadow cursor-pointer">
+            <i id="playIcon" class="fa-solid fa-play text-base"></i>
+        </button>
+
+        <!-- منوی انتخاب موسیقی -->
+        <div class="flex flex-col text-right">
+            <span id="audioStatus" class="text-[10px] text-amber-400 font-bold">پخش موزیک بی‌کلام</span>
+            <select id="trackSelect" onchange="changeTrack(this.value)" class="text-[11px] font-bold bg-transparent outline-none text-gray-200 cursor-pointer mt-0.5 max-w-[170px] truncate">
+                <option value="0" class="bg-gray-900">🎵 روز برفی (مجید انتظامی)</option>
+                <option value="1" class="bg-gray-900">🎵 شب‌های زاینده‌رود</option>
+                <option value="2" class="bg-gray-900">🎼 Experience (Einaudi)</option>
+                <option value="3" class="bg-gray-900">🎼 Nostalgia (Yanni)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- اسکریپت هوشمند کنترل موزیک -->
     <script>
         const playlist = [
             { title: "روز برفی (مجید انتظامی)", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
@@ -93,7 +119,10 @@
                 audioPlayer.play().then(() => {
                     if (audioStatus) audioStatus.innerText = "در حال پخش...";
                     if (playIcon) playIcon.className = "fa-solid fa-pause";
-                }).catch(err => console.log("خطای پخش موسیقی:", err));
+                }).catch(err => {
+                    console.log("خطای پخش:", err);
+                    if (audioStatus) audioStatus.innerText = "خطا در پخش";
+                });
             } else {
                 audioPlayer.pause();
                 if (audioStatus) audioStatus.innerText = "پخش موزیک";
@@ -104,10 +133,20 @@
         function changeTrack(index) {
             currentTrackIndex = parseInt(index);
             const wasPlaying = !audioPlayer.paused;
+            
             audioPlayer.src = playlist[currentTrackIndex].src;
+            
             if (wasPlaying) {
-                audioPlayer.play();
+                audioPlayer.play().then(() => {
+                    document.getElementById('audioStatus').innerText = "در حال پخش...";
+                });
+            } else {
+                document.getElementById('audioStatus').innerText = "آماده پخش";
             }
+        }
+
+        function changeLanguage(lang) {
+            console.log("Language changed to:", lang);
         }
     </script>
 </body>
