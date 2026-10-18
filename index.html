@@ -23,7 +23,7 @@
             overflow: hidden;
         }
 
-        /* انیمیشن چشمک‌زن دکمه‌های خورشید و ماه */
+        /* انیمیشن چشمک‌زن دکمه‌ها */
         @keyframes pulseGlow {
             0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
             50% { transform: scale(1.25); opacity: 1; box-shadow: 0 0 20px rgba(255,255,255,0.9); }
@@ -33,37 +33,35 @@
             animation: pulseGlow 2s infinite ease-in-out;
         }
 
-        /* انیمیشن حرکت بسیار آرامی، نامنظم و محو لوگوی NOVO-BAY در پس‌زمینه */
+        /* انیمیشن حرکت نامنظم، محو و ۵۵ سانتیمتری لوگوی Novobay */
         @keyframes floatRandomLogo {
-            0% { transform: translate(5vw, 10vh) scale(0.85) rotate(0deg); opacity: 0.12; }
-            25% { transform: translate(65vw, 25vh) scale(1.05) rotate(3deg); opacity: 0.20; }
-            50% { transform: translate(35vw, 60vh) scale(0.9) rotate(-2deg); opacity: 0.10; }
-            75% { transform: translate(10vw, 40vh) scale(1) rotate(2deg); opacity: 0.18; }
-            100% { transform: translate(5vw, 10vh) scale(0.85) rotate(0deg); opacity: 0.12; }
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 0.12; }
+            25% { transform: translate(45vw, 20vh) rotate(5deg); opacity: 0.18; }
+            50% { transform: translate(20vw, 50vh) rotate(-3deg); opacity: 0.08; }
+            75% { transform: translate(50vw, 35vh) rotate(4deg); opacity: 0.15; }
+            100% { transform: translate(0, 0) rotate(0deg); opacity: 0.12; }
         }
-
         .floating-logo-img {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 130px;
+            top: 10%;
+            left: 5%;
+            width: 24rem; /* حدود ۵۵ سانتی‌متر متناسب با مقیاس صفحه نمایش */
             height: auto;
-            border-radius: 20px;
-            animation: floatRandomLogo 32s infinite ease-in-out alternate;
+            max-width: 80vw;
+            animation: floatRandomLogo 28s infinite ease-in-out alternate;
             pointer-events: none;
-            mix-blend-mode: screen; /* ترکیب نرم و رویایی با پس‌زمینه */
-            filter: blur(1.5px) drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
-            z-index: 5;
+            filter: blur(1.5px) drop-shadow(0 0 15px rgba(255,255,255,0.2));
+            mix-blend-mode: screen;
         }
     </style>
 </head>
 <body class="relative flex flex-col justify-between select-none h-screen p-4 overflow-hidden">
 
     <!-- لایه تاریک‌کننده ملایم پس‌زمینه -->
-    <div class="absolute inset-0 bg-black/20 pointer-events-none z-0"></div>
+    <div class="absolute inset-0 bg-black/25 pointer-events-none z-0"></div>
 
-    <!-- لوگوی متحرک، محو و بسیار کمرنگ NOVO-BAY -->
-    <img src="./Logo.novo_bay.jpg" alt="NOVO-BAY Floating Logo" class="floating-logo-img">
+    <!-- لوگوی متحرک، محو و کمرنگ NOVO-BAY -->
+    <img src="./Logo.novo_bay.jpg" alt="NOVO-BAY Watermark" class="floating-logo-img z-0">
 
     <!-- نوار بالای صفحه: ردیف افقی شامل مترجم زبان و پخش‌کننده موسیقی -->
     <header class="relative z-20 w-full max-w-6xl mx-auto flex items-center justify-between bg-black/40 backdrop-blur-md p-3 rounded-2xl border border-white/10 shadow-lg">
@@ -81,7 +79,7 @@
             </select>
         </div>
 
-        <!-- ۲. پخش‌کننده موسیقی -->
+        <!-- ۲. پخش‌کننده موسیقی (پخش و توقف + انتخاب آهنگ) -->
         <div class="flex items-center gap-2">
             <button onclick="toggleAudio()" id="audioBtn" class="bg-amber-500 hover:bg-amber-400 text-gray-950 w-8 h-8 rounded-lg font-bold flex items-center justify-center transition shadow cursor-pointer">
                 <i id="playIcon" class="fa-solid fa-play text-xs"></i>
