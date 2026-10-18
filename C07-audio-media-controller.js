@@ -1,6 +1,5 @@
 // C07-audio-media-controller.js - کنترلر هوشمند پخش موسیقی نووبی
 
-// لیست موزیک‌های بی‌کلام شاخص ایران و جهان (لینک‌های مستقیم نمونه)
 const playlist = [
     { title: "روز برفی (مجید انتظامی)", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
     { title: "شب‌های زاینده‌رود (بی‌کلام)", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
@@ -12,7 +11,6 @@ let currentTrackIndex = 0;
 const audioPlayer = new Audio(playlist[0].src);
 audioPlayer.loop = true;
 
-// تابع پخش و توقف
 function toggleAudio() {
     const audioStatus = document.getElementById('audioStatus');
     const playIcon = document.getElementById('playIcon');
@@ -29,7 +27,6 @@ function toggleAudio() {
     }
 }
 
-// تغییر موزیک از لیست کشویی
 function changeTrack(index) {
     currentTrackIndex = parseInt(index);
     const wasPlaying = !audioPlayer.paused;
