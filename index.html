@@ -20,44 +20,96 @@
             background-color: #0b0f19;
             margin: 0;
             height: 100vh;
+            width: 100vw;
             overflow: hidden;
         }
 
-        /* انیمیشن چشمک‌زن (پالس) */
+        /* انیمیشن چشمک‌زن ملایم و زنده */
         @keyframes pulseGlow {
-            0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 10px rgba(255,255,255,0.4); }
-            50% { transform: scale(1.12); opacity: 1; box-shadow: 0 0 25px rgba(255,255,255,0.8); }
-            100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 10px rgba(255,255,255,0.4); }
+            0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
+            50% { transform: scale(1.25); opacity: 1; box-shadow: 0 0 20px rgba(255,255,255,0.9); }
+            100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
         }
 
-        .pulsing-btn {
-            animation: pulseGlow 2.5s infinite ease-in-out;
+        .pulsing-dot {
+            animation: pulseGlow 2s infinite ease-in-out;
         }
     </style>
 </head>
 <body class="relative flex items-center justify-center select-none">
 
-    <!-- لایه تاریک‌کننده ملایم پس‌زمینه برای کنتراست بهتر -->
-    <div class="absolute inset-0 bg-black/25 pointer-events-none"></div>
+    <!-- لایه تاریک‌کننده ملایم پس‌زمینه -->
+    <div class="absolute inset-0 bg-black/20 pointer-events-none"></div>
 
-    <!-- کانتینر اصلی صفحه با موقعیت نسبی برای جای‌گذاری دقیق دکمه‌ها روی صورت خورشید و ماه -->
-    <div class="relative w-full h-full max-w-5xl mx-auto flex items-center justify-between px-6 md:px-16">
+    <!-- کانتینر اصلی جهت جای‌گذاری دکمه‌ها روی لبه‌های تصویر -->
+    <div class="relative w-full h-full max-w-7xl mx-auto flex items-center justify-between p-4">
 
-        <!-- دکمه اول: روی صورت خورشید (سمت چپ تصویر) -->
-        <a href="https://sasaz405.github.io/novo-bay-showcase/" 
-           class="pulsing-btn absolute left-[15%] md:left-[22%] top-[55%] md:top-[50%] -translate-y-1/2 bg-amber-500/90 hover:bg-amber-400 text-gray-950 font-black text-xs md:text-sm py-3 px-5 rounded-2xl shadow-2xl border-2 border-amber-200/60 backdrop-blur-md transition-all flex items-center gap-2 cursor-pointer z-20">
-            <i class="fa-solid fa-sun text-amber-950">/i>
-            <span>ورود به شوکیس چالش</span>
-        </a>
+        <!-- دکمه دایره‌ای کوچک خورشید (منتهی‌الیه سمت چپ) -->
+        <div class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 flex flex-col items-center z-30">
+            <!-- پیام راهنما (ضربه اول) -->
+            <div id="sunTooltip" class="hidden mb-3 bg-amber-950/90 text-amber-200 border border-amber-400/50 text-[11px] font-bold py-1.5 px-3 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
+                صفحه چالش 🚀
+            </div>
+            <!-- دکمه دایره‌ای کوچک -->
+            <button onclick="handleButtonClick('sun')" 
+                    class="pulsing-dot w-7 h-7 md:w-9 md:h-9 bg-amber-500 hover:bg-amber-400 text-gray-950 rounded-full flex items-center justify-center shadow-lg border-2 border-amber-200 cursor-pointer transition-transform active:scale-90">
+                <i class="fa-solid fa-sun text-xs md:text-sm"></i>
+            </button>
+        </div>
 
-        <!-- دکمه دوم: روی صورت ماه (سمت راست تصویر) -->
-        <a href="#more" onclick="alert('گزینه‌های بعدی به زودی اضافه خواهند شد...')" 
-           class="pulsing-btn absolute right-[15%] md:right-[22%] top-[35%] md:top-[40%] -translate-y-1/2 bg-sky-400/90 hover:bg-sky-300 text-gray-950 font-black text-xs md:text-sm py-3 px-5 rounded-2xl shadow-2xl border-2 border-sky-200/60 backdrop-blur-md transition-all flex items-center gap-2 cursor-pointer z-20">
-            <i class="fa-solid fa-moon text-sky-950"></i>
-            <span>بخش‌های آتی</span>
-        </a>
+        <!-- دکمه دایره‌ای کوچک ماه (منتهی‌الیه سمت راست) -->
+        <div class="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 flex flex-col items-center z-30">
+            <!-- پیام راهنما (ضربه اول) -->
+            <div id="moonTooltip" class="hidden mb-3 bg-sky-950/90 text-sky-200 border border-sky-400/50 text-[11px] font-bold py-1.5 px-3 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
+                سایت اصلی 🌐
+            </div>
+            <!-- دکمه دایره‌ای کوچک -->
+            <button onclick="handleButtonClick('moon')" 
+                    class="pulsing-dot w-7 h-7 md:w-9 md:h-9 bg-sky-400 hover:bg-sky-300 text-gray-950 rounded-full flex items-center justify-center shadow-lg border-2 border-sky-200 cursor-pointer transition-transform active:scale-90">
+                <i class="fa-solid fa-moon text-xs md:text-sm"></i>
+            </button>
+        </div>
 
     </div>
+
+    <script>
+        // وضعیت ضربه‌ها برای دکمه‌ها
+        let sunClicked = false;
+        let moonClicked = false;
+
+        function handleButtonClick(type) {
+            if (type === 'sun') {
+                const tooltip = document.getElementById('sunTooltip');
+                if (!sunClicked) {
+                    // ضربه اول: نمایش متن راهنما
+                    tooltip.classList.remove('hidden');
+                    sunClicked = true;
+                    // اگر کاربر بعد ۴ ثانیه ضربه دوم را نزد، تولتیپ مخفی می‌شود
+                    setTimeout(() => {
+                        tooltip.classList.add('hidden');
+                        sunClicked = false;
+                    }, 4000);
+                } else {
+                    // ضربه دوم: انتقال به صفحه چالش
+                    window.location.href = "https://sasaz405.github.io/novo-bay-showcase/";
+                }
+            } else if (type === 'moon') {
+                const tooltip = document.getElementById('moonTooltip');
+                if (!moonClicked) {
+                    // ضربه اول: نمایش متن راهنما
+                    tooltip.classList.remove('hidden');
+                    moonClicked = true;
+                    setTimeout(() => {
+                        tooltip.classList.add('hidden');
+                        moonClicked = false;
+                    }, 4000);
+                } else {
+                    // ضربه دوم: ورود به سایت اصلی (لینک را می‌توانید در صورت نیاز تغییر دهید)
+                    alert("انتقال به سایت اصلی نووبی...");
+                }
+            }
+        }
+    </script>
 
 </body>
 </html>
