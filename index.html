@@ -12,17 +12,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* پس‌زمینه تصویر هنری خورشید و ماه */
+        /* پس‌زمینه تصویر هنری خورشید و ماه با نام صحیح فایل */
         body {
-            background-image: url('https://raw.githubusercontent.com/SaSaZ405/novo_bay/main/artwork.jpg');
+            background-image: url('./sun-moon.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
+            background-color: #0f172a;
         }
     </style>
 </head>
-<body class="font-sans antialiased min-h-screen flex flex-col justify-between p-6 select-none relative bg-gray-900 text-white">
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between p-6 select-none relative text-white">
 
     <!-- لایه اورلی ملایم برای خوانایی بهتر متون -->
     <div class="fixed inset-0 bg-black/30 backdrop-blur-[2px] pointer-events-none z-0"></div>
@@ -81,12 +82,10 @@
     <!-- ویجت شناور پخش‌کننده موسیقی (پایین سمت راست) -->
     <div id="floatingAudioPlayer" class="fixed bottom-6 right-6 z-50 bg-black/80 backdrop-blur-xl text-white p-3 rounded-2xl shadow-2xl border border-white/20 flex items-center gap-3">
         
-        <!-- دکمه پخش / توقف -->
         <button onclick="toggleAudio()" id="audioBtn" class="bg-amber-500 hover:bg-amber-600 text-gray-950 w-10 h-10 rounded-xl font-bold flex items-center justify-center transition shadow cursor-pointer">
             <i id="playIcon" class="fa-solid fa-play text-base"></i>
         </button>
 
-        <!-- منوی انتخاب موسیقی -->
         <div class="flex flex-col text-right">
             <span id="audioStatus" class="text-[10px] text-amber-400 font-bold">پخش موزیک بی‌کلام</span>
             <select id="trackSelect" onchange="changeTrack(this.value)" class="text-[11px] font-bold bg-transparent outline-none text-gray-200 cursor-pointer mt-0.5 max-w-[170px] truncate">
@@ -98,7 +97,7 @@
         </div>
     </div>
 
-    <!-- اسکریپت هوشمند کنترل موزیک -->
+    <!-- اسکریپت کنترل موزیک -->
     <script>
         const playlist = [
             { title: "روز برفی (مجید انتظامی)", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
@@ -108,7 +107,7 @@
         ];
 
         let currentTrackIndex = 0;
-        const audioPlayer = new Audio(playlist[0].src);
+        let audioPlayer = new Audio(playlist[0].src);
         audioPlayer.loop = true;
 
         function toggleAudio() {
@@ -121,7 +120,7 @@
                     if (playIcon) playIcon.className = "fa-solid fa-pause";
                 }).catch(err => {
                     console.log("خطای پخش:", err);
-                    if (audioStatus) audioStatus.innerText = "خطا در پخش";
+                    if (audioStatus) audioStatus.innerText = "لطفاً دوباره بزنید";
                 });
             } else {
                 audioPlayer.pause();
@@ -134,14 +133,18 @@
             currentTrackIndex = parseInt(index);
             const wasPlaying = !audioPlayer.paused;
             
-            audioPlayer.src = playlist[currentTrackIndex].src;
+            audioPlayer.pause();
+            audioPlayer = new Audio(playlist[currentTrackIndex].src);
+            audioPlayer.loop = true;
             
             if (wasPlaying) {
                 audioPlayer.play().then(() => {
                     document.getElementById('audioStatus').innerText = "در حال پخش...";
+                    document.getElementById('playIcon').className = "fa-solid fa-pause";
                 });
             } else {
                 document.getElementById('audioStatus').innerText = "آماده پخش";
+                document.getElementById('playIcon').className = "fa-solid fa-play";
             }
         }
 
