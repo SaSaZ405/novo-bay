@@ -1,254 +1,112 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" id="htmlRoot">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">NOVO-BAY</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #05070b;
-        }
-
-        /* پس‌زمینه تمام صفحه با تصویر خورشید و ماه */
-        .bg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .bg-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.9);
-        }
-
-        /* منوی زبان در گوشه بالای صفحه */
-        .lang-container {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            z-index: 100;
-        }
-
-        .lang-switcher {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
-            outline: none;
-        }
-
-        /* دکمه‌های گرد چشمک‌زن روی گونه‌ها */
-        .pulse-btn {
-            position: absolute;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            z-index: 10;
-            animation: pulse-glow 2s infinite;
-        }
-
-        /* دکمه روی گونه خورشید (سمت چپ) -> هدایت به چالش */
-        .sun-cheek-btn {
-            top: 55%;
-            left: 22%;
-            background: radial-gradient(circle, #ffcc00 0%, #ff6600 100%);
-            box-shadow: 0 0 12px #ff9900;
-        }
-
-        /* دکمه روی گونه ماه (سمت راست) -> وب‌سایت اصلی */
-        .moon-cheek-btn {
-            top: 51%;
-            left: 78%;
-            background: radial-gradient(circle, #a5f3fc 0%, #38bdf8 100%);
-            box-shadow: 0 0 12px #38bdf8;
-        }
-
-        @keyframes pulse-glow {
-            0% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-            }
-            70% {
-                transform: scale(1.15);
-                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
-            }
-            100% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-            }
-        }
-
-        /* راهنما (Tooltip) که با تک‌ضرب ظاهر می‌شود */
-        .tooltip {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(8px);
-            color: #fff;
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            white-space: nowrap;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .tooltip.show {
-            opacity: 1;
-        }
-    </style>
+    <title>NOVO-BAY | Global Preview & Landing</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="font-sans antialiased bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white min-h-screen flex flex-col justify-between p-6">
 
-    <!-- منوی زبان -->
-    <div class="lang-container">
-        <select class="lang-switcher" id="langSelect" onchange="changeLanguage()">
-            <option value="fa">فارسی</option>
-            <option value="en">English</option>
-            <option value="ar">العربية (الإمارات)</option>
-            <option value="ru">Русский</option>
-            <option value="zh">中文</option>
-            <option value="fr">Français</option>
-            <option value="de">Deutsch</option>
-            <option value="it">Italiano</option>
-        </select>
-    </div>
+    <!-- هدر صفحه اول با کنترلر موسیقی و انتخاب زبان -->
+    <header class="max-w-7xl mx-auto w-full flex items-center justify-between">
+        <div class="flex items-center space-x-2 space-x-reverse">
+            <!-- ویجت پخش‌کننده موسیقی یکپارچه -->
+            <div class="flex items-center bg-white/10 backdrop-blur-md p-1.5 rounded-xl border border-white/20 space-x-2 space-x-reverse">
+                <button onclick="toggleAudio()" id="audioBtn" class="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition">
+                    <i id="playIcon" class="fa-solid fa-play"></i>
+                    <span id="audioStatus">پخش موزیک</span>
+                </button>
+                <select onchange="changeTrack(this.value)" class="text-[11px] font-bold bg-transparent outline-none text-gray-200 cursor-pointer max-w-[140px] truncate">
+                    <option value="0" class="bg-gray-800">🎵 روز برفی (مجید انتظامی)</option>
+                    <option value="1" class="bg-gray-800">🎵 شب‌های زاینده‌رود</option>
+                    <option value="2" class="bg-gray-800">🎼 Experience (Einaudi)</option>
+                    <option value="3" class="bg-gray-800">🎼 Nostalgia (Yanni)</option>
+                </select>
+            </div>
+        </div>
 
-    <!-- ویجت پخش‌کننده موسیقی -->
-<div class="flex items-center bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow border border-white/50 space-x-2 space-x-reverse">
-    <button onclick="toggleAudio()" id="audioBtn" class="interactive-element bg-amber-50 hover:bg-amber-100 p-2 rounded-lg text-xs font-bold flex items-center gap-1.5 text-amber-800 transition">
-        <i id="playIcon" class="fa-solid fa-play text-amber-600"></i>
-        <span id="audioStatus">پخش موزیک</span>
-    </button>
-    <select onchange="changeTrack(this.value)" class="text-[11px] font-bold bg-transparent outline-none text-gray-700 cursor-pointer max-w-[130px] truncate">
-        <option value="0">🎵 روز برفی (مجید انتظامی)</option>
-        <option value="1">🎵 شب‌های زاینده‌رود</option>
-        <option value="2">🎼 Experience (Einaudi)</option>
-        <option value="3">🎼 Nostalgia (Yanni)</option>
-    </select>
-</div>
+        <div class="text-center">
+            <h1 class="text-2xl font-black tracking-widest">NOVO-BAY</h1>
+            <p class="text-[10px] text-gray-400 uppercase tracking-widest">Global Cross-Border Infrastructure</p>
+        </div>
 
-    <!-- پس‌زمینه تصویر خورشید و ماه -->
-    <div class="bg-container">
-        <img src="sun-moon.jpg" alt="NOVO-BAY Universe">
-        
-        <!-- دکمه خورشید (چالش) -->
-        <button class="pulse-btn sun-cheek-btn" onclick="handleSunClick(event)">
-            <span class="tooltip" id="sunTooltip">چالش</span>
-        </button>
+        <div class="flex items-center space-x-2 space-x-reverse">
+            <select class="bg-white/10 backdrop-blur-md text-white border border-white/20 p-2.5 rounded-xl text-xs font-bold outline-none cursor-pointer">
+                <option value="fa" class="bg-gray-800">فارسی (FA)</option>
+                <option value="en" class="bg-gray-800">English (EN)</option>
+                <option value="zh" class="bg-gray-800">中文 (ZH)</option>
+            </select>
+        </div>
+    </header>
 
-        <!-- دکمه ماه (وب‌سایت) -->
-        <button class="pulse-btn moon-cheek-btn" onclick="handleMoonClick(event)">
-            <span class="tooltip" id="moonTooltip">وب‌سایت</span>
-        </button>
-    </div>
+    <!-- محتوای اصلی لندینگ پیش‌نمایش -->
+    <main class="max-w-4xl mx-auto text-center space-y-8 my-auto py-12">
+        <div class="space-y-4">
+            <span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">
+                نسخه پیش‌نمایش و درگاه ورودی
+            </span>
+            <h2 class="text-4xl md:text-5xl font-black tracking-tight leading-tight">
+                پلتفرم هوشمند تحلیل و سرمایه‌گذاری <span class="text-amber-400">نووبی</span>
+            </h2>
+            <p class="text-gray-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+                آماده‌سازی ایده‌ها، چالش‌های ۱۰ روزه کلمات و عناوین، و تخصیص سهام خرد (Micro-Equity) در بستری امن و یکپارچه.
+            </p>
+        </div>
 
+        <!-- دکمه ورود به محیط اصلی چالش (شوکیس) -->
+        <div>
+            <a href="https://sasaz405.github.io/novo-bay-showcase/" class="inline-flex items-center gap-3 bg-amber-500 hover:bg-amber-600 text-gray-950 font-black text-sm px-8 py-4 rounded-2xl shadow-xl transition-all transform hover:scale-105">
+                <span>ورود به محیط اصلی چالش و نقشه GIS</span>
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+        </div>
+    </main>
+
+    <!-- فوتر صفحه -->
+    <footer class="max-w-7xl mx-auto w-full text-center text-xs text-gray-500 border-t border-white/10 pt-4">
+        <p>© تمامی حقوق برای هلتینگ نووبی محفوظ است.</p>
+    </footer>
+
+    <!-- اسکریپت داخلی کنترلر موسیقی (بدون نیاز به فایل جداگانه) -->
     <script>
-        const translations = {
-            fa: { challenge: "چالش", website: "وب‌سایت" },
-            en: { challenge: "Challenge", website: "Website" },
-            ar: { challenge: "تحدي", website: "موقع الكتروني" },
-            ru: { challenge: "Вызов", website: "Сайт" },
-            zh: { challenge: "挑战", website: "网站" },
-            fr: { challenge: "Défi", website: "Site web" },
-            de: { challenge: "Herausforderung", website: "Webseite" },
-            it: { challenge: "Sfida", website: "Sito web" }
-        };
+        const playlist = [
+            { title: "روز برفی (مجید انتظامی)", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+            { title: "شب‌های زاینده‌رود (بی‌کلام)", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+            { title: "Experience (Ludovico Einaudi)", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+            { title: "Nostalgia (Yanni)", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }
+        ];
 
-        window.onload = function() {
-            const savedLang = localStorage.getItem('novobay_lang') || 'fa';
-            document.getElementById('langSelect').value = savedLang;
-            applyLanguage(savedLang);
-        }
+        let currentTrackIndex = 0;
+        const audioPlayer = new Audio(playlist[0].src);
+        audioPlayer.loop = true;
 
-        function changeLanguage() {
-            const lang = document.getElementById('langSelect').value;
-            localStorage.setItem('novobay_lang', lang);
-            applyLanguage(lang);
-        }
+        function toggleAudio() {
+            const audioStatus = document.getElementById('audioStatus');
+            const playIcon = document.getElementById('playIcon');
 
-        function applyLanguage(lang) {
-            const t = translations[lang];
-            if (!t) return;
-
-            const htmlRoot = document.getElementById('htmlRoot');
-            if (lang === 'fa' || lang === 'ar') {
-                htmlRoot.setAttribute('dir', 'rtl');
-                htmlRoot.setAttribute('lang', lang);
+            if (audioPlayer.paused) {
+                audioPlayer.play().then(() => {
+                    if (audioStatus) audioStatus.innerText = "در حال پخش...";
+                    if (playIcon) playIcon.className = "fa-solid fa-pause";
+                }).catch(err => console.log("خطای پخش موسیقی:", err));
             } else {
-                htmlRoot.setAttribute('dir', 'ltr');
-                htmlRoot.setAttribute('lang', lang);
-            }
-
-            document.getElementById('sunTooltip').innerText = t.challenge;
-            document.getElementById('moonTooltip').innerText = t.website;
-        }
-
-        // مدیریت تک‌کلیک (نمایش نام دکمه) و دوبار کلیک (هدایت به لینک چالش) برای خورشید
-        let sunClicks = 0;
-        let sunTimer = null;
-        function handleSunClick(event) {
-            event.stopPropagation();
-            sunClicks++;
-            
-            if (sunClicks === 1) {
-                document.getElementById('sunTooltip').classList.add('show');
-                sunTimer = setTimeout(() => {
-                    sunClicks = 0;
-                    document.getElementById('sunTooltip').classList.remove('show');
-                }, 1500);
-            } else if (sunClicks === 2) {
-                clearTimeout(sunTimer);
-                sunClicks = 0;
-                document.getElementById('sunTooltip').classList.remove('show');
-                // هدایت دقیق به مخزن شوکیس
-                window.location.href = "https://sasaz405.github.io/novo-bay-showcase/";
+                audioPlayer.pause();
+                if (audioStatus) audioStatus.innerText = "پخش موزیک";
+                if (playIcon) playIcon.className = "fa-solid fa-play";
             }
         }
 
-        // مدیریت تک‌کلیک و دوبار کلیک برای ماه (وب‌سایت اصلی)
-        let moonClicks = 0;
-        let moonTimer = null;
-        function handleMoonClick(event) {
-            event.stopPropagation();
-            moonClicks++;
-            
-            if (moonClicks === 1) {
-                document.getElementById('moonTooltip').classList.add('show');
-                moonTimer = setTimeout(() => {
-                    moonClicks = 0;
-                    document.getElementById('moonTooltip').classList.remove('show');
-                }, 1500);
-            } else if (moonClicks === 2) {
-                clearTimeout(moonTimer);
-                moonClicks = 0;
-                document.getElementById('moonTooltip').classList.remove('show');
-                alert("شما در حال حاضر در وب‌سایت اصلی هستید.");
+        function changeTrack(index) {
+            currentTrackIndex = parseInt(index);
+            const wasPlaying = !audioPlayer.paused;
+            audioPlayer.src = playlist[currentTrackIndex].src;
+            if (wasPlaying) {
+                audioPlayer.play();
             }
         }
     </script>
