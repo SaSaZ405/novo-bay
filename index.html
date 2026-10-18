@@ -10,24 +10,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* استفاده دقیق از عکس اصلی خورشید و ماه خودت */
-        body {
-            background-image: url('./sun-moon.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-color: #050b14;
-            margin: 0;
-            height: 100vh;
+        /* تنظیم ویدیو برای پوشش کامل و تمام‌صفحه به عنوان پس‌زمینه زنده */
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100vw;
-            overflow: hidden;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
         }
 
-        /* انیمیشن چشمک‌زن / پالس نرم (شوک ملایم) برای دکمه‌ها و لوگو */
+        /* انیمیشن چشمک‌زن / پالس نرم برای دکمه‌های دوضربی روی خورشید و ماه */
         @keyframes pulseGlow {
             0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 10px rgba(255,255,255,0.4); }
-            50% { transform: scale(1.12); opacity: 1; box-shadow: 0 0 25px rgba(255,255,255,0.9); }
+            50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 25px rgba(255,255,255,0.9); }
             100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 10px rgba(255,255,255,0.4); }
         }
         .pulsing-dot {
@@ -37,11 +34,17 @@
 </head>
 <body class="relative flex flex-col justify-between select-none h-screen p-4 overflow-hidden">
 
-    <!-- لایه تاریک‌کننده ملایم برای خوانایی بهتر ابزارها -->
+    <!-- ویدیوی پس‌زمینه با قابلیت پخش خودکار، حلقه مداوم و بدون صدا با نام video.mp4 -->
+    <video autoplay muted loop playsinline webkit-playsinline class="bg-video">
+        <source src="./video.mp4" type="video/mp4">
+        مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+    </video>
+
+    <!-- لایه تاریک‌کننده بسیار ملایم برای خوانایی عالی منوها -->
     <div class="absolute inset-0 bg-black/10 pointer-events-none z-0"></div>
 
     <!-- نوار بالای صفحه: منوی ۷ زبان و پلیر موزیک -->
-    <header class="relative z-20 w-full max-w-6xl mx-auto flex items-center justify-between bg-black/50 backdrop-blur-md p-3 rounded-2xl border border-white/15 shadow-xl">
+    <header class="relative z-20 w-full max-w-6xl mx-auto flex items-center justify-between bg-black/40 backdrop-blur-md p-3 rounded-2xl border border-white/15 shadow-xl">
         
         <!-- ۱. منوی انتخاب زبان‌ها -->
         <div class="flex items-center">
@@ -74,7 +77,7 @@
     <!-- کانتینر میانی برای دو دکمه چشمک‌زن روی خورشید و ماه -->
     <div class="relative w-full max-w-7xl mx-auto flex items-center justify-between px-6 my-auto z-20">
 
-        <!-- دکمه خورشید (سمت چپ - ضربه اول راهنما، ضربه دوم صفحه چالش) -->
+        <!-- دکمه خورشید (منتهی‌الیه سمت چپ - ضربه اول راهنما، ضربه دوم صفحه چالش) -->
         <div class="absolute left-4 md:left-12 flex flex-col items-center">
             <div id="sunTooltip" class="hidden mb-2 bg-amber-950/95 text-amber-200 border border-amber-400/60 text-[11px] font-bold py-1 px-3 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
                 صفحه چالش 🚀
@@ -85,7 +88,7 @@
             </button>
         </div>
 
-        <!-- دکمه ماه (سمت راست - ضربه اول راهنما، ضربه دوم سایت اصلی) -->
+        <!-- دکمه ماه (منتهی‌الیه سمت راست - ضربه اول راهنما، ضربه دوم سایت اصلی) -->
         <div class="absolute right-4 md:right-12 flex flex-col items-center">
             <div id="moonTooltip" class="hidden mb-2 bg-sky-950/95 text-sky-200 border border-sky-400/60 text-[11px] font-bold py-1 px-3 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
                 سایت اصلی 🌐
@@ -96,11 +99,6 @@
             </button>
         </div>
 
-    </div>
-
-    <!-- لوگوی شما در گوشه پایین سمت چپ با افکت شوک/پالس ملایم -->
-    <div class="absolute bottom-4 left-4 z-20 pulsing-dot rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 w-16 h-16 md:w-20 md:h-20 bg-black">
-        <img src="./Logo.novo_bay.jpg" alt="NOVO-BAY Logo" class="w-full h-full object-cover">
     </div>
 
     <!-- فوتر پایین صفحه -->
