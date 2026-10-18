@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* تنظیمات ویدیو به عنوان پس‌زمینه تمام‌صفحه */
+        /* تنظیم ویدیو برای پوشش کامل صفحه و پخش روان پس‌زمینه */
         .bg-video {
             position: fixed;
             top: 0;
@@ -34,19 +34,19 @@
 </head>
 <body class="relative flex flex-col justify-between select-none h-screen p-4 overflow-hidden">
 
-    <!-- ویدیوی پس‌زمینه (حلقه شده، بی‌صدا و در حال پخش خودکار) -->
-    <video autoplay muted loop playsinline class="bg-video">
+    <!-- ویدیوی پس‌زمینه با قابلیت پخش خودکار، حلقه مداوم و بدون صدا -->
+    <video autoplay muted loop playsinline webkit-playsinline class="bg-video">
         <source src="./background.mp4" type="video/mp4">
         مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
     </video>
 
-    <!-- لایه تاریک‌کننده ملایم جهت خوانایی بهتر المان‌ها -->
+    <!-- لایه تاریک‌کننده بسیار ملایم برای وضوح دکمه‌ها -->
     <div class="absolute inset-0 bg-black/10 pointer-events-none z-0"></div>
 
-    <!-- نوار بالای صفحه: ردیف افقی شامل مترجم زبان و پخش‌کننده موسیقی -->
+    <!-- نوار بالای صفحه: منوی ۷ زبان و پلیر موزیک -->
     <header class="relative z-20 w-full max-w-6xl mx-auto flex items-center justify-between bg-black/40 backdrop-blur-md p-3 rounded-2xl border border-white/10 shadow-lg">
         
-        <!-- ۱. منوی انتخاب زبان‌ها (۷ زبان) -->
+        <!-- ۱. منوی انتخاب زبان‌ها -->
         <div class="flex items-center">
             <select id="langSelector" onchange="changeLanguage(this.value)" class="bg-black/60 text-white border border-white/20 px-3 py-1.5 rounded-xl text-xs font-bold outline-none cursor-pointer hover:bg-black transition">
                 <option value="fa">فارسی (FA)</option>
