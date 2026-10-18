@@ -10,20 +10,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body {
-            background-image: url('./sun-moon.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-color: #0b0f19;
-            margin: 0;
-            height: 100vh;
+        /* تنظیمات ویدیو به عنوان پس‌زمینه تمام‌صفحه */
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100vw;
-            overflow: hidden;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
         }
 
-        /* انیمیشن چشمک‌زن دکمه‌ها روی خورشید و ماه */
+        /* انیمیشن چشمک‌زن دکمه‌های روی خورشید و ماه */
         @keyframes pulseGlow {
             0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
             50% { transform: scale(1.25); opacity: 1; box-shadow: 0 0 20px rgba(255,255,255,0.9); }
@@ -32,41 +30,18 @@
         .pulsing-dot {
             animation: pulseGlow 2s infinite ease-in-out;
         }
-
-        /* انیمیشن حرکت نامنظم و شناور لوگو در پس‌زمینه با شفافیت محو */
-        @keyframes floatRandom {
-            0% { transform: translate(10vw, 20vh) scale(1); opacity: 0.3; }
-            33% { transform: translate(40vw, 15vh) scale(1.05); opacity: 0.45; }
-            66% { transform: translate(25vw, 50vh) scale(0.95); opacity: 0.25; }
-            100% { transform: translate(10vw, 20vh) scale(1); opacity: 0.3; }
-        }
-
-        .floating-logo-box {
-            position: absolute;
-            width: 45vw; /* ابعاد بزرگ و کاملاً قابل تشخیص در پس‌زمینه */
-            max-width: 320px;
-            animation: floatRandom 35s infinite ease-in-out alternate;
-            pointer-events: none;
-            z-index: 5;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
-        }
     </style>
 </head>
 <body class="relative flex flex-col justify-between select-none h-screen p-4 overflow-hidden">
 
-    <!-- لایه تاریک‌کننده ملایم پس‌زمینه -->
-    <div class="absolute inset-0 bg-black/20 pointer-events-none z-0"></div>
+    <!-- ویدیوی پس‌زمینه (حلقه شده، بی‌صدا و در حال پخش خودکار) -->
+    <video autoplay muted loop playsinline class="bg-video">
+        <source src="./background.mp4" type="video/mp4">
+        مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+    </video>
 
-    <!-- لوگوی شیک، بزرگ، محو و متحرک نووبی (طراحی‌شده دقیق مطابق الگوی شما) -->
-    <div class="floating-logo-box p-6 rounded-3xl bg-[#3b3e5b]/40 backdrop-blur-md border border-white/10 flex flex-col items-center justify-center text-center">
-        <div class="flex items-center gap-1.5 font-black text-4xl md:text-5xl tracking-tighter">
-            <span class="text-white">N</span>
-            <span class="text-amber-200">B</span>
-        </div>
-        <div class="w-full h-[1px] bg-amber-200/40 my-2"></div>
-        <span class="text-[10px] md:text-xs text-amber-100 tracking-[0.25em] font-medium uppercase">NOVO-BAY</span>
-        <div class="w-full h-[1px] bg-amber-200/40 mt-2"></div>
-    </div>
+    <!-- لایه تاریک‌کننده ملایم جهت خوانایی بهتر المان‌ها -->
+    <div class="absolute inset-0 bg-black/10 pointer-events-none z-0"></div>
 
     <!-- نوار بالای صفحه: ردیف افقی شامل مترجم زبان و پخش‌کننده موسیقی -->
     <header class="relative z-20 w-full max-w-6xl mx-auto flex items-center justify-between bg-black/40 backdrop-blur-md p-3 rounded-2xl border border-white/10 shadow-lg">
@@ -99,10 +74,10 @@
 
     </header>
 
-    <!-- کانتینر میانی برای دکمه‌های چشمک‌زن روی خورشید و ماه -->
+    <!-- کانتینر میانی برای دو دکمه چشمک‌زن روی خورشید و ماه -->
     <div class="relative w-full max-w-7xl mx-auto flex items-center justify-between px-4 my-auto z-20">
 
-        <!-- دکمه خورشید (منتهی‌الیه سمت چپ - ضربه اول راهنما، ضربه دوم انتقال به چالش) -->
+        <!-- دکمه خورشید (منتهی‌الیه سمت چپ - ضربه اول راهنما، ضربه دوم انتقال به صفحه چالش) -->
         <div class="absolute left-2 md:left-6 flex flex-col items-center">
             <div id="sunTooltip" class="hidden mb-2 bg-amber-950/90 text-amber-200 border border-amber-400/50 text-[11px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
                 صفحه چالش 🚀
@@ -158,6 +133,7 @@
             }
         }
 
+        // پخش‌کننده موسیقی
         const playlist = [
             { title: "روز برفی", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
             { title: "شب‌های زاینده‌رود", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
