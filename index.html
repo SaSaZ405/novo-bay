@@ -139,6 +139,20 @@
         </select>
     </div>
 
+    <!-- ویجت پخش‌کننده موسیقی -->
+<div class="flex items-center bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow border border-white/50 space-x-2 space-x-reverse">
+    <button onclick="toggleAudio()" id="audioBtn" class="interactive-element bg-amber-50 hover:bg-amber-100 p-2 rounded-lg text-xs font-bold flex items-center gap-1.5 text-amber-800 transition">
+        <i id="playIcon" class="fa-solid fa-play text-amber-600"></i>
+        <span id="audioStatus">پخش موزیک</span>
+    </button>
+    <select onchange="changeTrack(this.value)" class="text-[11px] font-bold bg-transparent outline-none text-gray-700 cursor-pointer max-w-[130px] truncate">
+        <option value="0">🎵 روز برفی (مجید انتظامی)</option>
+        <option value="1">🎵 شب‌های زاینده‌رود</option>
+        <option value="2">🎼 Experience (Einaudi)</option>
+        <option value="3">🎼 Nostalgia (Yanni)</option>
+    </select>
+</div>
+
     <!-- پس‌زمینه تصویر خورشید و ماه -->
     <div class="bg-container">
         <img src="sun-moon.jpg" alt="NOVO-BAY Universe">
