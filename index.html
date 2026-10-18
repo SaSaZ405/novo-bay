@@ -10,24 +10,36 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* پس‌زمینه تصویر ثابت و پایدار خورشید و ماه */
+        /* پس‌زمینه کیهانی ثابت و پایدار بدون وابستگی به فایل خارجی */
         body {
-            background-image: url('./sun-moon.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-color: #0b0f19;
+            background: linear-gradient(135deg, #050b14 0%, #0b1329 50%, #1a102f 100%);
             margin: 0;
             height: 100vh;
             width: 100vw;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+        }
+
+        /* نقاشی دیجیتال خورشید و ماه به‌صورت SVG داخلی برای حذف خطای لود عکس */
+        .art-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.9;
         }
 
         /* انیمیشن چشمک‌زن / پالس نرم (شوک ملایم) برای دکمه‌ها و لوگو */
         @keyframes pulseGlow {
             0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 10px rgba(255,255,255,0.4); }
-            50% { transform: scale(1.12); opacity: 1; box-shadow: 0 0 22px rgba(255,255,255,0.8); }
+            50% { transform: scale(1.12); opacity: 1; box-shadow: 0 0 25px rgba(255,255,255,0.9); }
             100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 10px rgba(255,255,255,0.4); }
         }
         .pulsing-dot {
@@ -35,17 +47,20 @@
         }
     </style>
 </head>
-<body class="relative flex flex-col justify-between select-none h-screen p-4 overflow-hidden">
+<body class="relative select-none h-screen w-screen overflow-hidden">
+
+    <!-- پس‌زمینه گرافیکی پایدار و بدون خطای لود -->
+    <div class="art-bg absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1920&auto=format&fit=crop'); filter: brightness(0.65) contrast(1.1);"></div>
 
     <!-- لایه تاریک‌کننده ملایم پس‌زمینه برای خوانایی بهتر ابزارها -->
-    <div class="absolute inset-0 bg-black/15 pointer-events-none z-0"></div>
+    <div class="absolute inset-0 bg-black/20 pointer-events-none z-0"></div>
 
     <!-- نوار بالای صفحه: منوی ۷ زبان و پلیر موزیک -->
-    <header class="relative z-20 w-full max-w-6xl mx-auto flex items-center justify-between bg-black/40 backdrop-blur-md p-3 rounded-2xl border border-white/10 shadow-lg">
+    <header class="relative z-20 w-full max-w-6xl mx-auto flex items-center justify-between bg-black/50 backdrop-blur-md p-3 rounded-2xl border border-white/15 shadow-xl">
         
         <!-- ۱. منوی انتخاب زبان‌ها -->
         <div class="flex items-center">
-            <select id="langSelector" onchange="changeLanguage(this.value)" class="bg-black/60 text-white border border-white/20 px-3 py-1.5 rounded-xl text-xs font-bold outline-none cursor-pointer hover:bg-black transition">
+            <select id="langSelector" onchange="changeLanguage(this.value)" class="bg-black/70 text-white border border-white/20 px-3 py-1.5 rounded-xl text-xs font-bold outline-none cursor-pointer hover:bg-black transition">
                 <option value="fa">فارسی (FA)</option>
                 <option value="en">English (EN)</option>
                 <option value="zh">中文 (ZH)</option>
@@ -61,7 +76,7 @@
             <button onclick="toggleAudio()" id="audioBtn" class="bg-amber-500 hover:bg-amber-400 text-gray-950 w-8 h-8 rounded-lg font-bold flex items-center justify-center transition shadow cursor-pointer">
                 <i id="playIcon" class="fa-solid fa-play text-xs"></i>
             </button>
-            <select id="trackSelect" onchange="changeTrack(this.value)" class="text-[11px] font-bold bg-black/60 text-gray-200 border border-white/20 px-2 py-1.5 rounded-xl outline-none cursor-pointer max-w-[140px] md:max-w-[180px] truncate">
+            <select id="trackSelect" onchange="changeTrack(this.value)" class="text-[11px] font-bold bg-black/70 text-gray-200 border border-white/20 px-2 py-1.5 rounded-xl outline-none cursor-pointer max-w-[140px] md:max-w-[180px] truncate">
                 <option value="0">🎵 روز برفی (مجید انتظامی)</option>
                 <option value="1">🎵 شب‌های زاینده‌رود</option>
                 <option value="2">🎼 Experience (Einaudi)</option>
@@ -72,34 +87,34 @@
     </header>
 
     <!-- کانتینر میانی برای دو دکمه چشمک‌زن روی خورشید و ماه -->
-    <div class="relative w-full max-w-7xl mx-auto flex items-center justify-between px-4 my-auto z-20">
+    <div class="relative w-full max-w-7xl mx-auto flex items-center justify-between px-6 my-auto z-20">
 
-        <!-- دکمه خورشید (منتهی‌الیه سمت چپ - ضربه اول راهنما، ضربه دوم صفحه چالش) -->
-        <div class="absolute left-2 md:left-6 flex flex-col items-center">
-            <div id="sunTooltip" class="hidden mb-2 bg-amber-950/90 text-amber-200 border border-amber-400/50 text-[11px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
+        <!-- دکمه خورشید (سمت چپ - ضربه اول راهنما، ضربه دوم صفحه چالش) -->
+        <div class="absolute left-4 md:left-12 flex flex-col items-center">
+            <div id="sunTooltip" class="hidden mb-2 bg-amber-950/95 text-amber-200 border border-amber-400/60 text-[11px] font-bold py-1 px-3 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
                 صفحه چالش 🚀
             </div>
             <button onclick="handleButtonClick('sun')" 
-                    class="pulsing-dot w-7 h-7 md:w-9 md:h-9 bg-amber-500 hover:bg-amber-400 text-gray-950 rounded-full flex items-center justify-center shadow-lg border-2 border-amber-200 cursor-pointer transition-transform active:scale-90">
-                <i class="fa-solid fa-sun text-xs"></i>
+                    class="pulsing-dot w-8 h-8 md:w-10 md:h-10 bg-amber-500 hover:bg-amber-400 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border-2 border-amber-200 cursor-pointer transition-transform active:scale-90">
+                <i class="fa-solid fa-sun text-xs md:text-sm"></i>
             </button>
         </div>
 
-        <!-- دکمه ماه (منتهی‌الیه سمت راست - ضربه اول راهنما، ضربه دوم سایت اصلی) -->
-        <div class="absolute right-2 md:right-6 flex flex-col items-center">
-            <div id="moonTooltip" class="hidden mb-2 bg-sky-950/90 text-sky-200 border border-sky-400/50 text-[11px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
+        <!-- دکمه ماه (سمت راست - ضربه اول راهنما، ضربه دوم سایت اصلی) -->
+        <div class="absolute right-4 md:right-12 flex flex-col items-center">
+            <div id="moonTooltip" class="hidden mb-2 bg-sky-950/95 text-sky-200 border border-sky-400/60 text-[11px] font-bold py-1 px-3 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
                 سایت اصلی 🌐
             </div>
             <button onclick="handleButtonClick('moon')" 
-                    class="pulsing-dot w-7 h-7 md:w-9 md:h-9 bg-sky-400 hover:bg-sky-300 text-gray-950 rounded-full flex items-center justify-center shadow-lg border-2 border-sky-200 cursor-pointer transition-transform active:scale-90">
-                <i class="fa-solid fa-moon text-xs"></i>
+                    class="pulsing-dot w-8 h-8 md:w-10 md:h-10 bg-sky-400 hover:bg-sky-300 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border-2 border-sky-200 cursor-pointer transition-transform active:scale-90">
+                <i class="fa-solid fa-moon text-xs md:text-sm"></i>
             </button>
         </div>
 
     </div>
 
     <!-- لوگوی ثابت در گوشه پایین سمت چپ با افکت شوک/پالس ملایم -->
-    <div class="absolute bottom-4 left-4 z-20 pulsing-dot bg-black/50 backdrop-blur-md border border-white/20 p-2.5 rounded-2xl shadow-2xl flex items-center gap-2">
+    <div class="absolute bottom-4 left-4 z-20 pulsing-dot bg-black/60 backdrop-blur-md border border-white/25 p-2.5 rounded-2xl shadow-2xl flex items-center gap-2">
         <div class="flex items-center gap-1 font-black text-lg md:text-xl tracking-tighter">
             <span class="text-white">N</span>
             <span class="text-amber-300">B</span>
