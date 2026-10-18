@@ -23,7 +23,7 @@
             overflow: hidden;
         }
 
-        /* انیمیشن چشمک‌زن دکمه‌ها */
+        /* انیمیشن چشمک‌زن دکمه‌های دایره‌ای */
         @keyframes pulseGlow {
             0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
             50% { transform: scale(1.25); opacity: 1; box-shadow: 0 0 20px rgba(255,255,255,0.9); }
@@ -33,25 +33,26 @@
             animation: pulseGlow 2s infinite ease-in-out;
         }
 
-        /* انیمیشن حرکت نامنظم، محو و ۵۵ سانتیمتری لوگوی Novobay */
+        /* انیمیشن حرکت نامنظم، کمرنگ و محو لوگوی NOVO-BAY */
         @keyframes floatRandomLogo {
-            0% { transform: translate(0, 0) rotate(0deg); opacity: 0.12; }
-            25% { transform: translate(45vw, 20vh) rotate(5deg); opacity: 0.18; }
-            50% { transform: translate(20vw, 50vh) rotate(-3deg); opacity: 0.08; }
-            75% { transform: translate(50vw, 35vh) rotate(4deg); opacity: 0.15; }
-            100% { transform: translate(0, 0) rotate(0deg); opacity: 0.12; }
+            0% { transform: translate(-10%, -10%) scale(0.9) rotate(0deg); opacity: 0.12; }
+            25% { transform: translate(30vw, 20vh) scale(1.05) rotate(3deg); opacity: 0.18; }
+            50% { transform: translate(15vw, 45vh) scale(0.95) rotate(-2deg); opacity: 0.08; }
+            75% { transform: translate(-5vw, 30vh) scale(1) rotate(2deg); opacity: 0.15; }
+            100% { transform: translate(-10%, -10%) scale(0.9) rotate(0deg); opacity: 0.12; }
         }
+
         .floating-logo-img {
             position: absolute;
-            top: 10%;
-            left: 5%;
-            width: 24rem; /* حدود ۵۵ سانتی‌متر متناسب با مقیاس صفحه نمایش */
-            height: auto;
+            width: 555px;
+            height: 555px;
             max-width: 80vw;
-            animation: floatRandomLogo 28s infinite ease-in-out alternate;
+            max-height: 80vh;
+            object-fit: contain;
+            animation: floatRandomLogo 30s infinite ease-in-out alternate;
             pointer-events: none;
-            filter: blur(1.5px) drop-shadow(0 0 15px rgba(255,255,255,0.2));
-            mix-blend-mode: screen;
+            filter: blur(2px) contrast(120%);
+            mix-blend-mode: screen; /* برای ادغام نرم و ملایم با تصویر پس‌زمینه */
         }
     </style>
 </head>
@@ -60,8 +61,8 @@
     <!-- لایه تاریک‌کننده ملایم پس‌زمینه -->
     <div class="absolute inset-0 bg-black/25 pointer-events-none z-0"></div>
 
-    <!-- لوگوی متحرک، محو و کمرنگ NOVO-BAY -->
-    <img src="./Logo.novo_bay.jpg" alt="NOVO-BAY Watermark" class="floating-logo-img z-0">
+    <!-- لوگوی بزرگ، کمرنگ و محو Novobay با حرکت شناور و نامنظم -->
+    <img src="./Logo.novo_bay.jpg" alt="NOVO-BAY Logo" class="floating-logo-img z-0">
 
     <!-- نوار بالای صفحه: ردیف افقی شامل مترجم زبان و پخش‌کننده موسیقی -->
     <header class="relative z-20 w-full max-w-6xl mx-auto flex items-center justify-between bg-black/40 backdrop-blur-md p-3 rounded-2xl border border-white/10 shadow-lg">
@@ -94,7 +95,7 @@
 
     </header>
 
-    <!-- کانتینر میانی برای دکمه‌های چشمک‌زن روی خورشید و ماه -->
+    <!-- کانتینر میانی برای دکمه‌های چشمک‌زن روی صورت خورشید و ماه -->
     <div class="relative w-full max-w-7xl mx-auto flex items-center justify-between px-4 my-auto z-20">
 
         <!-- دکمه خورشید (منتهی‌الیه سمت چپ) -->
@@ -189,7 +190,7 @@
         }
 
         function changeLanguage(lang) {
-            console.log("Language changed to:", lang);
+            console.log("زبان تغییر یافت به:", lang);
         }
     </script>
 </body>
