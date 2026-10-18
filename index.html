@@ -33,23 +33,24 @@
             animation: pulseGlow 2s infinite ease-in-out;
         }
 
-        /* انیمیشن حرکت نامنظم، محو و کمرنگ لوگوی Novobay (۱/۱۶ صفحه) */
+        /* انیمیشن حرکت نامنظم، واضح‌تر و محو مناسب لوگوی Novobay */
         @keyframes floatRandom {
-            0% { transform: translate(5vw, 10vh) scale(0.9); opacity: 0.18; }
-            25% { transform: translate(70vw, 25vh) scale(1.05); opacity: 0.25; }
-            50% { transform: translate(35vw, 65vh) scale(0.95); opacity: 0.12; }
-            75% { transform: translate(15vw, 45vh) scale(1); opacity: 0.22; }
-            100% { transform: translate(5vw, 10vh) scale(0.9); opacity: 0.18; }
+            0% { transform: translate(10vw, 15vh) scale(1); opacity: 0.3; }
+            25% { transform: translate(50vw, 20vh) scale(1.1); opacity: 0.45; }
+            50% { transform: translate(30vw, 50vh) scale(0.95); opacity: 0.25; }
+            75% { transform: translate(20vw, 40vh) scale(1.05); opacity: 0.4; }
+            100% { transform: translate(10vw, 15vh) scale(1); opacity: 0.3; }
         }
         .floating-logo {
             position: absolute;
-            width: 80px; /* اندازه تقریبی ۱/۱۶ کل صفحه */
+            width: 160px; /* اندازه بزرگ‌تر و کاملاً قابل تشخیص روی صفحه */
             height: auto;
-            animation: floatRandom 28s infinite ease-in-out alternate;
+            animation: floatRandom 30s infinite ease-in-out alternate;
             pointer-events: none;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
+            filter: drop-shadow(0 0 12px rgba(255,255,255,0.3));
             mix-blend-mode: screen;
             z-index: 5;
+            border-radius: 20px;
         }
     </style>
 </head>
@@ -58,7 +59,7 @@
     <!-- لایه تاریک‌کننده ملایم پس‌زمینه -->
     <div class="absolute inset-0 bg-black/20 pointer-events-none z-0"></div>
 
-    <!-- لوگوی متحرک، کمرنگ و محو Novobay -->
+    <!-- لوگوی متحرک، واضح و محو Novobay -->
     <img src="./Logo.novo_bay.jpg" alt="NOVO-BAY Logo" class="floating-logo" />
 
     <!-- نوار بالای صفحه: ردیف افقی شامل مترجم زبان و پخش‌کننده موسیقی -->
@@ -126,7 +127,6 @@
 
     <!-- اسکریپت‌های کنترلی -->
     <script>
-        // منطق دکمه‌های دوضربی
         let sunClicked = false;
         let moonClicked = false;
 
@@ -152,7 +152,6 @@
             }
         }
 
-        // منطق پخش‌کننده موسیقی
         const playlist = [
             { title: "روز برفی", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
             { title: "شب‌های زاینده‌رود", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
