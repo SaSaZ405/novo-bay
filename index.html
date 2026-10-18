@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* تنظیم ویدیو برای پوشش کامل و تمام‌صفحه به عنوان پس‌زمینه زنده */
+        /* تنظیم ویدیو به عنوان پس‌زمینه زنده و تمام‌صفحه */
         .bg-video {
             position: fixed;
             top: 0;
@@ -34,7 +34,7 @@
 </head>
 <body class="relative flex flex-col justify-between select-none h-screen p-4 overflow-hidden">
 
-    <!-- ویدیوی پس‌زمینه با قابلیت پخش خودکار، حلقه مداوم و بدون صدا با نام video.mp4 -->
+    <!-- ویدیوی پس‌زمینه با قابلیت پخش خودکار، حلقه مداوم و بدون صدا -->
     <video autoplay muted loop playsinline webkit-playsinline class="bg-video">
         <source src="./video.mp4" type="video/mp4">
         مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
@@ -144,6 +144,7 @@
         let audioPlayer = new Audio(playlist[0].src);
         audioPlayer.loop = true;
 
+        /* پخش یا توقف موزیک */
         function toggleAudio() {
             const playIcon = document.getElementById('playIcon');
             if (audioPlayer.paused) {
@@ -156,6 +157,7 @@
             }
         }
 
+        /* تغییر موزیک از لیست پخش */
         function changeTrack(index) {
             const wasPlaying = !audioPlayer.paused;
             audioPlayer.pause();
