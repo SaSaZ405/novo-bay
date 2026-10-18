@@ -10,30 +10,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* پس‌زمینه کیهانی ثابت و پایدار بدون وابستگی به فایل خارجی */
+        /* استفاده دقیق از عکس اصلی خورشید و ماه خودت */
         body {
-            background: linear-gradient(135deg, #050b14 0%, #0b1329 50%, #1a102f 100%);
+            background-image: url('./sun-moon.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #050b14;
             margin: 0;
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px;
-        }
-
-        /* نقاشی دیجیتال خورشید و ماه به‌صورت SVG داخلی برای حذف خطای لود عکس */
-        .art-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            z-index: -1;
-            opacity: 0.9;
         }
 
         /* انیمیشن چشمک‌زن / پالس نرم (شوک ملایم) برای دکمه‌ها و لوگو */
@@ -47,13 +35,10 @@
         }
     </style>
 </head>
-<body class="relative select-none h-screen w-screen overflow-hidden">
+<body class="relative flex flex-col justify-between select-none h-screen p-4 overflow-hidden">
 
-    <!-- پس‌زمینه گرافیکی پایدار و بدون خطای لود -->
-    <div class="art-bg absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1920&auto=format&fit=crop'); filter: brightness(0.65) contrast(1.1);"></div>
-
-    <!-- لایه تاریک‌کننده ملایم پس‌زمینه برای خوانایی بهتر ابزارها -->
-    <div class="absolute inset-0 bg-black/20 pointer-events-none z-0"></div>
+    <!-- لایه تاریک‌کننده ملایم برای خوانایی بهتر ابزارها -->
+    <div class="absolute inset-0 bg-black/10 pointer-events-none z-0"></div>
 
     <!-- نوار بالای صفحه: منوی ۷ زبان و پلیر موزیک -->
     <header class="relative z-20 w-full max-w-6xl mx-auto flex items-center justify-between bg-black/50 backdrop-blur-md p-3 rounded-2xl border border-white/15 shadow-xl">
@@ -113,14 +98,9 @@
 
     </div>
 
-    <!-- لوگوی ثابت در گوشه پایین سمت چپ با افکت شوک/پالس ملایم -->
-    <div class="absolute bottom-4 left-4 z-20 pulsing-dot bg-black/60 backdrop-blur-md border border-white/25 p-2.5 rounded-2xl shadow-2xl flex items-center gap-2">
-        <div class="flex items-center gap-1 font-black text-lg md:text-xl tracking-tighter">
-            <span class="text-white">N</span>
-            <span class="text-amber-300">B</span>
-        </div>
-        <div class="w-[1px] h-5 bg-white/20"></div>
-        <span class="text-[9px] text-gray-200 tracking-widest uppercase font-bold">NOVO-BAY</span>
+    <!-- لوگوی شما در گوشه پایین سمت چپ با افکت شوک/پالس ملایم -->
+    <div class="absolute bottom-4 left-4 z-20 pulsing-dot rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 w-16 h-16 md:w-20 md:h-20 bg-black">
+        <img src="./Logo.novo_bay.jpg" alt="NOVO-BAY Logo" class="w-full h-full object-cover">
     </div>
 
     <!-- فوتر پایین صفحه -->
