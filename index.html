@@ -34,7 +34,7 @@
 </head>
 <body class="relative flex flex-col justify-between select-none h-screen p-4 overflow-hidden">
 
-    <!-- ویدیوی پس‌زمینه با سرعت استاندارد و طبیعی -->
+    <!-- ویدیوی پس‌زمینه با قابلیت پخش خودکار، حلقه و سرعت تنظیم‌شده -->
     <video id="bgVideo" autoplay muted loop playsinline webkit-playsinline class="bg-video">
         <source src="video.mp4" type="video/mp4">
         مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
@@ -43,34 +43,8 @@
     <!-- لایه تاریک‌کننده ملایم پس‌زمینه -->
     <div class="absolute inset-0 bg-black/10 pointer-events-none z-0"></div>
 
-    <!-- نوار ابزار پایین صفحه (مینیمال، کوچک و هم‌اندازه با دکمه‌های دیگر) -->
-    <header class="relative z-20 w-full max-w-lg mx-auto mt-2 flex items-center justify-center gap-3 bg-black/50 backdrop-blur-md py-2 px-4 rounded-full border border-white/15 shadow-xl">
-        
-        <!-- ۱. منوی انتخاب زبان (کوچک و نقلی) -->
-        <select id="langSelector" onchange="changeLanguage(this.value)" class="bg-black/70 text-white border border-white/20 px-2.5 py-1 rounded-full text-[11px] font-bold outline-none cursor-pointer hover:bg-black transition">
-            <option value="fa">FA</option>
-            <option value="en">EN</option>
-            <option value="zh">ZH</option>
-            <option value="ru">RU</option>
-            <option value="ar">AR</option>
-            <option value="fr">FR</option>
-            <option value="de">DE</option>
-        </select>
-
-        <!-- ۲. دکمه پخش/توقف موزیک -->
-        <button onclick="toggleAudio()" id="audioBtn" class="pulsing-dot bg-amber-500 hover:bg-amber-400 text-gray-950 w-7 h-7 rounded-full font-bold flex items-center justify-center transition shadow cursor-pointer text-xs">
-            <i id="playIcon" class="fa-solid fa-play text-[10px]"></i>
-        </button>
-
-        <!-- ۳. انتخابگر آهنگ -->
-        <select id="trackSelect" onchange="changeTrack(this.value)" class="text-[10px] font-bold bg-black/70 text-gray-200 border border-white/20 px-2 py-1 rounded-full outline-none cursor-pointer max-w-[130px] truncate">
-            <option value="0">🎵 روز برفی</option>
-            <option value="1">🎵 زاینده‌رود</option>
-            <option value="2">🎼 Experience</option>
-            <option value="3">🎼 Nostalgia</option>
-        </select>
-
-    </header>
+    <!-- بالای صفحه کاملاً خالی و آزاد برای نمایش کامل خورشید و ماه -->
+    <div></div>
 
     <!-- کانتینر میانی برای دو دکمه چشمک‌زن روی خورشید و ماه -->
     <div class="relative w-full max-w-7xl mx-auto flex items-center justify-between px-6 my-auto z-20">
@@ -99,14 +73,43 @@
 
     </div>
 
+    <!-- نوار اطلاعات و ابزار (منتقل شده به پایین صفحه، مستقل و مینیمال بالای فوتر) -->
+    <div class="relative z-20 w-full max-w-xs mx-auto mb-2 flex items-center justify-center gap-2.5 bg-black/60 backdrop-blur-md py-1.5 px-3 rounded-full border border-white/20 shadow-2xl">
+        
+        <!-- ۱. منوی انتخاب زبان -->
+        <select id="langSelector" onchange="changeLanguage(this.value)" class="bg-black/80 text-white border border-white/20 px-2 py-0.5 rounded-full text-[10px] font-bold outline-none cursor-pointer hover:bg-black transition">
+            <option value="fa">FA</option>
+            <option value="en">EN</option>
+            <option value="zh">ZH</option>
+            <option value="ru">RU</option>
+            <option value="ar">AR</option>
+            <option value="fr">FR</option>
+            <option value="de">DE</option>
+        </select>
+
+        <!-- ۲. دکمه پخش/توقف موزیک -->
+        <button onclick="toggleAudio()" id="audioBtn" class="pulsing-dot bg-amber-500 hover:bg-amber-400 text-gray-950 w-6 h-6 rounded-full font-bold flex items-center justify-center transition shadow cursor-pointer text-[10px]">
+            <i id="playIcon" class="fa-solid fa-play text-[9px]"></i>
+        </button>
+
+        <!-- ۳. انتخابگر آهنگ -->
+        <select id="trackSelect" onchange="changeTrack(this.value)" class="text-[10px] font-bold bg-black/80 text-gray-200 border border-white/20 px-2 py-0.5 rounded-full outline-none cursor-pointer max-w-[110px] truncate">
+            <option value="0">🎵 روز برفی</option>
+            <option value="1">🎵 زاینده‌رود</option>
+            <option value="2">🎼 Experience</option>
+            <option value="3">🎼 Nostalgia</option>
+        </select>
+
+    </div>
+
     <!-- فوتر پایین صفحه -->
-    <footer class="relative z-20 w-full text-center text-[10px] text-gray-400/70 pb-2">
+    <footer class="relative z-20 w-full text-center text-[9px] text-gray-400/60 pb-1">
         NOVO-BAY Platform © 2026
     </footer>
 
     <!-- اسکریپت‌های کنترلی -->
     <script>
-        // تنظیم سرعت ویدیو روی حالت استاندارد و طبیعی (1.0)
+        // تنظیم سرعت ویدیو روی حالت استاندارد و روان (1.0)
         document.addEventListener("DOMContentLoaded", function() {
             const video = document.getElementById('bgVideo');
             video.playbackRate = 1.0; 
@@ -153,11 +156,11 @@
             const playIcon = document.getElementById('playIcon');
             if (audioPlayer.paused) {
                 audioPlayer.play().then(() => {
-                    playIcon.className = "fa-solid fa-pause text-[10px]";
+                    playIcon.className = "fa-solid fa-pause text-[9px]";
                 }).catch(err => console.log("خطا در پخش:", err));
             } else {
                 audioPlayer.pause();
-                playIcon.className = "fa-solid fa-play text-[10px]";
+                playIcon.className = "fa-solid fa-play text-[9px]";
             }
         }
 
@@ -169,7 +172,7 @@
             audioPlayer.loop = true;
             if (wasPlaying) {
                 audioPlayer.play();
-                document.getElementById('playIcon').className = "fa-solid fa-pause text-[10px]";
+                document.getElementById('playIcon').className = "fa-solid fa-pause text-[9px]";
             }
         }
 
