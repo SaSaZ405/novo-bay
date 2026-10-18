@@ -34,7 +34,7 @@
 </head>
 <body class="relative flex flex-col justify-between select-none h-screen p-4 overflow-hidden">
 
-    <!-- ویدیوی پس‌زمینه با قابلیت پخش خودکار، حلقه و سرعت آهسته (اسلوموشن شده توسط کد) -->
+    <!-- ویدیوی پس‌زمینه با سرعت استاندارد و طبیعی -->
     <video id="bgVideo" autoplay muted loop playsinline webkit-playsinline class="bg-video">
         <source src="video.mp4" type="video/mp4">
         مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
@@ -57,12 +57,12 @@
             <option value="de">DE</option>
         </select>
 
-        <!-- ۲. دکمه پخش/توقف موزیک (هم‌اندازه دکمه‌های خورشید و ماه) -->
+        <!-- ۲. دکمه پخش/توقف موزیک -->
         <button onclick="toggleAudio()" id="audioBtn" class="pulsing-dot bg-amber-500 hover:bg-amber-400 text-gray-950 w-7 h-7 rounded-full font-bold flex items-center justify-center transition shadow cursor-pointer text-xs">
             <i id="playIcon" class="fa-solid fa-play text-[10px]"></i>
         </button>
 
-        <!-- ۳. انتخابگر آهنگ (کوچک و مینیمال) -->
+        <!-- ۳. انتخابگر آهنگ -->
         <select id="trackSelect" onchange="changeTrack(this.value)" class="text-[10px] font-bold bg-black/70 text-gray-200 border border-white/20 px-2 py-1 rounded-full outline-none cursor-pointer max-w-[130px] truncate">
             <option value="0">🎵 روز برفی</option>
             <option value="1">🎵 زاینده‌رود</option>
@@ -106,10 +106,10 @@
 
     <!-- اسکریپت‌های کنترلی -->
     <script>
-        // تنظیم خودکار سرعت ویدیو به حالت آهسته و اسلوموشن (مثلاً نصف سرعت استاندارد: 0.5)
+        // تنظیم سرعت ویدیو روی حالت استاندارد و طبیعی (1.0)
         document.addEventListener("DOMContentLoaded", function() {
             const video = document.getElementById('bgVideo');
-            video.playbackRate = 0.5; // اینجا می‌توانی سرعت را کمتر (مثل 0.4) یا بیشتر کنی
+            video.playbackRate = 1.0; 
         });
 
         let sunClicked = false;
