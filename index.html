@@ -11,7 +11,7 @@
 
     <style>
         body {
-            background-image: url('./sun-moon.jpg');
+            background-image: url('https://raw.githubusercontent.com/SaSaZ405/novo_bay/main/sun-moon.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -33,22 +33,21 @@
             animation: pulseGlow 2s infinite ease-in-out;
         }
 
-        /* انیمیشن حرکت نامنظم، واضح‌تر و محو مناسب لوگوی Novobay */
+        /* انیمیشن حرکت نامنظم لوگو */
         @keyframes floatRandom {
-            0% { transform: translate(10vw, 15vh) scale(1); opacity: 0.3; }
-            25% { transform: translate(50vw, 20vh) scale(1.1); opacity: 0.45; }
+            0% { transform: translate(10vw, 15vh) scale(1); opacity: 0.35; }
+            25% { transform: translate(50vw, 20vh) scale(1.1); opacity: 0.5; }
             50% { transform: translate(30vw, 50vh) scale(0.95); opacity: 0.25; }
-            75% { transform: translate(20vw, 40vh) scale(1.05); opacity: 0.4; }
-            100% { transform: translate(10vw, 15vh) scale(1); opacity: 0.3; }
+            75% { transform: translate(20vw, 40vh) scale(1.05); opacity: 0.45; }
+            100% { transform: translate(10vw, 15vh) scale(1); opacity: 0.35; }
         }
         .floating-logo {
             position: absolute;
-            width: 160px; /* اندازه بزرگ‌تر و کاملاً قابل تشخیص روی صفحه */
+            width: 180px; /* اندازه کاملاً بزرگ و خوانا */
             height: auto;
             animation: floatRandom 30s infinite ease-in-out alternate;
             pointer-events: none;
-            filter: drop-shadow(0 0 12px rgba(255,255,255,0.3));
-            mix-blend-mode: screen;
+            mix-blend-mode: screen; /* حذف پس‌زمینه تیره لوگو و ترکیب آن با پس‌زمینه اصلی */
             z-index: 5;
             border-radius: 20px;
         }
@@ -59,8 +58,10 @@
     <!-- لایه تاریک‌کننده ملایم پس‌زمینه -->
     <div class="absolute inset-0 bg-black/20 pointer-events-none z-0"></div>
 
-    <!-- لوگوی متحرک، واضح و محو Novobay -->
-    <img src="./Logo.novo_bay.jpg" alt="NOVO-BAY Logo" class="floating-logo" />
+    <!-- لوگوی متحرک و محو Novobay با آدرس مستقیم گیت‌هاب -->
+    <img src="https://raw.githubusercontent.com/SaSaZ405/novo_bay/main/Logo.novo_bay.jpg" 
+         onerror="this.src='./Logo.novo_bay.jpg'"
+         alt="NOVO-BAY Logo" class="floating-logo" />
 
     <!-- نوار بالای صفحه: ردیف افقی شامل مترجم زبان و پخش‌کننده موسیقی -->
     <header class="relative z-20 w-full max-w-6xl mx-auto flex items-center justify-between bg-black/40 backdrop-blur-md p-3 rounded-2xl border border-white/10 shadow-lg">
@@ -78,7 +79,7 @@
             </select>
         </div>
 
-        <!-- ۲. پخش‌کننده موسیقی (پخش/توقف + موزیک‌ها) -->
+        <!-- ۲. پخش‌کننده موسیقی -->
         <div class="flex items-center gap-2">
             <button onclick="toggleAudio()" id="audioBtn" class="bg-amber-500 hover:bg-amber-400 text-gray-950 w-8 h-8 rounded-lg font-bold flex items-center justify-center transition shadow cursor-pointer">
                 <i id="playIcon" class="fa-solid fa-play text-xs"></i>
