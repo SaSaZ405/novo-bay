@@ -1,4 +1,4 @@
-// C07-audio-media-controller.js - کنترلر هوشمند پخش موسیقی نووبی
+// C07-audio-media-controller.js - کنترلر موزیک صفحه پیش‌نمایش
 
 const playlist = [
     { title: "روز برفی (مجید انتظامی)", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
