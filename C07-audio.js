@@ -4,58 +4,58 @@
    ========================================================== */
 
 (function () {
-  // لیست ۵ ترک انتخابی با پتانسیل جذب مخاطب بین‌المللی
+  // لیست ۵ ترک انتخابی با نام دقیق فایل‌ها در مخزن
   const playlist = [
-    { title: 'ترک ۵ - پرشور و مدرن', tag: 'سنتور و گیتار فلامنکو', src: 'track5.mp3' },
+    { title: 'ترک ۵ - پرشور و مدرن', tag: 'سنتور و گیتار', src: 'track5.mp3' },
     { title: 'ترک ۶ - تلفیقی و فضاساز', tag: 'پیانو و تار', src: 'track6.mp3' },
     { title: 'ترک ۴ - ریتمیک و مدرن', tag: 'تلفیقی جهان', src: 'track4.mp3' },
     { title: 'ترک ۸ - شاد و رقصان', tag: 'تنبک و تار', src: 'track8.mp3' },
-    { title: 'ترک ۲ - کلاسیک و احساسی', tag: 'ارکسترال زهی و سنتور', src: 'track2.mp3' }
+    { title: 'ترک ۲ - کلاسیک و احساسی', tag: 'ویولن و سنتور', src: 'track2.mp3' }
   ];
 
   let currentTrackIndex = 0;
   let isPlaying = false;
 
   const audio = new Audio();
-  audio.preload = 'metadata';
+  audio.preload = 'auto';
 
-  // استایل‌های ظاهر پلیر شناور
+  // تزریق استایل‌های CSS پلیر شناور در گوشه صفحه
   const style = document.createElement('style');
   style.innerHTML = `
     .nb-audio-float-player {
       position: fixed;
-      bottom: 24px;
-      left: 24px;
-      z-index: 99999;
-      background: rgba(22, 33, 62, 0.92);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(233, 69, 96, 0.3);
-      border-radius: 16px;
-      padding: 12px 18px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      bottom: 20px;
+      left: 20px;
+      z-index: 999999;
+      background: rgba(22, 33, 62, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(233, 69, 96, 0.4);
+      border-radius: 14px;
+      padding: 10px 16px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
       color: #ffffff;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: Tahoma, sans-serif;
       direction: rtl;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
     .nb-player-info {
       display: flex;
       flex-direction: column;
-      max-width: 170px;
+      max-width: 150px;
     }
     .nb-player-title {
-      font-size: 0.85rem;
-      font-weight: 700;
+      font-size: 0.8rem;
+      font-weight: bold;
       color: #e94560;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .nb-player-tag {
-      font-size: 0.7rem;
-      color: #a0a0b0;
+      font-size: 0.65rem;
+      color: #b0b0c0;
       margin-top: 2px;
       white-space: nowrap;
       overflow: hidden;
@@ -64,56 +64,64 @@
     .nb-player-controls {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
     .nb-btn {
       background: #0f3460;
       border: none;
       color: #ffffff;
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       transition: all 0.2s ease;
       outline: none;
     }
     .nb-btn:hover {
       background: #e94560;
-      transform: scale(1.08);
     }
     .nb-btn-play {
       background: #e94560;
-      width: 42px;
-      height: 42px;
-      font-size: 1.1rem;
+      width: 38px;
+      height: 38px;
+      font-size: 0.95rem;
     }
   `;
   document.head.appendChild(style);
 
-  // ساختار HTML پلیر با ۴ دکمه (عقب، پلی، استاپ، جلو)
+  // ساختار HTML پلیر با ۴ دکمه اصلی
   const playerContainer = document.createElement('div');
   playerContainer.className = 'nb-audio-float-player';
   playerContainer.innerHTML = `
     <div class="nb-player-info">
-      <span id="nb-title" class="nb-player-title">${playlist[0].title}</span>
-      <span id="nb-tag" class="nb-player-tag">${playlist[0].tag}</span>
+      <span id="nb-title" class="nb-player-title">آماده پخش</span>
+      <span id="nb-tag" class="nb-player-tag">موزیک پلیر</span>
     </div>
     <div class="nb-player-controls">
       <button id="nb-prev" class="nb-btn" title="ترک قبلی">⏭</button>
-      <button id="nb-play" class="nb-btn nb-btn-play" title="پخش / توقف موقت">▶</button>
+      <button id="nb-play" class="nb-btn nb-btn-play" title="پخش / توقف">▶</button>
       <button id="nb-stop" class="nb-btn" title="توقف کامل">⏹</button>
       <button id="nb-next" class="nb-btn" title="ترک بعدی">⏮</button>
     </div>
   `;
 
-  document.addEventListener('DOMContentLoaded', () => {
-    document.body.appendChild(playerContainer);
+  // تابع تزریق پلیر به صفحه
+  function initPlayer() {
+    if (!document.body.contains(playerContainer)) {
+      document.body.appendChild(playerContainer);
+    }
     loadTrack(currentTrackIndex);
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPlayer);
+  } else {
+    initPlayer();
+  }
 
   function loadTrack(index) {
     const track = playlist[index];
@@ -123,9 +131,10 @@
   }
 
   function playAudio() {
-    audio.play();
-    isPlaying = true;
-    document.getElementById('nb-play').textContent = '❚❚';
+    audio.play().then(() => {
+      isPlaying = true;
+      document.getElementById('nb-play').textContent = '❚❚';
+    }).catch(e => console.log("Play error:", e));
   }
 
   function pauseAudio() {
@@ -141,16 +150,22 @@
     document.getElementById('nb-play').textContent = '▶';
   }
 
+  // مدیریت رویداد دکمه‌ها
   document.addEventListener('click', (e) => {
-    if (e.target.closest('#nb-play')) {
+    const playBtn = e.target.closest('#nb-play');
+    const stopBtn = e.target.closest('#nb-stop');
+    const nextBtn = e.target.closest('#nb-next');
+    const prevBtn = e.target.closest('#nb-prev');
+
+    if (playBtn) {
       if (isPlaying) { pauseAudio(); } else { playAudio(); }
-    } else if (e.target.closest('#nb-stop')) {
+    } else if (stopBtn) {
       stopAudio();
-    } else if (e.target.closest('#nb-next')) {
+    } else if (nextBtn) {
       currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
       loadTrack(currentTrackIndex);
       playAudio();
-    } else if (e.target.closest('#nb-prev')) {
+    } else if (prevBtn) {
       currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
       loadTrack(currentTrackIndex);
       playAudio();
