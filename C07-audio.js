@@ -1,6 +1,6 @@
 /* ==========================================================
    NOVO-BAY: C07-audio.js
-   Minimal Gray Floating Audio Controller (3 Buttons)
+   Minimal Gray Floating Audio Controller (Left-aligned & Smaller)
    ========================================================== */
 
 (function () {
@@ -18,45 +18,44 @@
   const audio = new Audio();
   audio.preload = 'auto';
 
-  // تزریق استایل‌های شیک، مینیمال، طوسی و کوچک
+  // استایل‌های شیک، طوسی، بسیار کوچک و منتقل‌شده به سمت چپ
   const style = document.createElement('style');
   style.innerHTML = `
     .nb-audio-float-player {
       position: fixed;
-      bottom: 25px;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 24px;
+      left: 16px;
       z-index: 999999;
       background: rgba(45, 52, 54, 0.75);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 30px;
-      padding: 6px 14px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+      border-radius: 25px;
+      padding: 4px 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
     }
 
     .nb-player-controls {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 5px;
     }
 
     .nb-btn {
       background: rgba(255, 255, 255, 0.12);
       border: none;
       color: #e0e0e0;
-      width: 32px;
-      height: 32px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       transition: all 0.2s ease;
       outline: none;
     }
@@ -69,9 +68,9 @@
 
     .nb-btn-play {
       background: rgba(255, 255, 255, 0.25);
-      width: 38px;
-      height: 38px;
-      font-size: 0.95rem;
+      width: 30px;
+      height: 30px;
+      font-size: 0.8rem;
       color: #ffffff;
     }
 
@@ -97,10 +96,6 @@
       document.body.appendChild(playerContainer);
     }
     loadTrack(currentTrackIndex);
-
-    // حذف خودکار آیکون‌های اضافی و قدیمی زیر صفحه
-    const extraIcons = document.querySelectorAll('.media-controls, .audio-icon, .music-btn, footer .fa-music, footer .fa-play');
-    extraIcons.forEach(el => el.style.display = 'none');
   }
 
   if (document.readyState === 'loading') {
