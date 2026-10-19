@@ -34,7 +34,7 @@
 </head>
 <body class="relative flex flex-col justify-between select-none h-screen p-4 overflow-hidden">
 
-    <!-- ویدیوی پس‌زمینه با قابلیت پخش خودکار، حلقه و سرعت بهینه -->
+    <!-- ویدیوی پس‌زمینه با سرعت بسیار بالا (۲۰ برابر) -->
     <video id="bgVideo" autoplay muted loop playsinline webkit-playsinline class="bg-video">
         <source src="video.mp4" type="video/mp4">
         مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
@@ -108,10 +108,10 @@
 
     <!-- اسکریپت‌های کنترلی -->
     <script>
-        // تنظیم سرعت مناسب برای ویدیو
+        // افزایش چشمگیر سرعت ویدیو (تقریباً ۲۰ برابر حالت عادی)
         document.addEventListener("DOMContentLoaded", function() {
             const video = document.getElementById('bgVideo');
-            video.playbackRate = 1.3; 
+            video.playbackRate = 20.0; 
         });
 
         let sunClicked = false;
