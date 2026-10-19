@@ -34,7 +34,7 @@
 </head>
 <body class="relative flex flex-col justify-between select-none h-screen p-4 overflow-hidden">
 
-    <!-- ویدیوی پس‌زمینه با سرعت بالا -->
+    <!-- ویدیوی پس‌زمینه -->
     <video id="bgVideo" autoplay muted loop playsinline webkit-playsinline class="bg-video">
         <source src="video.mp4" type="video/mp4">
         مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
@@ -74,20 +74,25 @@
     </div>
 
     <!-- پنل پایین صفحه: سه دکمه طوسی، کوچک، هم‌اندازه و چشمک‌زن -->
-    <div class="relative z-20 w-full max-w-xs mx-auto mb-6 flex items-center justify-center gap-3">
+    <div class="relative z-30 w-full max-w-xs mx-auto mb-6 flex items-center justify-center gap-3">
         
-        <!-- ۱. دکمه انتخاب زبان (۸ زبان کامل) -->
+        <!-- ۱. دکمه انتخاب زبان (منوی سفارشی با ۸ زبان کامل) -->
         <div class="relative">
-            <select id="langSelector" onchange="changeLanguage(this.value)" class="pulsing-dot bg-gray-700 hover:bg-gray-600 text-gray-200 border border-gray-400 w-5 h-5 md:w-6 md:h-6 rounded-full text-[9px] font-bold outline-none cursor-pointer shadow-xl transition flex items-center justify-center" title="انتخاب زبان">
-                <option value="fa">فارسی</option>
-                <option value="en">English</option>
-                <option value="zh">中文</option>
-                <option value="ar">العربية</option>
-                <option value="fr">Français</option>
-                <option value="it">Italiano</option>
-                <option value="de">Deutsch</option>
-                <option value="ru">Русский</option>
-            </select>
+            <button onclick="toggleLangMenu()" id="langBtn" class="pulsing-dot bg-gray-700 hover:bg-gray-600 text-gray-200 w-5 h-5 md:w-6 md:h-6 rounded-full font-bold flex items-center justify-center shadow-xl border border-gray-400 cursor-pointer transition text-[9px]" title="انتخاب زبان">
+                <i class="fa-solid fa-globe text-[8px]"></i>
+            </button>
+
+            <!-- کادر لیست زبان‌ها (به صورت کامل و سفارشی) -->
+            <div id="langDropdown" class="hidden absolute bottom-9 right-0 bg-gray-900/95 backdrop-blur-md border border-gray-600 rounded-xl shadow-2xl py-2 w-36 z-50 text-[11px] text-gray-200 text-right">
+                <div onclick="selectLanguage('فارسی', 'fa')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">فارسی</div>
+                <div onclick="selectLanguage('English', 'en')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">English</div>
+                <div onclick="selectLanguage('中文', 'zh')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">中文</div>
+                <div onclick="selectLanguage('العربية', 'ar')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">العربية</div>
+                <div onclick="selectLanguage('Français', 'fr')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">Français</div>
+                <div onclick="selectLanguage('Italiano', 'it')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">Italiano</div>
+                <div onclick="selectLanguage('Deutsch', 'de')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">Deutsch</div>
+                <div onclick="selectLanguage('Русский', 'ru')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">Русский</div>
+            </div>
         </div>
 
         <!-- ۲. دکمه پخش/توقف موزیک -->
@@ -131,6 +136,7 @@
             } else if (type === 'moon') {
                 const tooltip = document.getElementById('moonTooltip');
                 if (!moonClicked) {
+                    tooltip.classList.add('hidden'); // اصلاح نمایش
                     tooltip.classList.remove('hidden');
                     moonClicked = true;
                     setTimeout(() => { tooltip.classList.add('hidden'); moonClicked = false; }, 4000);
@@ -139,6 +145,26 @@
                 }
             }
         }
+
+        // کنترل منوی سفارشی زبان‌ها
+        function toggleLangMenu() {
+            const dropdown = document.getElementById('langDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function selectLanguage(langName, langCode) {
+            console.log("زبان انتخاب شد:", langName, langCode);
+            document.getElementById('langDropdown').classList.add('hidden');
+        }
+
+        // بستن منو با کلیک بیرون از آن
+        window.addEventListener('click', function(e) {
+            const btn = document.getElementById('langBtn');
+            const dropdown = document.getElementById('langDropdown');
+            if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
 
         // پخش‌کننده موسیقی
         const playlist = [
@@ -177,10 +203,6 @@
                 document.getElementById('playIcon').className = "fa-solid fa-pause text-[8px]";
             }
             console.log("آهنگ فعلی:", playlist[currentTrackIndex].title);
-        }
-
-        function changeLanguage(lang) {
-            console.log("Language changed to:", lang);
         }
     </script>
 </body>
