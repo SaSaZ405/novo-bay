@@ -1,6 +1,6 @@
 /* ==========================================================
    NOVO-BAY: C07-audio.js
-   Minimal Gray Floating Audio Controller (Bottom-Left Fixed)
+   Ultra-Minimal Gray Floating Audio Controller (Bottom-Left)
    ========================================================== */
 
 (function () {
@@ -18,7 +18,7 @@
   const audio = new Audio();
   audio.preload = 'auto';
 
-  // استایل‌های بسیار کوچک، شیک و سنجاق‌شده دقیقاً در پایین گوشه سمت چپ
+  // استایل‌های بسیار مینیاتوری در گوشه سمت چپ پایین
   const style = document.createElement('style');
   style.innerHTML = `
     .nb-audio-float-player {
@@ -112,14 +112,16 @@
   function playAudio() {
     audio.play().then(() => {
       isPlaying = true;
-      document.getElementById('nb-play').textContent = '❚❚';
+      const playBtn = document.getElementById('nb-play');
+      if (playBtn) playBtn.textContent = '❚❚';
     }).catch(e => console.log("Play error:", e));
   }
 
   function pauseAudio() {
     audio.pause();
     isPlaying = false;
-    document.getElementById('nb-play').textContent = '▶';
+    const playBtn = document.getElementById('nb-play');
+    if (playBtn) playBtn.textContent = '▶';
   }
 
   document.addEventListener('click', (e) => {
