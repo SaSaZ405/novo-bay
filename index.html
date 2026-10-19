@@ -34,7 +34,7 @@
 </head>
 <body class="relative flex flex-col justify-between select-none h-screen p-4 overflow-hidden">
 
-    <!-- ویدیوی پس‌زمینه با سرعت بسیار بالا (۲۰ برابر) -->
+    <!-- ویدیوی پس‌زمینه با سرعت بالا -->
     <video id="bgVideo" autoplay muted loop playsinline webkit-playsinline class="bg-video">
         <source src="video.mp4" type="video/mp4">
         مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
@@ -49,7 +49,7 @@
     <!-- کانتینر میانی برای دو دکمه کوچک و چشمک‌زن روی خورشید و ماه -->
     <div class="relative w-full max-w-7xl mx-auto flex items-center justify-between px-6 my-auto z-20">
 
-        <!-- دکمه خورشید (کوچک و مینیمال) -->
+        <!-- دکمه خورشید -->
         <div class="absolute left-4 md:left-12 flex flex-col items-center">
             <div id="sunTooltip" class="hidden mb-2 bg-amber-950/95 text-amber-200 border border-amber-400/60 text-[10px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
                 صفحه چالش 🚀
@@ -60,7 +60,7 @@
             </button>
         </div>
 
-        <!-- دکمه ماه (کوچک و مینیمال) -->
+        <!-- دکمه ماه -->
         <div class="absolute right-4 md:right-12 flex flex-col items-center">
             <div id="moonTooltip" class="hidden mb-2 bg-sky-950/95 text-sky-200 border border-sky-400/60 text-[10px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
                 سایت اصلی 🌐
@@ -73,28 +73,29 @@
 
     </div>
 
-    <!-- پنل پایین صفحه: سه دکمه طوسی، کوچک، مجزا و چشمک‌زن -->
+    <!-- پنل پایین صفحه: سه دکمه طوسی، کوچک، هم‌اندازه و چشمک‌زن -->
     <div class="relative z-20 w-full max-w-xs mx-auto mb-6 flex items-center justify-center gap-3">
         
-        <!-- ۱. دکمه زبان (طوسی کوچک) -->
+        <!-- ۱. دکمه انتخاب زبان (۸ زبان کامل) -->
         <div class="relative">
-            <select id="langSelector" onchange="changeLanguage(this.value)" class="pulsing-dot appearance-none bg-gray-700 hover:bg-gray-600 text-gray-200 border border-gray-400 w-5 h-5 md:w-6 md:h-6 rounded-full text-[9px] font-bold text-center outline-none cursor-pointer shadow-xl transition flex items-center justify-center" style="text-align-last: center;">
-                <option value="fa">FA</option>
-                <option value="en">EN</option>
-                <option value="zh">ZH</option>
-                <option value="ru">RU</option>
-                <option value="ar">AR</option>
-                <option value="fr">FR</option>
-                <option value="de">DE</option>
+            <select id="langSelector" onchange="changeLanguage(this.value)" class="pulsing-dot bg-gray-700 hover:bg-gray-600 text-gray-200 border border-gray-400 w-5 h-5 md:w-6 md:h-6 rounded-full text-[9px] font-bold outline-none cursor-pointer shadow-xl transition flex items-center justify-center" title="انتخاب زبان">
+                <option value="fa">فارسی</option>
+                <option value="en">English</option>
+                <option value="zh">中文</option>
+                <option value="ar">العربية</option>
+                <option value="fr">Français</option>
+                <option value="it">Italiano</option>
+                <option value="de">Deutsch</option>
+                <option value="ru">Русский</option>
             </select>
         </div>
 
-        <!-- ۲. دکمه پخش/توقف موزیک (طوسی کوچک) -->
+        <!-- ۲. دکمه پخش/توقف موزیک -->
         <button onclick="toggleAudio()" id="audioBtn" class="pulsing-dot bg-gray-700 hover:bg-gray-600 text-gray-200 w-5 h-5 md:w-6 md:h-6 rounded-full font-bold flex items-center justify-center shadow-xl border border-gray-400 cursor-pointer transition text-[9px]">
             <i id="playIcon" class="fa-solid fa-play text-[8px]"></i>
         </button>
 
-        <!-- ۳. دکمه آهنگ بعدی (طوسی کوچک) -->
+        <!-- ۳. دکمه آهنگ بعدی -->
         <button onclick="nextTrack()" id="nextTrackBtn" class="pulsing-dot bg-gray-700 hover:bg-gray-600 text-gray-200 w-5 h-5 md:w-6 md:h-6 rounded-full font-bold flex items-center justify-center shadow-xl border border-gray-400 cursor-pointer transition text-[9px]" title="آهنگ بعدی">
             <i class="fa-solid fa-music text-[8px]"></i>
         </button>
@@ -108,7 +109,7 @@
 
     <!-- اسکریپت‌های کنترلی -->
     <script>
-        // افزایش چشمگیر سرعت ویدیو (تقریباً ۲۰ برابر حالت عادی)
+        // تنظیم سرعت ویدیو
         document.addEventListener("DOMContentLoaded", function() {
             const video = document.getElementById('bgVideo');
             video.playbackRate = 20.0; 
