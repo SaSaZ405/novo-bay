@@ -21,11 +21,11 @@
             z-index: -1;
         }
 
-        /* انیمیشن چشمک‌زن / پالس نرم برای دکمه‌ها */
+        /* انیمیشن چشمک‌زن / پالس نرم برای تمام دکمه‌ها و المان‌ها */
         @keyframes pulseGlow {
-            0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 10px rgba(255,255,255,0.4); }
-            50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 25px rgba(255,255,255,0.9); }
-            100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 10px rgba(255,255,255,0.4); }
+            0% { transform: scale(1); opacity: 0.9; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+            50% { transform: scale(1.18); opacity: 1; box-shadow: 0 0 25px rgba(255,255,255,0.95); }
+            100% { transform: scale(1); opacity: 0.9; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
         }
         .pulsing-dot {
             animation: pulseGlow 2s infinite ease-in-out;
@@ -43,62 +43,66 @@
     <!-- لایه تاریک‌کننده ملایم پس‌زمینه -->
     <div class="absolute inset-0 bg-black/10 pointer-events-none z-0"></div>
 
-    <!-- بالای صفحه کاملاً خالی و آزاد برای نمایش کامل خورشید و ماه -->
+    <!-- بالای صفحه خالی و آزاد -->
     <div></div>
 
     <!-- کانتینر میانی برای دو دکمه چشمک‌زن روی خورشید و ماه -->
-    <div class="relative w-full max-w-7xl mx-auto flex items-center justify-between px-6 my-auto z-20">
+    <div class="relative w-full max-w-7xl mx-auto flex items-center justify-between px-8 my-auto z-20">
 
         <!-- دکمه خورشید (سمت چپ - ضربه اول راهنما، ضربه دوم صفحه چالش) -->
-        <div class="absolute left-4 md:left-12 flex flex-col items-center">
+        <div class="absolute left-6 md:left-16 flex flex-col items-center">
             <div id="sunTooltip" class="hidden mb-2 bg-amber-950/95 text-amber-200 border border-amber-400/60 text-[11px] font-bold py-1 px-3 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
                 صفحه چالش 🚀
             </div>
             <button onclick="handleButtonClick('sun')" 
-                    class="pulsing-dot w-8 h-8 md:w-10 md:h-10 bg-amber-500 hover:bg-amber-400 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border-2 border-amber-200 cursor-pointer transition-transform active:scale-90">
-                <i class="fa-solid fa-sun text-xs md:text-sm"></i>
+                    class="pulsing-dot w-9 h-9 md:w-11 md:h-11 bg-amber-500 hover:bg-amber-400 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border-2 border-amber-200 cursor-pointer transition-transform active:scale-90">
+                <i class="fa-solid fa-sun text-sm"></i>
             </button>
         </div>
 
         <!-- دکمه ماه (سمت راست - ضربه اول راهنما، ضربه دوم سایت اصلی) -->
-        <div class="absolute right-4 md:right-12 flex flex-col items-center">
+        <div class="absolute right-6 md:right-16 flex flex-col items-center">
             <div id="moonTooltip" class="hidden mb-2 bg-sky-950/95 text-sky-200 border border-sky-400/60 text-[11px] font-bold py-1 px-3 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
                 سایت اصلی 🌐
             </div>
             <button onclick="handleButtonClick('moon')" 
-                    class="pulsing-dot w-8 h-8 md:w-10 md:h-10 bg-sky-400 hover:bg-sky-300 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border-2 border-sky-200 cursor-pointer transition-transform active:scale-90">
-                <i class="fa-solid fa-moon text-xs md:text-sm"></i>
+                    class="pulsing-dot w-9 h-9 md:w-11 md:h-11 bg-sky-400 hover:bg-sky-300 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border-2 border-sky-200 cursor-pointer transition-transform active:scale-90">
+                <i class="fa-solid fa-moon text-sm"></i>
             </button>
         </div>
 
     </div>
 
-    <!-- نوار اطلاعات و ابزار (منتقل شده به پایین صفحه، مستقل و مینیمال بالای فوتر) -->
-    <div class="relative z-20 w-full max-w-xs mx-auto mb-2 flex items-center justify-center gap-2.5 bg-black/60 backdrop-blur-md py-1.5 px-3 rounded-full border border-white/20 shadow-2xl">
+    <!-- پنل پایین صفحه: دکمه‌های دایره‌ای چشمک‌زن (موزیک و زبان هم‌اندازه با بقیه) -->
+    <div class="relative z-20 w-full max-w-xs mx-auto mb-6 flex items-center justify-center gap-4">
         
-        <!-- ۱. منوی انتخاب زبان -->
-        <select id="langSelector" onchange="changeLanguage(this.value)" class="bg-black/80 text-white border border-white/20 px-2 py-0.5 rounded-full text-[10px] font-bold outline-none cursor-pointer hover:bg-black transition">
-            <option value="fa">FA</option>
-            <option value="en">EN</option>
-            <option value="zh">ZH</option>
-            <option value="ru">RU</option>
-            <option value="ar">AR</option>
-            <option value="fr">FR</option>
-            <option value="de">DE</option>
-        </select>
+        <!-- ۱. دکمه دایره‌ای زبان (چشمک‌زن) -->
+        <div class="relative">
+            <select id="langSelector" onchange="changeLanguage(this.value)" class="pulsing-dot appearance-none bg-indigo-600 hover:bg-indigo-500 text-white border-2 border-indigo-200 w-10 h-10 rounded-full text-xs font-black text-center outline-none cursor-pointer shadow-2xl transition">
+                <option value="fa">FA</option>
+                <option value="en">EN</option>
+                <option value="zh">ZH</option>
+                <option value="ru">RU</option>
+                <option value="ar">AR</option>
+                <option value="fr">FR</option>
+                <option value="de">DE</option>
+            </select>
+        </div>
 
-        <!-- ۲. دکمه پخش/توقف موزیک -->
-        <button onclick="toggleAudio()" id="audioBtn" class="pulsing-dot bg-amber-500 hover:bg-amber-400 text-gray-950 w-6 h-6 rounded-full font-bold flex items-center justify-center transition shadow cursor-pointer text-[10px]">
-            <i id="playIcon" class="fa-solid fa-play text-[9px]"></i>
+        <!-- ۲. دکمه دایره‌ای پخش/توقف موزیک (چشمک‌زن) -->
+        <button onclick="toggleAudio()" id="audioBtn" class="pulsing-dot bg-amber-500 hover:bg-amber-400 text-gray-950 w-10 h-10 rounded-full font-bold flex items-center justify-center shadow-2xl border-2 border-amber-200 cursor-pointer transition text-sm">
+            <i id="playIcon" class="fa-solid fa-play text-xs"></i>
         </button>
 
-        <!-- ۳. انتخابگر آهنگ -->
-        <select id="trackSelect" onchange="changeTrack(this.value)" class="text-[10px] font-bold bg-black/80 text-gray-200 border border-white/20 px-2 py-0.5 rounded-full outline-none cursor-pointer max-w-[110px] truncate">
-            <option value="0">🎵 روز برفی</option>
-            <option value="1">🎵 زاینده‌رود</option>
-            <option value="2">🎼 Experience</option>
-            <option value="3">🎼 Nostalgia</option>
-        </select>
+        <!-- ۳. انتخابگر آهنگ (دایره‌ای مینیمال و چشمک‌زن) -->
+        <div class="relative">
+            <select id="trackSelect" onchange="changeTrack(this.value)" class="pulsing-dot appearance-none bg-emerald-600 hover:bg-emerald-500 text-white border-2 border-emerald-200 w-10 h-10 rounded-full text-xs font-black text-center outline-none cursor-pointer shadow-2xl transition text-center">
+                <option value="0">🎵</option>
+                <option value="1">🎶</option>
+                <option value="2">🎼</option>
+                <option value="3">🎧</option>
+            </select>
+        </div>
 
     </div>
 
@@ -109,10 +113,10 @@
 
     <!-- اسکریپت‌های کنترلی -->
     <script>
-        // تنظیم سرعت ویدیو روی حالت استاندارد و روان (1.0)
+        // تنظیم سرعت مناسب برای ویدیو
         document.addEventListener("DOMContentLoaded", function() {
             const video = document.getElementById('bgVideo');
-            video.playbackRate = 1.0; 
+            video.playbackRate = 1.3; // سرعت مطلوب و هماهنگ
         });
 
         let sunClicked = false;
@@ -156,11 +160,11 @@
             const playIcon = document.getElementById('playIcon');
             if (audioPlayer.paused) {
                 audioPlayer.play().then(() => {
-                    playIcon.className = "fa-solid fa-pause text-[9px]";
+                    playIcon.className = "fa-solid fa-pause text-xs";
                 }).catch(err => console.log("خطا در پخش:", err));
             } else {
                 audioPlayer.pause();
-                playIcon.className = "fa-solid fa-play text-[9px]";
+                playIcon.className = "fa-solid fa-play text-xs";
             }
         }
 
@@ -172,7 +176,7 @@
             audioPlayer.loop = true;
             if (wasPlaying) {
                 audioPlayer.play();
-                document.getElementById('playIcon').className = "fa-solid fa-pause text-[9px]";
+                document.getElementById('playIcon').className = "fa-solid fa-pause text-xs";
             }
         }
 
