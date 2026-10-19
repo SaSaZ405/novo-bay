@@ -1,147 +1,182 @@
-/* ==========================================================
-   NOVO-BAY: C07-audio.js
-   Minimal Gray Floating Audio Controller (Bottom-Left Aligned)
-   ========================================================== */
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVO-BAY | Landing</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-(function () {
-  const playlist = [
-    'track5.mp3',
-    'track6.mp3',
-    'track4.mp3',
-    'track8.mp3',
-    'track2.mp3'
-  ];
+    <style>
+        /* تنظیم ویدیو به عنوان پس‌زمینه زنده و تمام‌صفحه */
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+        }
 
-  let currentTrackIndex = 0;
-  let isPlaying = false;
+        /* انیمیشن چشمک‌زن / پالس نرم برای تمام دکمه‌ها */
+        @keyframes pulseGlow {
+            0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+            50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 15px rgba(255,255,255,0.8); }
+            100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+        }
+        .pulsing-dot {
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="relative flex flex-col justify-between select-none h-screen p-4 overflow-hidden">
 
-  const audio = new Audio();
-  audio.preload = 'auto';
+    <!-- ویدیوی پس‌زمینه -->
+    <video id="bgVideo" autoplay muted loop playsinline webkit-playsinline class="bg-video">
+        <source src="video.mp4" type="video/mp4">
+        مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+    </video>
 
-  // استایل‌های بسیار کوچک و ثابت در گوشه چپ پایین صفحه
-  const style = document.createElement('style');
-  style.innerHTML = `
-    .nb-audio-float-player {
-      position: fixed;
-      bottom: 24px;
-      left: 16px;
-      z-index: 999999;
-      background: rgba(45, 52, 54, 0.75);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      padding: 3px 8px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+    <!-- لایه تاریک‌کننده ملایم پس‌زمینه -->
+    <div class="absolute inset-0 bg-black/10 pointer-events-none z-0"></div>
 
-    .nb-player-controls {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+    <!-- دکمه انتخاب زبان (منوی سفارشی با ۸ زبان) انتقال یافته به بالا گوشه سمت راست -->
+    <div class="fixed top-4 right-4 z-50">
+        <div class="relative">
+            <button onclick="toggleLangMenu()" id="langBtn" class="pulsing-dot bg-gray-700/80 hover:bg-gray-600 text-gray-200 w-5 h-5 md:w-6 md:h-6 rounded-full font-bold flex items-center justify-center shadow-xl border border-gray-400 cursor-pointer transition text-[9px]" title="انتخاب زبان">
+                <i class="fa-solid fa-globe text-[8px]"></i>
+            </button>
 
-    .nb-btn {
-      background: rgba(255, 255, 255, 0.12);
-      border: none;
-      color: #e0e0e0;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
-      transition: all 0.2s ease;
-      outline: none;
-    }
-
-    .nb-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-      color: #ffffff;
-      transform: scale(1.08);
-    }
-
-    .nb-btn-play {
-      background: rgba(255, 255, 255, 0.25);
-      width: 28px;
-      height: 28px;
-      font-size: 0.75rem;
-      color: #ffffff;
-    }
-
-    .nb-btn-play:hover {
-      background: rgba(255, 255, 255, 0.45);
-    }
-  `;
-  document.head.appendChild(style);
-
-  // ساختار پلیر با ۳ دکمه کوچک
-  const playerContainer = document.createElement('div');
-  playerContainer.className = 'nb-audio-float-player';
-  playerContainer.innerHTML = `
-    <div class="nb-player-controls">
-      <button id="nb-prev" class="nb-btn" title="قبلی">⏭</button>
-      <button id="nb-play" class="nb-btn nb-btn-play" title="پخش / توقف">▶</button>
-      <button id="nb-next" class="nb-btn" title="بعدی">⏮</button>
+            <!-- کادر لیست زبان‌ها (باز شونده به سمت پایین) -->
+            <div id="langDropdown" class="hidden absolute top-8 right-0 bg-gray-900/95 backdrop-blur-md border border-gray-600 rounded-xl shadow-2xl py-2 w-36 z-50 text-[11px] text-gray-200 text-right">
+                <div onclick="setLanguage('fa')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">فارسی</div>
+                <div onclick="setLanguage('en')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">English</div>
+                <div onclick="setLanguage('zh')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">中文</div>
+                <div onclick="setLanguage('ar')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">العربية</div>
+                <div onclick="setLanguage('fr')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">Français</div>
+                <div onclick="setLanguage('it')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">Italiano</div>
+                <div onclick="setLanguage('de')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">Deutsch</div>
+                <div onclick="setLanguage('ru')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">Русский</div>
+            </div>
+        </div>
     </div>
-  `;
 
-  function initPlayer() {
-    if (!document.body.contains(playerContainer)) {
-      document.body.appendChild(playerContainer);
-    }
-    loadTrack(currentTrackIndex);
-  }
+    <!-- بالای صفحه خالی و آزاد -->
+    <div></div>
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initPlayer);
-  } else {
-    initPlayer();
-  }
+    <!-- کانتینر میانی برای دو دکمه کوچک و چشمک‌زن روی خورشید و ماه -->
+    <div class="relative w-full max-w-7xl mx-auto flex items-center justify-between px-6 my-auto z-20">
 
-  function loadTrack(index) {
-    audio.src = playlist[index];
-  }
+        <!-- دکمه خورشید -->
+        <div class="absolute left-4 md:left-12 flex flex-col items-center">
+            <div id="sunTooltip" class="hidden mb-2 bg-amber-950/95 text-amber-200 border border-amber-400/60 text-[10px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
+                صفحه چالش 🚀
+            </div>
+            <button onclick="handleButtonClick('sun')" 
+                    class="pulsing-dot w-5 h-5 md:w-6 md:h-6 bg-amber-500 hover:bg-amber-400 text-gray-950 rounded-full flex items-center justify-center shadow-xl border border-amber-200 cursor-pointer transition-transform active:scale-90">
+                <i class="fa-solid fa-sun text-[9px]"></i>
+            </button>
+        </div>
 
-  function playAudio() {
-    audio.play().then(() => {
-      isPlaying = true;
-      document.getElementById('nb-play').textContent = '❚❚';
-    }).catch(e => console.log("Play error:", e));
-  }
+        <!-- دکمه ماه -->
+        <div class="absolute right-4 md:right-12 flex flex-col items-center">
+            <div id="moonTooltip" class="hidden mb-2 bg-sky-950/95 text-sky-200 border border-sky-400/60 text-[10px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap animate-bounce">
+                سایت اصلی 🌐
+            </div>
+            <button onclick="handleButtonClick('moon')" 
+                    class="pulsing-dot w-5 h-5 md:w-6 md:h-6 bg-sky-400 hover:bg-sky-300 text-gray-950 rounded-full flex items-center justify-center shadow-xl border border-sky-200 cursor-pointer transition-transform active:scale-90">
+                <i class="fa-solid fa-moon text-[9px]"></i>
+            </button>
+        </div>
 
-  function pauseAudio() {
-    audio.pause();
-    isPlaying = false;
-    document.getElementById('nb-play').textContent = '▶';
-  }
+    </div>
 
-  document.addEventListener('click', (e) => {
-    const playBtn = e.target.closest('#nb-play');
-    const nextBtn = e.target.closest('#nb-next');
-    const prevBtn = e.target.closest('#nb-prev');
+    <!-- فضای خالی پایین صفحه برای تعادل -->
+    <div></div>
 
-    if (playBtn) {
-      if (isPlaying) { pauseAudio(); } else { playAudio(); }
-    } else if (nextBtn) {
-      currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-      loadTrack(currentTrackIndex);
-      playAudio();
-    } else if (prevBtn) {
-      currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
-      loadTrack(currentTrackIndex);
-      playAudio();
-    }
-  });
+    <!-- فوتر پایین صفحه -->
+    <footer class="relative z-20 w-full text-center text-[9px] text-gray-400/60 pb-1" id="footerText">
+        NOVO-BAY Platform © 2026
+    </footer>
 
-  audio.addEventListener('ended', () => {
-    currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-    loadTrack(currentTrackIndex);
-    playAudio();
-  });
-})();
+    <!-- اسکریپت‌های کنترلی و ترجمه -->
+    <script>
+        // دیکشنری کامل متن‌ها برای ۸ زبان
+        const translations = {
+            fa: { sun: "صفحه چالش 🚀", moon: "سایت اصلی 🌐", footer: "NOVO-BAY Platform © 2026", dir: "rtl" },
+            en: { sun: "Challenge Page 🚀", moon: "Main Site 🌐", footer: "NOVO-BAY Platform © 2026", dir: "ltr" },
+            zh: { sun: "挑战页面 🚀", moon: "主网站 🌐", footer: "NOVO-BAY 平台 © 2026", dir: "ltr" },
+            ar: { sun: "صفحة التحدي 🚀", moon: "الموقع الرئيسي 🌐", footer: "منصة نوفو-باي © 2026", dir: "rtl" },
+            fr: { sun: "Page de Défi 🚀", moon: "Site Principal 🌐", footer: "Plateforme NOVO-BAY © 2026", dir: "ltr" },
+            it: { sun: "Pagina della Sfida 🚀", moon: "Sito Principale 🌐", footer: "Piattaforma NOVO-BAY © 2026", dir: "ltr" },
+            de: { sun: "Herausforderungsseite 🚀", moon: "Hauptseite 🌐", footer: "NOVO-BAY Plattform © 2026", dir: "ltr" },
+            ru: { sun: "Страница вызова 🚀", moon: "Главный сайт 🌐", footer: "Платформа NOVO-BAY © 2026", dir: "ltr" }
+        };
+
+        let currentLang = localStorage.getItem('novo_lang') || 'fa';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('novo_lang', lang);
+            const t = translations[lang] || translations.fa;
+            
+            document.getElementById('htmlRoot').setAttribute('dir', t.dir);
+            document.getElementById('sunTooltip').innerText = t.sun;
+            document.getElementById('moonTooltip').innerText = t.moon;
+            document.getElementById('footerText').innerText = t.footer;
+            
+            document.getElementById('langDropdown').classList.add('hidden');
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            setLanguage(currentLang);
+            const video = document.getElementById('bgVideo');
+            video.playbackRate = 20.0; 
+        });
+
+        let sunClicked = false;
+        let moonClicked = false;
+
+        function handleButtonClick(type) {
+            const t = translations[currentLang] || translations.fa;
+            if (type === 'sun') {
+                const tooltip = document.getElementById('sunTooltip');
+                tooltip.innerText = t.sun;
+                if (!sunClicked) {
+                    tooltip.classList.remove('hidden');
+                    sunClicked = true;
+                    setTimeout(() => { tooltip.classList.add('hidden'); sunClicked = false; }, 4000);
+                } else {
+                    window.location.href = "https://sasaz405.github.io/novo-bay-showcase/?lang=" + currentLang;
+                }
+            } else if (type === 'moon') {
+                const tooltip = document.getElementById('moonTooltip');
+                tooltip.innerText = t.moon;
+                if (!moonClicked) {
+                    tooltip.classList.remove('hidden');
+                    moonClicked = true;
+                    setTimeout(() => { tooltip.classList.add('hidden'); moonClicked = false; }, 4000);
+                } else {
+                    alert("انتقال به سایت اصلی نووبی...");
+                }
+            }
+        }
+
+        function toggleLangMenu() {
+            const dropdown = document.getElementById('langDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        window.addEventListener('click', function(e) {
+            const btn = document.getElementById('langBtn');
+            const dropdown = document.getElementById('langDropdown');
+            if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+    
+    <!-- فایل جاوااسکریپت پلیر صوتی
