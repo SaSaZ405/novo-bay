@@ -1,6 +1,6 @@
 /* ==========================================================
    NOVO-BAY: C07-audio.js
-   Minimal Gray Floating Audio Controller (Left-aligned & Smaller)
+   Minimal Gray Floating Audio Controller (Bottom-Left Fixed)
    ========================================================== */
 
 (function () {
@@ -18,69 +18,70 @@
   const audio = new Audio();
   audio.preload = 'auto';
 
-  // استایل‌های شیک، طوسی، بسیار کوچک و منتقل‌شده به سمت چپ
+  // استایل‌های بسیار کوچک، شیک و سنجاق‌شده دقیقاً در پایین گوشه سمت چپ
   const style = document.createElement('style');
   style.innerHTML = `
     .nb-audio-float-player {
-      position: fixed;
-      bottom: 24px;
-      left: 16px;
-      z-index: 999999;
-      background: rgba(45, 52, 54, 0.75);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 25px;
-      padding: 4px 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      position: fixed !important;
+      bottom: 16px !important;
+      left: 16px !important;
+      z-index: 999999 !important;
+      background: rgba(45, 52, 54, 0.85) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      border-radius: 20px !important;
+      padding: 3px 8px !important;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      direction: ltr !important;
     }
 
     .nb-player-controls {
-      display: flex;
-      align-items: center;
-      gap: 5px;
+      display: flex !important;
+      align-items: center !important;
+      gap: 4px !important;
     }
 
     .nb-btn {
-      background: rgba(255, 255, 255, 0.12);
-      border: none;
-      color: #e0e0e0;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      transition: all 0.2s ease;
-      outline: none;
+      background: rgba(255, 255, 255, 0.15) !important;
+      border: none !important;
+      color: #e0e0e0 !important;
+      width: 24px !important;
+      height: 24px !important;
+      border-radius: 50% !important;
+      cursor: pointer !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-size: 0.65rem !important;
+      transition: all 0.2s ease !important;
+      outline: none !important;
     }
 
     .nb-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-      color: #ffffff;
-      transform: scale(1.08);
+      background: rgba(255, 255, 255, 0.35) !important;
+      color: #ffffff !important;
+      transform: scale(1.08) !important;
     }
 
     .nb-btn-play {
-      background: rgba(255, 255, 255, 0.25);
-      width: 30px;
-      height: 30px;
-      font-size: 0.8rem;
-      color: #ffffff;
+      background: rgba(255, 255, 255, 0.3) !important;
+      width: 28px !important;
+      height: 28px !important;
+      font-size: 0.75rem !important;
+      color: #ffffff !important;
     }
 
     .nb-btn-play:hover {
-      background: rgba(255, 255, 255, 0.45);
+      background: rgba(255, 255, 255, 0.5) !important;
     }
   `;
   document.head.appendChild(style);
 
-  // ساختار پلیر با ۳ دکمه
+  // ساختار ۳ دکمه‌ای مینیمال
   const playerContainer = document.createElement('div');
   playerContainer.className = 'nb-audio-float-player';
   playerContainer.innerHTML = `
