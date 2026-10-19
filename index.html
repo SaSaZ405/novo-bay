@@ -73,7 +73,7 @@
 
     </div>
 
-    <!-- پنل پایین صفحه: سه دکمه طوسی، کوچک، هم‌اندازه و چشمک‌زن -->
+    <!-- پنل پایین صفحه: فقط دکمه زبان (دکمه‌های قدیمی موزیک حذف شدند) -->
     <div class="relative z-30 w-full max-w-xs mx-auto mb-6 flex items-center justify-center gap-3">
         
         <!-- ۱. دکمه انتخاب زبان (منوی سفارشی با ۸ زبان کامل) -->
@@ -95,16 +95,6 @@
             </div>
         </div>
 
-        <!-- ۲. دکمه پخش/توقف موزیک -->
-        <button onclick="toggleAudio()" id="audioBtn" class="pulsing-dot bg-gray-700 hover:bg-gray-600 text-gray-200 w-5 h-5 md:w-6 md:h-6 rounded-full font-bold flex items-center justify-center shadow-xl border border-gray-400 cursor-pointer transition text-[9px]">
-            <i id="playIcon" class="fa-solid fa-play text-[8px]"></i>
-        </button>
-
-        <!-- ۳. دکمه آهنگ بعدی -->
-        <button onclick="nextTrack()" id="nextTrackBtn" class="pulsing-dot bg-gray-700 hover:bg-gray-600 text-gray-200 w-5 h-5 md:w-6 md:h-6 rounded-full font-bold flex items-center justify-center shadow-xl border border-gray-400 cursor-pointer transition text-[9px]" title="آهنگ بعدی">
-            <i class="fa-solid fa-music text-[8px]"></i>
-        </button>
-
     </div>
 
     <!-- فوتر پایین صفحه -->
@@ -123,7 +113,7 @@
             fr: { sun: "Page de Défi 🚀", moon: "Site Principal 🌐", footer: "Plateforme NOVO-BAY © 2026", dir: "ltr" },
             it: { sun: "Pagina della Sfida 🚀", moon: "Sito Principale 🌐", footer: "Piattaforma NOVO-BAY © 2026", dir: "ltr" },
             de: { sun: "Herausforderungsseite 🚀", moon: "Hauptseite 🌐", footer: "NOVO-BAY Plattform © 2026", dir: "ltr" },
-            ru: { sun: "Страница вызова 🚀", moon: "Главный сайт 🌐", footer: "Платформа NOVO-BAY © 2026", dir: "ltr" }
+            ru: { sun: "Страница вызова 🚀", moon: "Главный сайт 🌐", footer: "Платформа Платформа © 2026", dir: "ltr" }
         };
 
         let currentLang = localStorage.getItem('novo_lang') || 'fa';
@@ -195,45 +185,9 @@
                 dropdown.classList.add('hidden');
             }
         });
-
-        // پخش‌کننده موسیقی
-        const playlist = [
-            { title: "روز برفی", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-            { title: "شب‌های زاینده‌رود", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-            { title: "Experience", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
-            { title: "Nostalgia", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }
-        ];
-
-        let currentTrackIndex = 0;
-        let audioPlayer = new Audio(playlist[currentTrackIndex].src);
-        audioPlayer.loop = true;
-
-        /* پخش یا توقف موزیک */
-        function toggleAudio() {
-            const playIcon = document.getElementById('playIcon');
-            if (audioPlayer.paused) {
-                audioPlayer.play().then(() => {
-                    playIcon.className = "fa-solid fa-pause text-[8px]";
-                }).catch(err => console.log("خطا در پخش:", err));
-            } else {
-                audioPlayer.pause();
-                playIcon.className = "fa-solid fa-play text-[8px]";
-            }
-        }
-
-        /* تغییر آهنگ با کلیک روی دکمه موزیک بعدی */
-        function nextTrack() {
-            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-            const wasPlaying = !audioPlayer.paused;
-            audioPlayer.pause();
-            audioPlayer = new Audio(playlist[currentTrackIndex].src);
-            audioPlayer.loop = true;
-            if (wasPlaying) {
-                audioPlayer.play().catch(err => console.log("خطا در پخش:", err));
-                document.getElementById('playIcon').className = "fa-solid fa-pause text-[8px]";
-            }
-        }
     </script>
+    
+    <!-- فایل جاوااسکریپت پلیر صوتی جدید و شناور -->
     <script src="C07-audio.js"></script>
 </body>
 </html>
