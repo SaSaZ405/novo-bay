@@ -73,17 +73,17 @@
 
     </div>
 
-    <!-- پنل پایین صفحه: فقط دکمه زبان (دکمه‌های قدیمی موزیک حذف شدند) -->
-    <div class="relative z-30 w-full max-w-xs mx-auto mb-6 flex items-center justify-center gap-3">
+    <!-- پنل پایین صفحه: دکمه زبان منتقل‌شده به منتهی‌الیه سمت راست -->
+    <div class="relative z-30 w-full max-w-xs mx-auto mb-6 flex items-center justify-end px-4">
         
-        <!-- ۱. دکمه انتخاب زبان (منوی سفارشی با ۸ زبان کامل) -->
+        <!-- دکمه انتخاب زبان (منوی سفارشی با ۸ زبان کامل) -->
         <div class="relative">
             <button onclick="toggleLangMenu()" id="langBtn" class="pulsing-dot bg-gray-700 hover:bg-gray-600 text-gray-200 w-5 h-5 md:w-6 md:h-6 rounded-full font-bold flex items-center justify-center shadow-xl border border-gray-400 cursor-pointer transition text-[9px]" title="انتخاب زبان">
                 <i class="fa-solid fa-globe text-[8px]"></i>
             </button>
 
             <!-- کادر لیست زبان‌ها -->
-            <div id="langDropdown" class="hidden absolute bottom-9 right-0 bg-gray-900/95 backdrop-blur-md border border-gray-600 rounded-xl shadow-2xl py-2 w-36 z-50 text-[11px] text-gray-200 text-right">
+            <div id="langDropdown" class="hidden absolute bottom-9 left-0 bg-gray-900/95 backdrop-blur-md border border-gray-600 rounded-xl shadow-2xl py-2 w-36 z-50 text-[11px] text-gray-200 text-right">
                 <div onclick="setLanguage('fa')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">فارسی</div>
                 <div onclick="setLanguage('en')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">English</div>
                 <div onclick="setLanguage('zh')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer transition">中文</div>
@@ -113,7 +113,7 @@
             fr: { sun: "Page de Défi 🚀", moon: "Site Principal 🌐", footer: "Plateforme NOVO-BAY © 2026", dir: "ltr" },
             it: { sun: "Pagina della Sfida 🚀", moon: "Sito Principale 🌐", footer: "Piattaforma NOVO-BAY © 2026", dir: "ltr" },
             de: { sun: "Herausforderungsseite 🚀", moon: "Hauptseite 🌐", footer: "NOVO-BAY Plattform © 2026", dir: "ltr" },
-            ru: { sun: "Страница вызова 🚀", moon: "Главный сайт 🌐", footer: "Платформа Платформа © 2026", dir: "ltr" }
+            ru: { sun: "Страница вызова 🚀", moon: "Главный сайт 🌐", footer: "Платформа NOVO-BAY © 2026", dir: "ltr" }
         };
 
         let currentLang = localStorage.getItem('novo_lang') || 'fa';
