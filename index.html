@@ -113,7 +113,7 @@
             fr: { sun: "Page de Défi 🚀", moon: "Site Principal 🌐", footer: "Plateforme NOVO-BAY © 2026", dir: "ltr" },
             it: { sun: "Pagina della Sfida 🚀", moon: "Sito Principale 🌐", footer: "Piattaforma NOVO-BAY © 2026", dir: "ltr" },
             de: { sun: "Herausforderungsseite 🚀", moon: "Hauptseite 🌐", footer: "NOVO-BAY Plattform © 2026", dir: "ltr" },
-            ru: { sun: "Страница вызова 🚀", moon: "Главный сайт 🌐", footer: "Платформа NOVO-BAY © 2026", dir: "ltr" }
+            ru: { sun: "Страница вызова 🚀", moon: "Главный сайт 🚀", footer: "Платформа NOVO-BAY © 2026", dir: "ltr" }
         };
 
         let currentLang = localStorage.getItem('novo_lang') || 'fa';
@@ -134,7 +134,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             setLanguage(currentLang);
             const video = document.getElementById('bgVideo');
-            video.playbackRate = 20.0; 
+            if (video) { video.playbackRate = 20.0; }
         });
 
         let sunClicked = false;
@@ -179,4 +179,7 @@
         });
     </script>
     
-    <!-- فایل جاوااسکریپت پلیر صوتی
+    <!-- فراخوانی فایل جاوااسکریپت پلیر صوتی شناور -->
+    <script src="C07-audio.js?v=3"></script>
+</body>
+</html>
