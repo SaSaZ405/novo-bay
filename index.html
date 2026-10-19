@@ -114,7 +114,7 @@
 
     <!-- اسکریپت‌های کنترلی و ترجمه -->
     <script>
-        // دیکشنری ترجمه متن‌ها برای ۸ زبان
+        // دیکشنری کامل متن‌ها برای ۸ زبان
         const translations = {
             fa: { sun: "صفحه چالش 🚀", moon: "سایت اصلی 🌐", footer: "NOVO-BAY Platform © 2026", dir: "rtl" },
             en: { sun: "Challenge Page 🚀", moon: "Main Site 🌐", footer: "NOVO-BAY Platform © 2026", dir: "ltr" },
@@ -133,22 +133,21 @@
             localStorage.setItem('novo_lang', lang);
             const t = translations[lang] || translations.fa;
             
+            // تغییر جهت صفحه (RTL / LTR)
             document.getElementById('htmlRoot').setAttribute('dir', t.dir);
-            document.getElementById('footerTextinnerText') = t.footer;
+            
+            // اعمال فوری متن‌ها روی تپ‌تیپ‌ها و فوتر
+            document.getElementById('sunTooltip').innerText = t.sun;
+            document.getElementById('moonTooltip').innerText = t.moon;
             document.getElementById('footerText').innerText = t.footer;
             
-            // به‌روزرسانی متن تپ‌تیپ‌ها اگر باز باشند
-            window.currentSunText = t.sun;
-            window.currentMoonText = t.moon;
-            
+            // بستن منو پس از انتخاب
             document.getElementById('langDropdown').classList.add('hidden');
         }
 
-        // اعمال زبان ذخیره‌شده در لود اولیه
-        setLanguage(currentLang);
-
-        // تنظیم سرعت ویدیو
+        // اعمال زبان ذخیره‌شده به محض لود شدن صفحه
         document.addEventListener("DOMContentLoaded", function() {
+            setLanguage(currentLang);
             const video = document.getElementById('bgVideo');
             video.playbackRate = 20.0; 
         });
@@ -166,7 +165,7 @@
                     sunClicked = true;
                     setTimeout(() => { tooltip.classList.add('hidden'); sunClicked = false; }, 4000);
                 } else {
-                    // هدایت به صفحه چالش به همراه ارسال کد زبان انتخابی
+                    // هدایت به صفحه چالش به همراه ارسال کد زبان انتخابی در URL
                     window.location.href = "https://sasaz405.github.io/novo-bay-showcase/?lang=" + currentLang;
                 }
             } else if (type === 'moon') {
