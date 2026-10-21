@@ -1,24 +1,30 @@
 /* ==========================================================
    NOVO-BAY: C07-audio.js
-   Ultra-Minimal Gray Floating Audio Controller (Bottom-Left)
+   Minimal Floating Audio Controller with Volume/Mute Button
    ========================================================== */
 
 (function () {
+  // نام دقیق ۹ فایل صوتی آپلود شده در مخزن
   const playlist = [
-    'track5.mp3',
-    'track6.mp3',
-    'track4.mp3',
-    'track8.mp3',
-    'track2.mp3'
+    'trac1.mp3',
+    'trac2.mp3',
+    'trac3.mp3',
+    'trac4.mp3',
+    'trac5.mp3',
+    'trac6.mp3',
+    'trac7.mp3',
+    'trac8.mp3',
+    'trac9.mp3'
   ];
 
   let currentTrackIndex = 0;
   let isPlaying = false;
+  let isMuted = false;
 
   const audio = new Audio();
   audio.preload = 'auto';
 
-  // استایل‌های بسیار مینیاتوری در گوشه سمت چپ پایین
+  // استایل‌های مینیاتوری پلیر به همراه دکمه بلندگو
   const style = document.createElement('style');
   style.innerHTML = `
     .nb-audio-float-player {
@@ -81,7 +87,7 @@
   `;
   document.head.appendChild(style);
 
-  // ساختار ۳ دکمه‌ای مینیمال
+  // ساختار پلیر شامل ۴ دکمه: قبلی، پخش/توقف، بعدی، و بلندگو (صدا)
   const playerContainer = document.createElement('div');
   playerContainer.className = 'nb-audio-float-player';
   playerContainer.innerHTML = `
@@ -89,6 +95,7 @@
       <button id="nb-prev" class="nb-btn" title="قبلی">⏭</button>
       <button id="nb-play" class="nb-btn nb-btn-play" title="پخش / توقف">▶</button>
       <button id="nb-next" class="nb-btn" title="بعدی">⏮</button>
+      <button id="nb-mute" class="nb-btn" title="قطع / وصل صدا">🔊</button>
     </div>
   `;
 
@@ -124,10 +131,20 @@
     if (playBtn) playBtn.textContent = '▶';
   }
 
+  function toggleMute() {
+    isMuted = !isMuted;
+    audio.muted = isMuted;
+    const muteBtn = document.getElementById('nb-mute');
+    if (muteBtn) {
+      muteBtn.textContent = isMuted ? '🔇' : '🔊';
+    }
+  }
+
   document.addEventListener('click', (e) => {
     const playBtn = e.target.closest('#nb-play');
     const nextBtn = e.target.closest('#nb-next');
     const prevBtn = e.target.closest('#nb-prev');
+    const muteBtn = e.target.closest('#nb-mute');
 
     if (playBtn) {
       if (isPlaying) { pauseAudio(); } else { playAudio(); }
@@ -139,6 +156,8 @@
       currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
       loadTrack(currentTrackIndex);
       playAudio();
+    } else if (muteBtn) {
+      toggleMute();
     }
   });
 
