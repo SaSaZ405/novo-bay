@@ -1,5 +1,5 @@
 /* ==========================================================
-   NOVO-BAY LANDING MASTER GRID & ARTWORK ALIGNMENT (D03)
+   NOVO-BAY LANDING MASTER GRID (D03) - FIXED POSITIONING
    ========================================================== */
 * {
     box-sizing: border-box;
@@ -12,75 +12,78 @@ body, html {
     height: 100vh;
     overflow: hidden;
     font-family: system-ui, -apple-system, sans-serif;
-    background-color: #050b14;
+    background-color: #000;
 }
 
-/* کانتینر اصلی تصویر پس‌زمینه و شبکه */
-.artwork-container {
-    position: relative;
+/* ویدیوی پس‌زمینه زنده و تمام‌صفحه */
+.bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-/* تصویر پس‌زمینه خورشید و ماه */
-.bg-artwork {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* فیت شدن کامل عکس بدون برش */
+    object-fit: cover;
     z-index: 1;
 }
 
-/* هدر بالای صفحه برای دکمه ترجمه */
-.top-header {
+/* شبکه اصلی کانتینر روی ویدیو */
+.command-viewport {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    padding: 16px 24px;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+    pointer-events: none; /* اجازه عبور کلیک به پس‌زمینه در صورت نیاز */
+}
+
+/* فعال کردن کلیک برای المان‌های تعاملی */
+.interactive-element {
+    pointer-events: auto;
+}
+
+/* منطقه دکمه زبان: گوشه بالا سمت راست (هدر) */
+.zone-lang-menu {
+    position: absolute;
+    top: 16px;
+    right: 16px;
     z-index: 50;
 }
 
-/* جایگاه دقیق دکمه خورشید روی گونه‌ی خورشید */
+/* دکمه خورشید: قفل‌شده دقیقاً روی گونه خورشید */
 .sun-hotspot {
     position: absolute;
-    top: 52%;
-    left: 41%;
+    top: 45%;
+    left: 36%;
     transform: translate(-50%, -50%);
-    z-index: 20;
+    z-index: 30;
 }
 
-/* جایگاه دقیق دکمه ماه روی گونه‌ی ماه آبی */
+/* دکمه ماه: قفل‌شده دقیقاً روی گونه ماه آبی */
 .moon-hotspot {
     position: absolute;
-    top: 51%;
-    left: 58%;
+    top: 44%;
+    left: 63%;
     transform: translate(-50%, -50%);
-    z-index: 20;
+    z-index: 30;
 }
 
 /* فوتر پایین صفحه */
-.footer-bar {
+.zone-footer {
     position: absolute;
     bottom: 8px;
     width: 100%;
     text-align: center;
     font-size: 9px;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.4);
     z-index: 20;
 }
 
 /* انیمیشن چشمک‌زن */
 @keyframes pulseGlow {
-    0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
-    50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 18px rgba(255,255,255,0.9); }
-    100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
+    0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+    50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 16px rgba(255,255,255,0.8); }
+    100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 6px rgba(255,255,255,0.4); }
 }
 .pulsing-dot {
     animation: pulseGlow 2s infinite ease-in-out;
