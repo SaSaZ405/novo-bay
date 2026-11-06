@@ -1,6 +1,5 @@
-
 /* ==========================================================
-   NOVO-BAY LANDING MASTER GRID (D03 - FIXED)
+   NOVO-BAY LANDING MASTER GRID & ARTWORK ALIGNMENT (D03)
    ========================================================== */
 * {
     box-sizing: border-box;
@@ -13,68 +12,75 @@ body, html {
     height: 100vh;
     overflow: hidden;
     font-family: system-ui, -apple-system, sans-serif;
-    background-color: #000;
+    background-color: #050b14;
 }
 
-/* شبکه شطرنجی اصلی ۱۲در۱۲ برای فیت شدن کامل روی صفحه بدون نیاز به زوم */
-.command-viewport {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: repeat(12, 1fr);
-    width: 100vw;
-    height: 100vh;
+/* کانتینر اصلی تصویر پس‌زمینه و شبکه */
+.artwork-container {
     position: relative;
-    z-index: 10;
-}
-
-/* ویدیوی پس‌زمینه یا تصویر */
-.bg-video {
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100vw;
     height: 100vh;
-    object-fit: cover;
-    z-index: 1;
-}
-
-/* جایگاه منوی زبان (بالا سمت راست - سطر ۱) */
-.zone-lang-menu {
-    grid-column: 10 / span 3;
-    grid-row: 1 / span 2;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
-    padding: 16px;
-    z-index: 50;
-}
-
-/* جایگاه دکمه‌های خورشید و ماه (دقیقاً وسط صفحه - سطر ۴ تا ۷) */
-.zone-center-stage {
-    grid-column: 2 / span 10;
-    grid-row: 4 / span 4;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 32px;
-    z-index: 20;
-}
-
-/* جایگاه فوتر پایین صفحه (سطر ۱۲) */
-.zone-footer {
-    grid-column: 1 / span 12;
-    grid-row: 12 / span 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+}
+
+/* تصویر پس‌زمینه خورشید و ماه */
+.bg-artwork {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* فیت شدن کامل عکس بدون برش */
+    z-index: 1;
+}
+
+/* هدر بالای صفحه برای دکمه ترجمه */
+.top-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 24px;
+    z-index: 50;
+}
+
+/* جایگاه دقیق دکمه خورشید روی گونه‌ی خورشید */
+.sun-hotspot {
+    position: absolute;
+    top: 52%;
+    left: 41%;
+    transform: translate(-50%, -50%);
     z-index: 20;
 }
 
-/* انیمیشن چشمک‌زن ملایم */
+/* جایگاه دقیق دکمه ماه روی گونه‌ی ماه آبی */
+.moon-hotspot {
+    position: absolute;
+    top: 51%;
+    left: 58%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+}
+
+/* فوتر پایین صفحه */
+.footer-bar {
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: center;
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.5);
+    z-index: 20;
+}
+
+/* انیمیشن چشمک‌زن */
 @keyframes pulseGlow {
-    0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 6px rgba(255,255,255,0.4); }
-    50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 15px rgba(255,255,255,0.8); }
-    100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+    0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
+    50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 18px rgba(255,255,255,0.9); }
+    100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
 }
 .pulsing-dot {
     animation: pulseGlow 2s infinite ease-in-out;
