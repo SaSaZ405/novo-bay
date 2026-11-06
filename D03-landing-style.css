@@ -1,5 +1,5 @@
 /* ==========================================================
-   NOVO-BAY LANDING MASTER GRID (D03) - FIXED POSITIONING
+   NOVO-BAY LANDING MASTER GRID (D03) - EXACT CHEEK ALIGNMENT
    ========================================================== */
 * {
     box-sizing: border-box;
@@ -26,7 +26,7 @@ body, html {
     z-index: 1;
 }
 
-/* شبکه اصلی کانتینر روی ویدیو */
+/* کانتینر روی لایه‌ی ویدیو */
 .command-viewport {
     position: absolute;
     top: 0;
@@ -34,15 +34,14 @@ body, html {
     width: 100vw;
     height: 100vh;
     z-index: 10;
-    pointer-events: none; /* اجازه عبور کلیک به پس‌زمینه در صورت نیاز */
+    pointer-events: none;
 }
 
-/* فعال کردن کلیک برای المان‌های تعاملی */
 .interactive-element {
     pointer-events: auto;
 }
 
-/* منطقه دکمه زبان: گوشه بالا سمت راست (هدر) */
+/* منوی ترجمه: بالا سمت راست */
 .zone-lang-menu {
     position: absolute;
     top: 16px;
@@ -50,25 +49,25 @@ body, html {
     z-index: 50;
 }
 
-/* دکمه خورشید: قفل‌شده دقیقاً روی گونه خورشید */
+/* دکمه خورشید: دقیقاً روی مرکز گونه خورشید */
 .sun-hotspot {
     position: absolute;
-    top: 45%;
+    top: 50%;
     left: 36%;
     transform: translate(-50%, -50%);
     z-index: 30;
 }
 
-/* دکمه ماه: قفل‌شده دقیقاً روی گونه ماه آبی */
+/* دکمه ماه: دقیقاً روی مرکز گونه ماه آبی */
 .moon-hotspot {
     position: absolute;
-    top: 44%;
-    left: 63%;
+    top: 52%;
+    left: 68%;
     transform: translate(-50%, -50%);
     z-index: 30;
 }
 
-/* فوتر پایین صفحه */
+/* فوتر پایین */
 .zone-footer {
     position: absolute;
     bottom: 8px;
