@@ -1,5 +1,5 @@
 /* ==========================================================
-   NOVO-BAY LANDING MASTER GRID (D03) - EXACT CHEEK ALIGNMENT
+   NOVO-BAY LANDING MASTER GRID (D03) - PRECISE ADJUSTMENT
    ========================================================== */
 * {
     box-sizing: border-box;
@@ -15,7 +15,7 @@ body, html {
     background-color: #000;
 }
 
-/* ویدیوی پس‌زمینه زنده و تمام‌صفحه */
+/* ویدیوی پس‌زمینه زنده و تمام‌صفحه[cite: 4] */
 .bg-video {
     position: fixed;
     top: 0;
@@ -26,7 +26,6 @@ body, html {
     z-index: 1;
 }
 
-/* کانتینر روی لایه‌ی ویدیو */
 .command-viewport {
     position: absolute;
     top: 0;
@@ -41,7 +40,7 @@ body, html {
     pointer-events: auto;
 }
 
-/* منوی ترجمه: بالا سمت راست */
+/* منوی ترجمه: بالا سمت راست[cite: 4] */
 .zone-lang-menu {
     position: absolute;
     top: 16px;
@@ -49,20 +48,20 @@ body, html {
     z-index: 50;
 }
 
-/* دکمه خورشید: دقیقاً روی مرکز گونه خورشید */
+/* دکمه خورشید: ۲ واحد پایین‌تر و ۱ واحد به سمت چپ */
 .sun-hotspot {
     position: absolute;
-    top: 50%;
-    left: 36%;
+    top: 52%;
+    left: 35%;
     transform: translate(-50%, -50%);
     z-index: 30;
 }
 
-/* دکمه ماه: دقیقاً روی مرکز گونه ماه آبی */
+/* دکمه ماه: انتقال بیشتر به سمت راست روی گونه ماه */
 .moon-hotspot {
     position: absolute;
     top: 52%;
-    left: 68%;
+    left: 71%;
     transform: translate(-50%, -50%);
     z-index: 30;
 }
