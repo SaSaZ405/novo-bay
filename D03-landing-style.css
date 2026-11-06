@@ -1,5 +1,5 @@
 /* ==========================================================
-   NOVO-BAY LANDING MASTER GRID (D03) - PRECISE ADJUSTMENT
+   NOVO-BAY LANDING MASTER GRID (D03) - FINAL POSITION ADJUSTMENT
    ========================================================== */
 * {
     box-sizing: border-box;
@@ -15,7 +15,7 @@ body, html {
     background-color: #000;
 }
 
-/* ویدیوی پس‌زمینه زنده و تمام‌صفحه[cite: 4] */
+/* ویدیوی پس‌زمینه تمام‌صفحه */
 .bg-video {
     position: fixed;
     top: 0;
@@ -40,7 +40,7 @@ body, html {
     pointer-events: auto;
 }
 
-/* منوی ترجمه: بالا سمت راست[cite: 4] */
+/* منوی ترجمه: بالا سمت راست */
 .zone-lang-menu {
     position: absolute;
     top: 16px;
@@ -48,20 +48,20 @@ body, html {
     z-index: 50;
 }
 
-/* دکمه خورشید: ۲ واحد پایین‌تر و ۱ واحد به سمت چپ */
+/* دکمه خورشید: ۴ واحد بیشتر به سمت چپ (روی گونه خورشید) */
 .sun-hotspot {
     position: absolute;
     top: 52%;
-    left: 35%;
+    left: 31%;
     transform: translate(-50%, -50%);
     z-index: 30;
 }
 
-/* دکمه ماه: انتقال بیشتر به سمت راست روی گونه ماه */
+/* دکمه ماه: ۶ واحد بیشتر به سمت راست (روی گونه ماه آبی) */
 .moon-hotspot {
     position: absolute;
     top: 52%;
-    left: 71%;
+    left: 77%;
     transform: translate(-50%, -50%);
     z-index: 30;
 }
