@@ -1,1 +1,81 @@
 
+/* ==========================================================
+   NOVO-BAY LANDING MASTER GRID (D03 - FIXED)
+   ========================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: #000;
+}
+
+/* شبکه شطرنجی اصلی ۱۲در۱۲ برای فیت شدن کامل روی صفحه بدون نیاز به زوم */
+.command-viewport {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+}
+
+/* ویدیوی پس‌زمینه یا تصویر */
+.bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* جایگاه منوی زبان (بالا سمت راست - سطر ۱) */
+.zone-lang-menu {
+    grid-column: 10 / span 3;
+    grid-row: 1 / span 2;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 16px;
+    z-index: 50;
+}
+
+/* جایگاه دکمه‌های خورشید و ماه (دقیقاً وسط صفحه - سطر ۴ تا ۷) */
+.zone-center-stage {
+    grid-column: 2 / span 10;
+    grid-row: 4 / span 4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    z-index: 20;
+}
+
+/* جایگاه فوتر پایین صفحه (سطر ۱۲) */
+.zone-footer {
+    grid-column: 1 / span 12;
+    grid-row: 12 / span 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+
+/* انیمیشن چشمک‌زن ملایم */
+@keyframes pulseGlow {
+    0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+    50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 15px rgba(255,255,255,0.8); }
+    100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+}
+.pulsing-dot {
+    animation: pulseGlow 2s infinite ease-in-out;
+}
