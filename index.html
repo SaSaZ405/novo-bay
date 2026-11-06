@@ -6,7 +6,8 @@
     <title>NOVO-BAY | Landing Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="D03-landing-style.css">
+    <!-- اضافه کردن شماره نسخه برای پاک شدن کش مرورگر -->
+    <link rel="stylesheet" href="D03-landing-style.css?v=4">
 </head>
 <body class="select-none bg-black">
 
@@ -20,7 +21,7 @@
     <!-- کانتینر اصلی روی ویدیو -->
     <main class="command-viewport">
         
-        <!-- دکمه ترجمه (بالا سمت راست) -->
+        <!-- دکمه ترجمه (بالا سمت راست)[cite: 4] -->
         <div class="zone-lang-menu interactive-element">
             <div class="relative">
                 <button onclick="toggleLangMenu()" id="langBtn" class="pulsing-dot bg-gray-800/80 hover:bg-gray-700 text-gray-200 w-7 h-7 rounded-full font-bold flex items-center justify-center shadow-xl border border-gray-400 cursor-pointer text-[9px]" title="Language">
@@ -39,7 +40,7 @@
             </div>
         </div>
 
-        <!-- دکمه خورشید دقیقاً روی گونه خورشید -->
+        <!-- دکمه خورشید -->
         <div class="sun-hotspot interactive-element flex flex-col items-center">
             <div id="sunTooltip" class="hidden mb-2 bg-amber-950/95 text-amber-200 border border-amber-400/60 text-[10px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl animate-bounce whitespace-nowrap">
                 صفحه چالش 🚀
@@ -49,7 +50,7 @@
             </button>
         </div>
 
-        <!-- دکمه ماه دقیقاً روی گونه ماه آبی -->
+        <!-- دکمه ماه -->
         <div class="moon-hotspot interactive-element flex flex-col items-center">
             <div id="moonTooltip" class="hidden mb-2 bg-sky-950/95 text-sky-200 border border-sky-400/60 text-[10px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl animate-bounce whitespace-nowrap">
                 سایت اصلی 🌐
