@@ -10,18 +10,23 @@
 </head>
 <body class="select-none bg-black">
 
-    <main class="artwork-container">
-        
-        <!-- تصویر پس‌زمینه خورشید و ماه (نام فایل عکس موجود در مخزن شما: sun-moon.jpg) -->
-        <img src="sun-moon.jpg" alt="NOVO-BAY Sun & Moon" class="bg-artwork">
+    <!-- ویدیوی پس‌زمینه تمام صفحه -->
+    <video id="bgVideo" autoplay muted loop playsinline webkit-playsinline class="bg-video">
+        <source src="video.mp4" type="video/mp4">
+    </video>
 
-        <!-- هدر بالا برای دکمه ترجمه -->
-        <header class="top-header">
+    <div class="absolute inset-0 bg-black/10 pointer-events-none z-2"></div>
+
+    <!-- کانتینر المان‌ها روی ویدیو -->
+    <main class="command-viewport">
+        
+        <!-- دکمه ترجمه (بالا سمت راست) -->
+        <div class="zone-lang-menu interactive-element">
             <div class="relative">
-                <button onclick="toggleLangMenu()" id="langBtn" class="pulsing-dot bg-gray-800/90 hover:bg-gray-700 text-gray-200 w-8 h-8 rounded-full font-bold flex items-center justify-center shadow-2xl border border-gray-400 cursor-pointer text-xs" title="Language">
-                    <i class="fa-solid fa-globe text-xs"></i>
+                <button onclick="toggleLangMenu()" id="langBtn" class="pulsing-dot bg-gray-800/80 hover:bg-gray-700 text-gray-200 w-7 h-7 rounded-full font-bold flex items-center justify-center shadow-xl border border-gray-400 cursor-pointer text-[9px]" title="Language">
+                    <i class="fa-solid fa-globe text-[9px]"></i>
                 </button>
-                <div id="langDropdown" class="hidden absolute top-10 right-0 bg-gray-900/95 backdrop-blur-md border border-gray-600 rounded-xl shadow-2xl py-2 w-36 z-50 text-[11px] text-gray-200 text-right">
+                <div id="langDropdown" class="hidden absolute top-9 right-0 bg-gray-900/95 backdrop-blur-md border border-gray-600 rounded-xl shadow-2xl py-2 w-36 z-50 text-[11px] text-gray-200 text-right">
                     <div onclick="setLanguage('fa')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer">فارسی</div>
                     <div onclick="setLanguage('en')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer">English</div>
                     <div onclick="setLanguage('zh')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer">中文</div>
@@ -32,30 +37,30 @@
                     <div onclick="setLanguage('ru')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer">Русский</div>
                 </div>
             </div>
-        </header>
+        </div>
 
-        <!-- دکمه خورشید دقیقاً روی گونه خورشید -->
-        <div class="sun-hotspot flex flex-col items-center">
-            <div id="sunTooltip" class="hidden mb-2 bg-amber-950/95 text-amber-200 border border-amber-400/60 text-[10px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl animate-bounce">
+        <!-- دکمه خورشید روی گونه خورشید -->
+        <div class="sun-hotspot interactive-element flex flex-col items-center">
+            <div id="sunTooltip" class="hidden mb-2 bg-amber-950/95 text-amber-200 border border-amber-400/60 text-[10px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl animate-bounce whitespace-nowrap">
                 صفحه چالش 🚀
             </div>
-            <button onclick="handleButtonClick('sun')" class="pulsing-dot w-8 h-8 md:w-10 md:h-10 bg-amber-500 hover:bg-amber-400 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border-2 border-amber-200 cursor-pointer">
-                <i class="fa-solid fa-sun text-xs md:text-sm"></i>
+            <button onclick="handleButtonClick('sun')" class="pulsing-dot w-6 h-6 md:w-7 md:h-7 bg-amber-500 hover:bg-amber-400 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border border-amber-200 cursor-pointer">
+                <i class="fa-solid fa-sun text-[9px]"></i>
             </button>
         </div>
 
-        <!-- دکمه ماه دقیقاً روی گونه ماه آبی -->
-        <div class="moon-hotspot flex flex-col items-center">
-            <div id="moonTooltip" class="hidden mb-2 bg-sky-950/95 text-sky-200 border border-sky-400/60 text-[10px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl animate-bounce">
+        <!-- دکمه ماه روی گونه ماه آبی -->
+        <div class="moon-hotspot interactive-element flex flex-col items-center">
+            <div id="moonTooltip" class="hidden mb-2 bg-sky-950/95 text-sky-200 border border-sky-400/60 text-[10px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl animate-bounce whitespace-nowrap">
                 سایت اصلی 🌐
             </div>
-            <button onclick="handleButtonClick('moon')" class="pulsing-dot w-8 h-8 md:w-10 md:h-10 bg-sky-400 hover:bg-sky-300 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border-2 border-sky-200 cursor-pointer">
-                <i class="fa-solid fa-moon text-xs md:text-sm"></i>
+            <button onclick="handleButtonClick('moon')" class="pulsing-dot w-6 h-6 md:w-7 md:h-7 bg-sky-400 hover:bg-sky-300 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border border-sky-200 cursor-pointer">
+                <i class="fa-solid fa-moon text-[9px]"></i>
             </button>
         </div>
 
         <!-- فوتر پایین -->
-        <footer class="footer-bar" id="footerText">
+        <footer class="zone-footer" id="footerText">
             NOVO-BAY Platform © 2026
         </footer>
 
