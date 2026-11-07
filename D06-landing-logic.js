@@ -1,20 +1,7 @@
-// در فایل D06-landing-logic.js
 function handleButtonClick(type) {
-    const t = translations[currentLang] || translations.fa;
     if (type === 'sun') {
-        // کلیک اول روی دکمه خورشید برای باز کردن پنل شیشه‌ای قوانین
-        if (typeof openChallengeModal === 'function') {
-            openChallengeModal();
-        }
+        openChallengeModal(); // باز شدن پنل شیشه‌ای قوانین چالش با متن دقیق
     } else if (type === 'moon') {
-        const tooltip = document.getElementById('moonTooltip');
-        tooltip.innerText = t.moon;
-        if (!moonClicked) {
-            tooltip.classList.remove('hidden');
-            moonClicked = true;
-            setTimeout(() => { tooltip.classList.add('hidden'); moonClicked = false; }, 4000);
-        } else {
-            alert("انتقال به سایت اصلی نووبی...");
-        }
+        window.location.href = "index.html"; // یا لینک سایت اصلی
     }
 }
