@@ -2,7 +2,7 @@
    NOVO-BAY CHALLENGE MODAL & PROTOCOL MANAGER (D08)
    ========================================================== */
 
-// تزریق استایل‌های مختص به پنل شیشه‌ای چالش به صورت داینامیک
+// تزریق استایل‌های پنل شیشه‌ای چالش
 (function injectChallengeModalStyles() {
     const styleId = 'novo-challenge-modal-style';
     if (document.getElementById(styleId)) return;
@@ -13,9 +13,9 @@
         .challenge-modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(2, 6, 23, 0.85);
-            backdrop-filter: blur(12px);
-            z-index: 9999;
+            background: rgba(2, 6, 23, 0.88);
+            backdrop-filter: blur(14px);
+            z-index: 99999;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -28,12 +28,12 @@
             visibility: visible;
         }
         .challenge-modal-card {
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.95);
             border: 1px solid rgba(245, 158, 11, 0.4);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.15);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 35px rgba(245, 158, 11, 0.2);
             border-radius: 1.5rem;
             width: 90%;
-            max-width: 520px;
+            max-width: 580px;
             padding: 2rem;
             color: #f8fafc;
             transform: scale(0.95);
@@ -48,7 +48,7 @@
     document.head.appendChild(style);
 })();
 
-// ایجاد ساختار HTML پاپ‌آپ شیشه‌ای در صفحه
+// ساختار HTML پنل شیشه‌ای با متن دقیق مورد نظر شما
 (function createChallengeModalDOM() {
     if (document.getElementById('challengeModalOverlay')) return;
 
@@ -56,19 +56,20 @@
         <div id="challengeModalOverlay" class="challenge-modal-overlay">
             <div class="challenge-modal-card">
                 <div class="flex items-center justify-between mb-4 border-b border-amber-500/30 pb-3">
-                    <h3 class="text-base font-bold text-amber-300 flex items-center gap-2">
+                    <h3 class="text-sm md:text-base font-bold text-amber-300 flex items-center gap-2">
                         <i class="fa-solid fa-rocket text-amber-400"></i>
-                        پروتکل ورود به چالش‌های NOVO-BAY
+                        قوانین و شرایط ورود به چالش‌های نوو-بی (NOVO-BAY Challenge Protocol)
                     </h3>
                     <button onclick="closeChallengeModal()" class="text-gray-400 hover:text-white transition cursor-pointer text-sm">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                <div class="space-y-3 text-xs text-gray-300 leading-relaxed">
-                    <p><strong>هدف پلتفرم:</strong> سنجش مهارت‌های تحلیلی، تصمیم‌گیری در شرایط بحران و حل مسائل پیچیده‌ی شهری و فضایی.</p>
-                    <p><strong>روند شرکت:</strong> رویارویی با سناریوهای تعاملی و چالش‌های محاسباتی نیازمند دقت و تفکر سیستمی.</p>
-                    <p class="text-amber-200/80 bg-amber-950/40 p-2.5 rounded-xl border border-amber-500/20">
-                        با کلیک بر روی دکمه «پذیرش و ورود»، موافقت خود را با چارچوب علمی و اجرایی این بخش اعلام می‌کنید.
+                <div class="space-y-3 text-[11px] md:text-xs text-gray-300 leading-relaxed">
+                    <p><strong>هدف پلتفرم:</strong> این بخش برای سنجش مهارت‌های تحلیلی، تصمیم‌گیری در شرایط بحران و حل مسائل پیچیده‌ی شهری و فضایی طراحی شده است.</p>
+                    <p><strong>روند شرکت:</strong> با ورود به این بخش، شما با سناریوهای تعاملی و چالش‌های محاسباتی روبه‌رو خواهید شد که نیازمند دقت و تفکر سیستمی است.</p>
+                    <p><strong>حریم و تعهد:</strong> اطلاعات و نتایج تحلیل‌های شما در چارچوب استانداردهای پژوهشی پلتفرم ثبت و پردازش می‌گردد.</p>
+                    <p class="text-amber-200/90 bg-amber-950/40 p-3 rounded-xl border border-amber-500/30 font-medium">
+                        با کلیک بر روی دکمه‌ی «پذیرش و ورود»، موافقت خود را با چارچوب علمی و اجرایی این بخش اعلام می‌کنید.
                     </p>
                 </div>
                 <div class="mt-6 flex items-center justify-end gap-3">
@@ -86,7 +87,7 @@
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 })();
 
-// توابع کنترل‌کننده رویدادهای چالش
+// توابع کنترل‌کننده
 function openChallengeModal() {
     const overlay = document.getElementById('challengeModalOverlay');
     if (overlay) {
@@ -106,7 +107,7 @@ function acceptAndEnterChallenge() {
     window.location.href = "https://sasaz405.github.io/novo-bay-showcase/?lang=" + currentLang;
 }
 
-// بستن مودال با کلیک بیرون از کادر
+// بستن با کلیک بیرون از کادر
 window.addEventListener('click', function(e) {
     const overlay = document.getElementById('challengeModalOverlay');
     if (e.target === overlay) {
