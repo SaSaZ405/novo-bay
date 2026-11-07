@@ -1,20 +1,229 @@
-// در فایل D06-landing-logic.js
-function handleButtonClick(type) {
-    const t = translations[currentLang] || translations.fa;
-    if (type === 'sun') {
-        // کلیک اول روی دکمه خورشید برای باز کردن پنل شیشه‌ای قوانین
-        if (typeof openChallengeModal === 'function') {
-            openChallengeModal();
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVO-BAY | Central Command Platform</title>
+    <!-- استفاده از Tailwind CSS برای طراحی مدرن و پنل‌های شیشه‌ای -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- استایل‌های سراسری مادر (شماره ۲) -->
+    <link rel="stylesheet" href="D03-landing-style.css">
+    <style>
+        /* استایل‌های سراسری پنل شیشه‌ای و انیمیشن‌ها (شماره ۶، ۸، ۱۰) */
+        .glass-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.88);
+            backdrop-filter: blur(14px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
         }
-    } else if (type === 'moon') {
-        const tooltip = document.getElementById('moonTooltip');
-        tooltip.innerText = t.moon;
-        if (!moonClicked) {
-            tooltip.classList.remove('hidden');
-            moonClicked = true;
-            setTimeout(() => { tooltip.classList.add('hidden'); moonClicked = false; }, 4000);
-        } else {
-            alert("انتقال به سایت اصلی نووبی...");
+        .glass-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
-    }
-}
+        .glass-card {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 35px rgba(245, 158, 11, 0.2);
+            border-radius: 1.5rem;
+            width: 90%;
+            max-width: 580px;
+            padding: 2rem;
+            color: #f8fafc;
+            transform: scale(0.95);
+            transition: transform 0.3s ease-in-out;
+            text-align: right;
+            direction: rtl;
+        }
+        .glass-overlay.active .glass-card {
+            transform: scale(1);
+        }
+        @keyframes pulseGlow {
+            0% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 16px rgba(255,255,255,0.8); }
+            100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+        }
+        .pulsing-dot { animation: pulseGlow 2s infinite ease-in-out; }
+    </style>
+</head>
+<body class="select-none bg-black overflow-hidden">
+
+    <!-- ویدیوی پس‌زمینه تمام‌صفحه -->
+    <video id="bgVideo" autoplay muted loop playsinline webkit-playsinline class="fixed inset-0 w-screen h-screen object-cover z-1">
+        <source src="video.mp4" type="video/mp4">
+    </video>
+
+    <div class="absolute inset-0 bg-black/10 pointer-events-none z-2"></div>
+
+    <!-- هسته مرکزی فرماندهی المان‌ها -->
+    <main class="absolute inset-0 z-10 pointer-events-none">
+        
+        <!-- ۱. دکمه ترجمه / زبان (شماره ۳): بالا سمت راست -->
+        <div class="absolute top-4 right-4 z-50 pointer-events-auto">
+            <div class="relative">
+                <button onclick="toggleLangMenu()" id="langBtn" class="pulsing-dot bg-gray-800/80 hover:bg-gray-700 text-gray-200 w-7 h-7 rounded-full font-bold flex items-center justify-center shadow-xl border border-gray-400 cursor-pointer text-[9px]" title="Language" onmouseenter="showTooltip('lang')" onmouseleave="hideTooltip('lang')">
+                    <i class="fa-solid fa-globe text-[9px]"></i>
+                </button>
+                <!-- راهنمای کوتاه (Tooltip) -->
+                <div id="langTooltip" class="hidden absolute top-10 right-0 bg-gray-950/95 text-gray-200 border border-gray-500 text-[10px] py-1 px-2 rounded-lg whitespace-nowrap shadow-xl">
+                    تغییر زبان و گویش پلتفرم 🌐
+                </div>
+                <!-- منوی آبشاری زبان -->
+                <div id="langDropdown" class="hidden absolute top-9 right-0 bg-gray-900/95 backdrop-blur-md border border-gray-600 rounded-xl shadow-2xl py-2 w-36 z-50 text-[11px] text-gray-200 text-right">
+                    <div onclick="setLanguage('fa')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer">فارسی</div>
+                    <div onclick="setLanguage('en')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer">English</div>
+                    <div onclick="setLanguage('zh')" class="px-3 py-1.5 hover:bg-gray-700 cursor-pointer">中文</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ۲. دکمه خورشید / چالش (شماره ۴) -->
+        <div class="absolute top-[52%] left-[31%] -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-auto flex flex-col items-center">
+            <div id="sunTooltip" class="hidden mb-2 bg-amber-950/95 text-amber-200 border border-amber-400/60 text-[10px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap">
+                صفحه چالش‌های استراتژیک 🚀
+            </div>
+            <button onclick="openModal('sun')" onmouseenter="showTooltip('sun')" onmouseleave="hideTooltip('sun')" class="pulsing-dot w-6 h-6 md:w-7 md:h-7 bg-amber-500 hover:bg-amber-400 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border border-amber-200 cursor-pointer">
+                <i class="fa-solid fa-sun text-[9px]"></i>
+            </button>
+        </div>
+
+        <!-- ۳. دکمه ماه / سایت اصلی (شماره ۵) -->
+        <div class="absolute top-[52%] left-[77%] -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-auto flex flex-col items-center">
+            <div id="moonTooltip" class="hidden mb-2 bg-sky-950/95 text-sky-200 border border-sky-400/60 text-[10px] font-bold py-1 px-2.5 rounded-xl backdrop-blur-md shadow-2xl whitespace-nowrap">
+                سایت اصلی و گالری 🌐
+            </div>
+            <button onclick="openModal('moon')" onmouseenter="showTooltip('moon')" onmouseleave="hideTooltip('moon')" class="pulsing-dot w-6 h-6 md:w-7 md:h-7 bg-sky-400 hover:bg-sky-300 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border border-sky-200 cursor-pointer">
+                <i class="fa-solid fa-moon text-[9px]"></i>
+            </button>
+        </div>
+
+        <!-- ۴. کنترلر موسیقی پلیر (شماره ۷): پایین سمت چپ -->
+        <div class="absolute bottom-4 left-4 z-40 pointer-events-auto flex items-center gap-2 bg-gray-900/80 backdrop-blur-md p-2 rounded-xl border border-gray-700">
+            <button onclick="openModal('audio')" onmouseenter="showTooltip('audio')" onmouseleave="hideTooltip('audio')" class="text-amber-400 hover:text-amber-300 text-xs px-2 py-1 cursor-pointer flex items-center gap-1.5">
+                <i class="fa-solid fa-music"></i>
+                <span class="text-[10px]">موزیک پلیر</span>
+            </button>
+            <div id="audioTooltip" class="hidden absolute bottom-12 left-0 bg-gray-950/95 text-amber-200 border border-amber-500/50 text-[10px] py-1 px-2 rounded-lg whitespace-nowrap shadow-xl">
+                مدیریت پخش صوتی و ترک‌ها 🎵
+            </div>
+        </div>
+
+        <!-- فوتر پایین -->
+        <footer class="absolute bottom-2 w-full text-center text-[9px] text-white/40 z-20" id="footerText">
+            NOVO-BAY Platform © 2026
+        </footer>
+
+    </main>
+
+    <!-- پنل شیشه‌ای مرکزی (Modal) جهت نمایش قوانین و پروتکل‌ها (شماره ۶) -->
+    <div id="centralGlassModal" class="glass-overlay">
+        <div class="glass-card">
+            <div class="flex items-center justify-between mb-4 border-b border-amber-500/30 pb-3">
+                <h3 id="modalTitle" class="text-sm md:text-base font-bold text-amber-300 flex items-center gap-2">
+                    <i class="fa-solid fa-rocket text-amber-400"></i>
+                    قوانین و شرایط ورود به چالش‌های نوو-بی (NOVO-BAY Protocol)
+                </h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-white transition cursor-pointer text-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="modalBody" class="space-y-3 text-[11px] md:text-xs text-gray-300 leading-relaxed">
+                <p><strong>هدف پلتفرم:</strong> این بخش برای سنجش مهارت‌های تحلیلی، تصمیم‌گیری در شرایط بحران و حل مسائل پیچیده‌ی شهری و فضایی طراحی شده است.</p>
+                <p><strong>روند شرکت:</strong> با ورود به این بخش، شما با سناریوهای تعاملی و چالش‌های محاسباتی روبه‌رو خواهید شد که نیازمند دقت و تفکر سیستمی است.</p>
+                <p><strong>حریم و تعهد:</strong> اطلاعات و نتایج تحلیل‌های شما در چارچوب استانداردهای پژوهشی پلتفرم ثبت و پردازش می‌گردد.</p>
+                <p class="text-amber-200/90 bg-amber-950/40 p-3 rounded-xl border border-amber-500/30 font-medium">
+                    با کلیک بر روی دکمه‌ی «پذیرش و ورود»، موافقت خود را با چارچوب علمی و اجرایی این بخش اعلام می‌کنید.
+                </p>
+            </div>
+            <div class="mt-6 flex items-center justify-end gap-3">
+                <button onclick="closeModal()" class="px-4 py-2 rounded-xl text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 transition cursor-pointer">
+                    انصراف
+                </button>
+                <button id="modalConfirmBtn" onclick="confirmAction()" class="px-5 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-gray-950 transition shadow-lg shadow-amber-500/20 cursor-pointer flex items-center gap-2">
+                    <span>پذیرش و ورود به چالش</span>
+                    <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- اسکریپت‌های مدیریت مرکزی (شماره ۹، ۱۰) -->
+    <script>
+        let currentActionType = 'sun';
+
+        function showTooltip(type) {
+            const tip = document.getElementById(type + 'Tooltip');
+            if (tip) tip.classList.remove('hidden');
+        }
+
+        function hideTooltip(type) {
+            const tip = document.getElementById(type + 'Tooltip');
+            if (tip) tip.classList.add('hidden');
+        }
+
+        function openModal(type) {
+            currentActionType = type;
+            const modal = document.getElementById('centralGlassModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            if (type === 'sun') {
+                title.innerHTML = '<i class="fa-solid fa-rocket text-amber-400"></i> قوانین و شرایط ورود به چالش‌های نوو-بی';
+                body.innerHTML = `
+                    <p><strong>هدف پلتفرم:</strong> سنجش مهارت‌های تحلیلی، تصمیم‌گیری در شرایط بحران و حل مسائل پیچیده‌ی شهری و فضایی.</p>
+                    <p><strong>روند شرکت:</strong> رویارویی با سناریوهای تعاملی و چالش‌های محاسباتی نیازمند دقت و تفکر سیستمی.</p>
+                    <p class="text-amber-200/90 bg-amber-950/40 p-3 rounded-xl border border-amber-500/30 font-medium">با کلیک بر روی دکمه‌ی «پذیرش و ورود»، موافقت خود را با چارچوب علمی و اجرایی این بخش اعلام می‌کنید.</p>
+                `;
+            } else if (type === 'moon') {
+                title.innerHTML = '<i class="fa-solid fa-globe text-sky-400"></i> راهنمای ورود به سایت اصلی';
+                body.innerHTML = `
+                    <p><strong>معرفی بخش:</strong> ورود به گالری سراسری، مخازن پژوهشی و مستندات اصلی هلدینگ نوو-بی.</p>
+                    <p class="text-sky-200/90 bg-sky-950/40 p-3 rounded-xl border border-sky-500/30 font-medium">جهت ورود به محیط عمومی سایت اصلی، روی دکمه تایید کلیک نمایید.</p>
+                `;
+            } else if (type === 'audio') {
+                title.innerHTML = '<i class="fa-solid fa-music text-amber-400"></i> پروتکل پخش صوتی و موسیقی';
+                body.innerHTML = `
+                    <p><strong>مدیریت صوت:</strong> انتخاب ترک‌های صوتی، کنترل جریان پخش و تنظیمات صوتی پس‌زمینه.</p>
+                    <p class="text-amber-200/90 bg-amber-950/40 p-3 rounded-xl border border-amber-500/30 font-medium">برای فعال‌سازی کامل پنل صوتی روی دکمه تایید بزنید.</p>
+                `;
+            }
+
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('centralGlassModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function confirmAction() {
+            const lang = localStorage.getItem('novo_lang') || 'fa';
+            if (currentActionType === 'sun') {
+                window.location.href = "https://sasaz405.github.io/novo-bay-showcase/?lang=" + lang;
+            } else if (currentActionType === 'moon') {
+                alert("در حال انتقال به سایت اصلی نووبی...");
+                closeModal();
+            } else {
+                closeModal();
+            }
+        }
+
+        function toggleLangMenu() {
+            const dropdown = document.getElementById('langDropdown');
+            if (dropdown) dropdown.classList.toggle('hidden');
+        }
+
+        function setLanguage(lang) {
+            localStorage.setItem('novo_lang', lang);
+            toggleLangMenu();
+        }
+    </script>
+</body>
+</html>
