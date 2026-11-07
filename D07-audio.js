@@ -1,52 +1,33 @@
 /* ==========================================================
-   NOVO-BAY AUDIO CONTROLLER MODULE (D07)
+   NOVO-BAY INDEPENDENT AUDIO MODULE (C07-audio.js)
+   Layer: C07-audio-module
    ========================================================== */
-class NovoAudioPlayer {
+class C07AudioEngine {
     constructor() {
         this.tracks = ['trac1.mp3', 'trac2.mp3', 'trac3.mp3', 'trac4.mp3', 'trac5.mp3', 'trac6.mp3', 'trac7.mp3', 'trac8.mp3', 'trac9.mp3'];
-        this.currentTrackIndex = 0;
-        this.audioElement = new Audio(this.tracks[this.currentTrackIndex]);
-        this.audioElement.loop = false;
-        
-        this.audioElement.addEventListener('ended', () => {
+        this.currentIndex = 0;
+        this.player = new Audio(this.tracks[this.currentIndex]);
+        this.player.loop = false;
+
+        this.player.addEventListener('ended', () => {
             this.playNext();
         });
     }
 
     togglePlay() {
-        if (this.audioElement.paused) {
-            this.audioElement.play().catch(e => console.log("Audio autoplay restricted:", e));
-            return true;
+        if (this.player.paused) {
+            this.player.play().catch(e => console.log("C07 Audio autoplay prevented:", e));
         } else {
-            this.audioElement.pause();
-            return false;
+            this.player.pause();
         }
     }
 
     playNext() {
-        this.currentTrackIndex = (this.currentTrackIndex + 1) % this.tracks.length;
-        this.audioElement.src = this.tracks[this.currentTrackIndex];
-        this.audioElement.play();
-    }
-
-    setVolume(val) {
-        this.audioElement.volume = val;
+        this.currentIndex = (this.currentIndex + 1) % this.tracks.length;
+        this.player.src = this.tracks[this.currentIndex];
+        this.player.play();
     }
 }
 
-// راه‌اندازی نمونه سراسری صوت
-const novoAudio = new NovoAudioPlayer();
-
-// تابع ثبت پیشنهاد موسیقی کاربر
-function submitUserMusicSuggestion() {
-    const inputField = document.getElementById('musicSuggestionInput');
-    if (inputField && inputField.value.trim() !== "") {
-        const suggestion = inputField.value.trim();
-        // ذخیره موقت یا ارسال (در اینجا به عنوان نمونه ثبت در کانسول و تایید به کاربر)
-        console.log("User Music Suggestion Registered:", suggestion);
-        alert("پیشنهاد ارزشمند شما ثبت شد. از همراهی شما سپاسگزاریم! 🎶");
-        inputField.value = "";
-    } else {
-        alert("لطفاً نام یا لینک موسیقی مورد نظر خود را وارد کنید.");
-    }
-}
+// ایجاد نمونه مستقل از چرخ‌دنده صوتی C07
+const c07Audio = new C07AudioEngine();
