@@ -102,7 +102,6 @@ function closeChallengeModal() {
 }
 
 function acceptAndEnterChallenge() {
-    // استخراج زبان جاری از لوکال استوریج یا پیش‌فرض فارسی
     const currentLang = localStorage.getItem('novo_lang') || 'fa';
     window.location.href = "https://sasaz405.github.io/novo-bay-showcase/?lang=" + currentLang;
 }
