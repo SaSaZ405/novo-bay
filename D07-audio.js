@@ -1,5 +1,5 @@
 /* ==========================================================
-   NOVO-BAY AUTONOMOUS AUDIO MODULE (D07)
+   NOVO-BAY AUTONOMOUS AUDIO MODULE (D07 - FIXED)
    ========================================================== */
 class NovoAutonomousAudio {
     constructor() {
@@ -32,20 +32,28 @@ class NovoAutonomousAudio {
         const layer = document.getElementById('layer-D07');
         if (!layer) return;
 
+        // تزریق استایل‌های حیاتی برای رفع مشکل pointer-events
+        const styleFix = document.createElement('style');
+        styleFix.innerHTML = `
+            .ice-glass-overlay { pointer-events: auto !important; }
+            .interactive-node { pointer-events: auto !important; }
+        `;
+        document.head.appendChild(styleFix);
+
         const htmlContent = `
             <div class="absolute bottom-4 left-4 interactive-node flex items-center">
                 <div class="relative">
-                    <button id="D07_mainBtn" class="bg-gray-900/80 hover:bg-gray-800 text-amber-400 px-3 py-2 rounded-xl border border-gray-700 shadow-xl flex items-center gap-2 cursor-pointer transition">
+                    <button id="D07_mainBtn" class="bg-gray-900/80 hover:bg-gray-800 text-amber-400 px-3 py-2 rounded-xl border border-gray-700 shadow-xl flex items-center gap-2 cursor-pointer transition select-none">
                         <i class="fa-solid fa-music text-xs"></i>
                         <span class="text-[11px] font-bold">موزیک پلیر</span>
                     </button>
-                    <div id="D07_tooltip" class="hidden absolute bottom-12 left-0 bg-white/90 backdrop-blur-md text-slate-900 border border-white text-[10px] font-bold py-1 px-2.5 rounded-xl whitespace-nowrap shadow-xl">
-                        آوای ملل و موسیقی‌های شاخص 🎵 (جهت مطالعه‌ی راهنما، دبل‌کلیک فرمایید)
+                    <div id="D07_tooltip" class="hidden absolute bottom-12 left-0 bg-white/90 backdrop-blur-md text-slate-900 border border-white text-[10px] font-bold py-1 px-2.5 rounded-xl whitespace-nowrap shadow-xl pointer-events-none">
+                        آوای ملل و موسیقی‌های شاخص 🎵
                     </div>
                 </div>
             </div>
 
-            <!-- تم توضیحات بزرگ (با دبل کلیک) -->
+            <!-- تم توضیحات بزرگ -->
             <div id="D07_mainModal" class="ice-glass-overlay">
                 <div class="ice-glass-card text-xs leading-relaxed">
                     <div class="flex items-center justify-between mb-3 border-b border-slate-300/80 pb-2">
@@ -53,7 +61,7 @@ class NovoAutonomousAudio {
                             <i class="fa-solid fa-music text-amber-600"></i>
                             راهنمای جامع پخش صوتی و آوای ملل (NOVO-BAY)
                         </h3>
-                        <button id="D07_closeMain" class="text-slate-500 hover:text-slate-900 cursor-pointer text-sm font-bold">
+                        <button id="D07_closeMain" class="text-slate-500 hover:text-slate-900 cursor-pointer text-sm font-bold p-1">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
@@ -85,7 +93,7 @@ class NovoAutonomousAudio {
                 <div class="ice-glass-card text-xs">
                     <div class="flex items-center justify-between mb-2 border-b border-slate-300/80 pb-2">
                         <h3 class="text-xs text-slate-900 font-black">فرم پیشنهاد موسیقی اختصاصی</h3>
-                        <button id="D07_closeSug" class="text-slate-500 hover:text-slate-900 cursor-pointer text-sm font-bold">
+                        <button id="D07_closeSug" class="text-slate-500 hover:text-slate-900 cursor-pointer text-sm font-bold p-1">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
@@ -120,35 +128,70 @@ class NovoAutonomousAudio {
         const mainModal = document.getElementById('D07_mainModal');
         const sugModal = document.getElementById('D07_suggestionModal');
 
-        // هاور برای نمایش تم کوچک
-        btn.addEventListener('mouseenter', () => tooltip.classList.remove('hidden'));
-        btn.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
+        // جلوگیری از باز شدن منوی پیش‌فرض موبایل هنگام لمس طولانی
+        btn.addEventListener('contextmenu', (e) => e.preventDefault());
 
-        // دبل‌کلیک برای نمایش تم بزرگ توضیحات
-        btn.addEventListener('dblclick', (e) => {
-            e.preventDefault();
+        // دسکتاپ: هاور و کلیک
+        btn.addEventListener('mouseenter', () => {
+            if (!('ontouchstart' in window)) tooltip.classList.remove('hidden');
+        });
+        btn.addEventListener('mouseleave', () => {
+            if (!('ontouchstart' in window)) tooltip.classList.add('hidden');
+        });
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             mainModal.classList.add('active');
         });
 
-        // بستن تم بزرگ
+        // موبایل: لمس ساده = نمایش راهنما، نگه داشتن = باز کردن مستقیم صفحه توضیحات
+        let pressTimer = null;
+        let touchStarted = false;
+
+        btn.addEventListener('touchstart', (e) => {
+            touchStarted = true;
+            tooltip.classList.remove('hidden');
+
+            pressTimer = setTimeout(() => {
+                if (touchStarted) {
+                    tooltip.classList.add('hidden');
+                    mainModal.classList.add('active');
+                }
+            }, 500);
+        }, { passive: true });
+
+        btn.addEventListener('touchend', (e) => {
+            if (pressTimer) {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+            }
+            touchStarted = false;
+        });
+
+        btn.addEventListener('touchmove', () => {
+            if (pressTimer) {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+                touchStarted = false;
+                tooltip.classList.add('hidden');
+            }
+        });
+
+        // مدیریت بستن و کلیک روی دکمه‌های مودال
         document.getElementById('D07_closeMain').addEventListener('click', () => mainModal.classList.remove('active'));
         document.getElementById('D07_cancelMain').addEventListener('click', () => mainModal.classList.remove('active'));
 
-        // دکمه OK و ورود به لیست پخش
         document.getElementById('D07_okBtn').addEventListener('click', () => {
             mainModal.classList.remove('active');
             this.openPlaylistUI();
         });
 
-        // باز کردن فرم پیشنهاد
         document.getElementById('D07_openSugBtn').addEventListener('click', () => {
             mainModal.classList.remove('active');
             sugModal.classList.add('active');
-            const dir = document.getElementById('htmlRoot').getAttribute('dir') || 'rtl';
+            const dir = document.getElementById('htmlRoot')?.getAttribute('dir') || 'rtl';
             document.getElementById('D07_sugInput').setAttribute('dir', dir);
         });
 
-        // بستن فرم پیشنهاد
         document.getElementById('D07_closeSug').addEventListener('click', () => {
             sugModal.classList.remove('active');
             mainModal.classList.add('active');
@@ -158,12 +201,11 @@ class NovoAutonomousAudio {
             mainModal.classList.add('active');
         });
 
-        // ثبت پیشنهاد
         document.getElementById('D07_submitSug').addEventListener('click', () => {
             const val = document.getElementById('D07_sugInput').value;
             if(val.trim() !== "") {
                 localStorage.setItem('novo_audio_suggestion', val);
-                alert("پیشنهاد ارزشمند شما با موفقیت به مخزن نظرسنجی مرکزی منتقل شد.");
+                alert("پیشنهاد ارزشمند شما با موفقیت ثبت شد.");
                 document.getElementById('D07_sugInput').value = "";
             }
             sugModal.classList.remove('active');
@@ -178,7 +220,7 @@ class NovoAutonomousAudio {
                     <div class="ice-glass-card w-[420px] text-xs">
                         <div class="flex items-center justify-between mb-3 border-b border-slate-300/80 pb-2">
                             <h3 class="text-xs text-amber-800 font-black"><i class="fa-solid fa-list-music"></i> لیست پخش و تنظیمات صوتی ملل</h3>
-                            <button onclick="document.getElementById('D07_playlistModal').classList.remove('active')" class="text-slate-500 hover:text-slate-900 cursor-pointer text-sm font-bold"><i class="fa-solid fa-xmark"></i></button>
+                            <button onclick="document.getElementById('D07_playlistModal').classList.remove('active')" class="text-slate-500 hover:text-slate-900 cursor-pointer text-sm font-bold p-1"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                         <div class="space-y-2 max-h-[200px] overflow-y-auto mb-3 p-1">
                             ${this.tracks.map((tr, idx) => `
