@@ -1,5 +1,5 @@
 /* ==========================================================
-   NOVO-BAY AUTONOMOUS AUDIO MODULE (D07 - FIXED)
+   NOVO-BAY AUTONOMOUS AUDIO MODULE (D07 - FINAL FIX)
    ========================================================== */
 class NovoAutonomousAudio {
     constructor() {
@@ -32,7 +32,6 @@ class NovoAutonomousAudio {
         const layer = document.getElementById('layer-D07');
         if (!layer) return;
 
-        // تزریق استایل‌های حیاتی برای رفع مشکل pointer-events
         const styleFix = document.createElement('style');
         styleFix.innerHTML = `
             .ice-glass-overlay { pointer-events: auto !important; }
@@ -47,15 +46,16 @@ class NovoAutonomousAudio {
                         <i class="fa-solid fa-music text-xs"></i>
                         <span class="text-[11px] font-bold">موزیک پلیر</span>
                     </button>
+                    <!-- معرفی کوچک -->
                     <div id="D07_tooltip" class="hidden absolute bottom-12 left-0 bg-white/90 backdrop-blur-md text-slate-900 border border-white text-[10px] font-bold py-1 px-2.5 rounded-xl whitespace-nowrap shadow-xl pointer-events-none">
                         آوای ملل و موسیقی‌های شاخص 🎵
                     </div>
                 </div>
             </div>
 
-            <!-- تم توضیحات بزرگ -->
+            <!-- تم توضیحات (مربع متناسب، بدون پوشش تمام صفحه) -->
             <div id="D07_mainModal" class="ice-glass-overlay">
-                <div class="ice-glass-card text-xs leading-relaxed">
+                <div class="ice-glass-card text-xs leading-relaxed max-w-[420px] w-[90vw]">
                     <div class="flex items-center justify-between mb-3 border-b border-slate-300/80 pb-2">
                         <h3 class="text-xs text-slate-900 flex items-center gap-2 font-black">
                             <i class="fa-solid fa-music text-amber-600"></i>
@@ -67,9 +67,9 @@ class NovoAutonomousAudio {
                     </div>
                     
                     <div class="space-y-2 text-[11px] text-slate-800 font-bold leading-relaxed">
-                        <p>در این بخش، نواها و قطعات موسیقی شاخص از سرزمین‌های مختلف جهان — که زبان‌های آن مناطق در این پلتفرم پشتیبانی می‌شوند — طنین‌انداز می‌گردد.</p>
-                        <p>شما آزادانه‌ می‌توانید نوایی خاص را به‌صورت مکرر بشنوید، اجازه دهید سلسله‌ای از نواها به‌نوبت نواخته شوند، یا جریان پخش صوتی را در بدو ورود به پلتفرم و یا در هر بخش دلخواه دیگر متوقف سازید.</p>
-                        <p class="text-slate-700 bg-white/60 p-2.5 rounded-xl border border-white">هدف از ارائه‌ی این مجموعه‌ی گزیده، صرفاً معرفی اصالت‌های موسیقایی ملل گوناگون است. چنانچه پیشنهاد ارزنده‌ای در خصوص قطعه‌ای خاص مدنظر دارید، با ما به اشتراک بگذارید؛ در صورت استقبال و فزونی درخواست‌ها، آن را به لیست پخش سراسری اضافه خواهیم کرد.</p>
+                        <p>در این بخش، نواها و قطعات موسیقی شاخص از سرزمین‌های مختلف جهان طنین‌انداز می‌گردد.</p>
+                        <p>شما آزادانه‌ می‌توانید نوایی خاص را به‌صورت مکرر بشنوید، اجازه دهید سلسله‌ای از نواها به‌نوبت نواخته شوند، یا جریان پخش صوتی را متوقف سازید.</p>
+                        <p class="text-slate-700 bg-white/60 p-2 rounded-xl border border-white">هدف از ارائه‌ی این مجموعه‌ی گزیده، صرفاً معرفی اصالت‌های موسیقایی ملل گوناگون است.</p>
                     </div>
 
                     <div class="mt-4 flex items-center justify-between gap-2 pt-2 border-t border-slate-300/80">
@@ -77,8 +77,9 @@ class NovoAutonomousAudio {
                             پیشنهاد موسیقی 💡
                         </button>
                         <div class="flex items-center gap-2">
+                            <!-- تبدیل انصراف به مرحله قبل -->
                             <button id="D07_cancelMain" class="btn-ice-glass px-3 py-1.5 rounded-xl text-[11px]">
-                                انصراف
+                                مرحله قبل
                             </button>
                             <button id="D07_okBtn" class="btn-ice-glass px-3.5 py-1.5 rounded-xl text-[11px]">
                                 OK (ورود به لیست پخش)
@@ -88,9 +89,9 @@ class NovoAutonomousAudio {
                 </div>
             </div>
 
-            <!-- تم پیشنهاد موسیقی -->
+            <!-- فرم پیشنهاد موسیقی -->
             <div id="D07_suggestionModal" class="ice-glass-overlay">
-                <div class="ice-glass-card text-xs">
+                <div class="ice-glass-card text-xs max-w-[380px] w-[90vw]">
                     <div class="flex items-center justify-between mb-2 border-b border-slate-300/80 pb-2">
                         <h3 class="text-xs text-slate-900 font-black">فرم پیشنهاد موسیقی اختصاصی</h3>
                         <button id="D07_closeSug" class="text-slate-500 hover:text-slate-900 cursor-pointer text-sm font-bold p-1">
@@ -99,19 +100,20 @@ class NovoAutonomousAudio {
                     </div>
                     
                     <div class="text-[11px] text-slate-800 mb-2 font-bold leading-relaxed">
-                        هر کدام از اطلاعات زیر را در مورد موسیقی پیشنهادی مایل هستید وارد کنید. اسم موسیقی، خواننده، نوازنده، سال انتشار و سایر اطلاعات تکمیلی در مورد همان موضوع را وارد کنید.
+                        اطلاعات موسیقی پیشنهادی مانند اسم قطعه، خواننده یا نوازنده را وارد کنید.
                     </div>
 
                     <div class="space-y-2">
-                        <input type="text" id="D07_sugInput" placeholder="نام موسیقی، خواننده، نوازنده و..." class="w-full bg-white/80 border border-slate-300 rounded-xl px-3 py-1.5 text-[11px] text-slate-900 outline-none font-bold shadow-inner">
+                        <input type="text" id="D07_sugInput" placeholder="نام موسیقی، خواننده و..." class="w-full bg-white/80 border border-slate-300 rounded-xl px-3 py-1.5 text-[11px] text-slate-900 outline-none font-bold shadow-inner">
                     </div>
 
                     <div class="mt-3 flex items-center justify-end gap-2 pt-2 border-t border-slate-300/80">
+                        <!-- بازگشت به مرحله قبل -->
                         <button id="D07_backSug" class="btn-ice-glass px-3 py-1.5 rounded-xl text-[11px]">
-                            بستن صفحه
+                            مرحله قبل
                         </button>
                         <button id="D07_submitSug" class="btn-ice-glass px-3.5 py-1.5 rounded-xl text-[11px]">
-                            تایید و ارسال به مرکز نظرسنجی
+                            تایید و ارسال
                         </button>
                     </div>
                 </div>
@@ -128,87 +130,54 @@ class NovoAutonomousAudio {
         const mainModal = document.getElementById('D07_mainModal');
         const sugModal = document.getElementById('D07_suggestionModal');
 
-        // جلوگیری از باز شدن منوی پیش‌فرض موبایل هنگام لمس طولانی
-        btn.addEventListener('contextmenu', (e) => e.preventDefault());
-
-        // دسکتاپ: هاور و کلیک
-        btn.addEventListener('mouseenter', () => {
-            if (!('ontouchstart' in window)) tooltip.classList.remove('hidden');
-        });
-        btn.addEventListener('mouseleave', () => {
-            if (!('ontouchstart' in window)) tooltip.classList.add('hidden');
-        });
+        // مدیریت حالت دو مرحله‌ای: ضربه اول = معرفی، ضربه دوم = صفحه اصلی
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            mainModal.classList.add('active');
-        });
-
-        // موبایل: لمس ساده = نمایش راهنما، نگه داشتن = باز کردن مستقیم صفحه توضیحات
-        let pressTimer = null;
-        let touchStarted = false;
-
-        btn.addEventListener('touchstart', (e) => {
-            touchStarted = true;
-            tooltip.classList.remove('hidden');
-
-            pressTimer = setTimeout(() => {
-                if (touchStarted) {
-                    tooltip.classList.add('hidden');
-                    mainModal.classList.add('active');
-                }
-            }, 500);
-        }, { passive: true });
-
-        btn.addEventListener('touchend', (e) => {
-            if (pressTimer) {
-                clearTimeout(pressTimer);
-                pressTimer = null;
-            }
-            touchStarted = false;
-        });
-
-        btn.addEventListener('touchmove', () => {
-            if (pressTimer) {
-                clearTimeout(pressTimer);
-                pressTimer = null;
-                touchStarted = false;
-                tooltip.classList.add('hidden');
+            if (tooltip.classList.contains('hidden')) {
+                tooltip.classList.remove('hidden');
+            } else {
+                tooltip.classList.add('hidden'); // حذف مربع کوچک
+                mainModal.classList.add('active');
             }
         });
 
-        // مدیریت بستن و کلیک روی دکمه‌های مودال
-        document.getElementById('D07_closeMain').addEventListener('click', () => mainModal.classList.remove('active'));
-        document.getElementById('D07_cancelMain').addEventListener('click', () => mainModal.classList.remove('active'));
+        const closeModalFunc = () => {
+            mainModal.classList.remove('active');
+            tooltip.classList.add('hidden'); // حذف هم‌زمان مربع کوچک پس از خروج
+        };
+
+        // بستن و بازگشت به مرحله قبل
+        document.getElementById('D07_closeMain').addEventListener('click', closeModalFunc);
+        document.getElementById('D07_cancelMain').addEventListener('click', closeModalFunc);
 
         document.getElementById('D07_okBtn').addEventListener('click', () => {
-            mainModal.classList.remove('active');
+            closeModalFunc();
             this.openPlaylistUI();
         });
 
         document.getElementById('D07_openSugBtn').addEventListener('click', () => {
             mainModal.classList.remove('active');
             sugModal.classList.add('active');
-            const dir = document.getElementById('htmlRoot')?.getAttribute('dir') || 'rtl';
-            document.getElementById('D07_sugInput').setAttribute('dir', dir);
         });
 
         document.getElementById('D07_closeSug').addEventListener('click', () => {
             sugModal.classList.remove('active');
-            mainModal.classList.add('active');
+            closeModalFunc();
         });
         document.getElementById('D07_backSug').addEventListener('click', () => {
             sugModal.classList.remove('active');
-            mainModal.classList.add('active');
+            mainModal.classList.add('active'); // بازگشت به مرحله قبل (توضیحات)
         });
 
         document.getElementById('D07_submitSug').addEventListener('click', () => {
             const val = document.getElementById('D07_sugInput').value;
             if(val.trim() !== "") {
                 localStorage.setItem('novo_audio_suggestion', val);
-                alert("پیشنهاد ارزشمند شما با موفقیت ثبت شد.");
+                alert("پیشنهاد ارزشمند شما ثبت شد.");
                 document.getElementById('D07_sugInput').value = "";
             }
             sugModal.classList.remove('active');
+            tooltip.classList.add('hidden');
         });
     }
 
@@ -217,16 +186,16 @@ class NovoAutonomousAudio {
         if (!plModal) {
             const modalHTML = `
                 <div id="D07_playlistModal" class="ice-glass-overlay active">
-                    <div class="ice-glass-card w-[420px] text-xs">
+                    <div class="ice-glass-card max-w-[400px] w-[90vw] text-xs">
                         <div class="flex items-center justify-between mb-3 border-b border-slate-300/80 pb-2">
                             <h3 class="text-xs text-amber-800 font-black"><i class="fa-solid fa-list-music"></i> لیست پخش و تنظیمات صوتی ملل</h3>
                             <button onclick="document.getElementById('D07_playlistModal').classList.remove('active')" class="text-slate-500 hover:text-slate-900 cursor-pointer text-sm font-bold p-1"><i class="fa-solid fa-xmark"></i></button>
                         </div>
-                        <div class="space-y-2 max-h-[200px] overflow-y-auto mb-3 p-1">
+                        <div class="space-y-2 max-h-[200px] overflow-y-auto mb-3 p-1" id="D07_trackContainer">
                             ${this.tracks.map((tr, idx) => `
-                                <div onclick="window.D07_instance.selectTrack(${idx})" class="p-2 bg-white/50 hover:bg-white/90 rounded-xl cursor-pointer flex justify-between items-center text-[11px] font-bold border border-slate-200">
+                                <div onclick="window.D07_instance.selectTrack(${idx})" class="track-item p-2 ${idx === this.currentTrackIndex ? 'bg-amber-100 border-amber-400' : 'bg-white/50'} hover:bg-white/90 rounded-xl cursor-pointer flex justify-between items-center text-[11px] font-bold border border-slate-200 transition">
                                     <span>ترک شماره ${idx + 1} (${tr})</span>
-                                    <i class="fa-solid fa-play text-amber-600 text-[10px]"></i>
+                                    <i class="fa-solid ${idx === this.currentTrackIndex && !this.audioElement.paused ? 'fa-pause text-amber-600' : 'fa-play text-amber-600'} text-[10px]"></i>
                                 </div>
                             `).join('')}
                         </div>
@@ -241,8 +210,8 @@ class NovoAutonomousAudio {
                             </div>
                         </div>
                         <div class="mt-4 flex justify-end">
-                            <button onclick="document.getElementById('D07_playlistModal').classList.remove('active'); window.D07_instance.togglePlay();" class="btn-ice-glass px-4 py-2 rounded-xl text-[11px]">
-                                پخش / توقف و خروج
+                            <button onclick="document.getElementById('D07_playlistModal').classList.remove('active');" class="btn-ice-glass px-4 py-2 rounded-xl text-[11px]">
+                                خروج
                             </button>
                         </div>
                     </div>
@@ -254,21 +223,36 @@ class NovoAutonomousAudio {
         }
     }
 
+    selectTrack(idx) {
+        if (this.currentTrackIndex === idx) {
+            this.togglePlay();
+        } else {
+            this.currentTrackIndex = idx;
+            localStorage.setItem('novo_track_idx', idx);
+            this.audioElement.src = this.tracks[idx];
+            this.audioElement.play();
+        }
+        this.updatePlaylistUI();
+    }
+
     togglePlay() {
         if (this.audioElement.paused) {
             this.audioElement.play().catch(e => console.log("Audio deferred:", e));
-            return true;
         } else {
             this.audioElement.pause();
-            return false;
         }
+        this.updatePlaylistUI();
     }
 
-    playNext() {
-        this.currentTrackIndex = (this.currentTrackIndex + 1) % this.tracks.length;
-        localStorage.setItem('novo_track_idx', this.currentTrackIndex);
-        this.audioElement.src = this.tracks[this.currentTrackIndex];
-        this.audioElement.play();
+    updatePlaylistUI() {
+        const container = document.getElementById('D07_trackContainer');
+        if (!container) return;
+        container.innerHTML = this.tracks.map((tr, idx) => `
+            <div onclick="window.D07_instance.selectTrack(${idx})" class="track-item p-2 ${idx === this.currentTrackIndex ? 'bg-amber-100 border-amber-400' : 'bg-white/50'} hover:bg-white/90 rounded-xl cursor-pointer flex justify-between items-center text-[11px] font-bold border border-slate-200 transition">
+                <span>ترک شماره ${idx + 1} (${tr})</span>
+                <i class="fa-solid ${idx === this.currentTrackIndex && !this.audioElement.paused ? 'fa-pause text-amber-600' : 'fa-play text-amber-600'} text-[10px]"></i>
+            </div>
+        `).join('');
     }
 
     setLoop(isLoop) {
@@ -279,13 +263,6 @@ class NovoAutonomousAudio {
     setVolume(val) {
         this.audioElement.volume = val;
         localStorage.setItem('novo_vol_state', val);
-    }
-
-    selectTrack(idx) {
-        this.currentTrackIndex = idx;
-        localStorage.setItem('novo_track_idx', idx);
-        this.audioElement.src = this.tracks[idx];
-        this.audioElement.play();
     }
 }
 
