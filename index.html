@@ -6,10 +6,10 @@
     <title>NOVO-BAY | Autonomous Layered Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="D03-landing-style.css?v=5">
+    <link rel="stylesheet" href="D03-landing-style.css?v=6">
     <style>
         /* ==========================================================
-           استاندارد سراسری تم شیشه‌ای سفید یخی
+           استاندارد سراسری تم شیشه‌ای سفید یخی (مات، سه‌بعدی، قابل تغییر سایز)
            ========================================================== */
         .ice-glass-overlay {
             position: fixed; inset: 0;
@@ -26,18 +26,19 @@
         .ice-glass-card {
             background: rgba(255, 255, 255, 0.85);
             border: 1.5px solid rgba(255, 255, 255, 0.95);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 1);
             backdrop-filter: blur(24px);
             border-radius: 1.25rem;
-            padding: 1.25rem;
+            padding: 1.5rem;
             color: #0f172a;
             transform: scale(0.92);
             transition: transform 0.3s ease-in-out;
             text-align: right; direction: rtl;
             font-weight: 700;
-            display: inline-block;
+            resize: both;
+            overflow: auto;
             width: auto;
-            max-width: 440px;
+            max-width: 480px;
         }
         .ice-glass-overlay.active .ice-glass-card { transform: scale(1); }
 
@@ -73,55 +74,55 @@
     <!-- لایه اصلی کنترلی -->
     <main class="independent-layer z-10">
 
-        <!-- ۱. دکمه خورشید (بازگشت دقیق به موقعیت روی صورت خورشید) -->
+        <!-- دکمه خورشید -->
         <div class="sun-hotspot interactive-node flex flex-col items-center">
             <button onclick="handleButtonClick('sun')" class="pulsing-dot w-6 h-6 md:w-7 md:h-7 bg-amber-500 hover:bg-amber-400 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border border-amber-200 cursor-pointer">
                 <i class="fa-solid fa-sun text-[9px]"></i>
             </button>
         </div>
 
-        <!-- ۲. دکمه ماه (بازگشت دقیق به موقعیت روی صورت ماه) -->
+        <!-- دکمه ماه -->
         <div class="moon-hotspot interactive-node flex flex-col items-center">
             <button onclick="handleButtonClick('moon')" class="pulsing-dot w-6 h-6 md:w-7 md:h-7 bg-sky-400 hover:bg-sky-300 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border border-sky-200 cursor-pointer">
                 <i class="fa-solid fa-moon text-[9px]"></i>
             </button>
         </div>
 
-        <!-- ۳. لایه اختصاصی D07 (موزیک پلیر) -->
+        <!-- لایه اختصاصی D07 (موزیک پلیر) -->
         <div class="independent-layer z-40" id="layer-D07">
             <div class="absolute bottom-4 left-4 interactive-node flex items-center">
                 <div class="relative">
+                    <!-- با هاور تم کوچک باز می‌شود، با دبل‌کلیک تم بزرگ توضیحات باز می‌شود -->
                     <button ondblclick="D07_openMainModal()" onmouseenter="D07_showTooltip()" onmouseleave="D07_hideTooltip()" class="bg-gray-900/80 hover:bg-gray-800 text-amber-400 px-3 py-2 rounded-xl border border-gray-700 shadow-xl flex items-center gap-2 cursor-pointer transition">
                         <i class="fa-solid fa-music text-xs"></i>
                         <span class="text-[11px] font-bold">موزیک پلیر</span>
                     </button>
-                    <!-- تم کوچک توضیحات (با قرار گرفتن موس) -->
+                    <!-- تم کوچک توضیحات (فقط با قرار گرفتن موس) -->
                     <div id="D07_tooltip" class="hidden absolute bottom-12 left-0 bg-white/90 backdrop-blur-md text-slate-900 border border-white text-[10px] font-bold py-1 px-2.5 rounded-xl whitespace-nowrap shadow-xl">
-                        آوای ملل و موسیقی‌های شاخص 🎵 (برای توضیحات کامل دبل کلیک کنید)
+                        آوای ملل و موسیقی‌های شاخص 🎵 (برای مطالعه راهنما، دبل‌کلیک کنید)
                     </div>
                 </div>
             </div>
 
-            <!-- تم توضیحات بزرگ (با دبل کلیک، باکس متناسب، دکمه‌های سفید یخی) -->
+            <!-- تم توضیحات بزرگ (با متن ویرایش‌شده ادبی و دکمه‌های یک‌دست سفید یخی) -->
             <div id="D07_mainModal" class="ice-glass-overlay">
                 <div class="ice-glass-card text-xs leading-relaxed">
                     <div class="flex items-center justify-between mb-3 border-b border-slate-300/80 pb-2">
                         <h3 class="text-xs text-slate-900 flex items-center gap-2 font-black">
                             <i class="fa-solid fa-music text-amber-600"></i>
-                            راهنمای پخش صوتی و موسیقی ملل (NOVO-BAY)
+                            راهنمای جامع پخش صوتی و آوای ملل (NOVO-BAY)
                         </h3>
                         <button onclick="D07_closeMainModal()" class="text-slate-500 hover:text-slate-900 cursor-pointer text-sm">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
                     
-                    <div class="space-y-2 text-[11px] text-slate-800 font-bold">
-                        <p>شما در این بخش موسیقی‌های شاخص از کشورهای مختلفی که زبان‌های آن کشور را ساپورت می‌کنند خواهید شنید.</p>
-                        <p>شما این امکان را دارید که یک موسیقی را به صورت مکرر گوش کنید یا اجازه بدهید همه موسیقی‌ها پخش بشه یا کلا پخش موسیقی رو غیر فعال کنید در ابتدای ورود به سایت یا در هر صفحه ای که قرار داشتید.</p>
-                        <p class="text-slate-700 bg-white/50 p-2 rounded-xl border border-white">هدف از پخش موسیقی‌های محدود صرفاً معرفی موسیقی شاخص در کشورهای مد نظر هست چنانچه پیشنهاد موسیقی خاصی برای ما دارید می‌تونید اون رو با ما به اشتراک بذارید در صورت بالا بودن تعداد درخواست‌ها اون رو در سایت پخش خواهیم کرد.</p>
+                    <div class="space-y-2 text-[11px] text-slate-800 font-bold leading-relaxed">
+                        <p>در این بخش، نواها و قطعات موسیقی شاخص از سرزمین‌های مختلف جهان — که زبان‌های آن مناطق در این پلتفرم پشتیبانی می‌شوند — طنین‌انداز می‌گردد.</p>
+                        <p>شما آزادانه‌ می‌توانید نوایی خاص را به‌صورت مکرر بشنوید، اجازه دهید سلسله‌ای از نواها به‌نوبت نواخته شوند، یا جریان پخش صوتی را در بدو ورود به پلتفرم و یا در هر بخش دلخواه دیگر متوقف سازید.</p>
+                        <p class="text-slate-700 bg-white/60 p-2.5 rounded-xl border border-white">هدف از ارائه‌ی این مجموعه‌ی گزیده، صرفاً معرفی اصالت‌های موسیقایی ملل گوناگون است. چنانچه پیشنهاد ارزنده‌ای در خصوص قطعه‌ای خاص مدنظر دارید، با ما به اشتراک بگذارید؛ در صورت استقبال و فزونی درخواست‌ها، آن را به لیست پخش سراسری اضافه خواهیم کرد.</p>
                     </div>
 
-                    <!-- دکمه‌های یک‌دست سفید یخی -->
                     <div class="mt-4 flex items-center justify-between gap-2 pt-2 border-t border-slate-300/80">
                         <button onclick="D07_openSuggestionModal()" class="btn-ice-glass px-3 py-1.5 rounded-xl text-[11px] cursor-pointer">
                             پیشنهاد موسیقی 💡
@@ -173,7 +174,7 @@
         </footer>
     </main>
 
-    <script src="D07-audio.js?v=5"></script>
+    <script src="D07-audio.js?v=6"></script>
     <script>
         window.D07_showTooltip = function() {
             document.getElementById('D07_tooltip').classList.remove('hidden');
@@ -199,23 +200,25 @@
         };
         window.D07_confirmAndGoToList = function() {
             D07_closeMainModal();
-            if (typeof novoAudio !== 'undefined') {
+            if (typeof novoAudio !== 'undefined' && typeof novoAudio.openPlaylistUI === 'function') {
                 novoAudio.openPlaylistUI();
+            } else {
+                alert("ورود به لیست پخش صوتی...");
             }
         };
         window.D07_submitSuggestion = function() {
             const val = document.getElementById('D07_sugInput').value;
             if(val.trim() !== "") {
                 localStorage.setItem('novo_audio_suggestion', val);
-                alert("پیشنهاد شما با موفقیت ثبت شد.");
-                document.getElementById('D07_sugInput').value = "";
+                alert("پیشنهاد ارزشمند شما با موفقیت ثبت شد.");
+                document.getElementById('D07_sugInput'].value = "";
             }
             D07_closeSuggestionModal();
         };
         
         function handleButtonClick(type) {
             if (type === 'sun') {
-                alert("ورود به چالش");
+                alert("ورود به چالش‌های استراتژیک");
             } else if (type === 'moon') {
                 alert("ورود به سایت اصلی");
             }
