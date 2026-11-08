@@ -1,5 +1,5 @@
 /* ==========================================================
-   NOVO-BAY AUTONOMOUS TRANSLATION MODULE (D01 - FINAL)
+   NOVO-BAY AUTONOMOUS TRANSLATION MODULE (D01 - FIXED)
    ========================================================== */
 class NovoAutonomousTranslate {
     constructor() {
@@ -33,7 +33,6 @@ class NovoAutonomousTranslate {
         const layer = document.getElementById('layer-D01');
         if (!layer) return;
 
-        // استایل انیمیشن چرخش کره زمین و رفع مشکلات pointer-events
         const styleFix = document.createElement('style');
         styleFix.innerHTML = `
             @keyframes d01-spin {
@@ -56,10 +55,6 @@ class NovoAutonomousTranslate {
                         <i class="fa-solid fa-globe text-sm d01-globe-spin text-amber-400"></i>
                         <span class="text-[11px] font-bold">زبان / Translation</span>
                     </button>
-                    <!-- معرفی کوچک اولیه -->
-                    <div id="D01_tooltip" class="hidden absolute top-12 right-0 bg-white/90 backdrop-blur-md text-slate-900 border border-white text-[10px] font-bold py-1 px-2.5 rounded-xl whitespace-nowrap shadow-xl pointer-events-none">
-                        انتخاب زبان و ترجمه پلتفرم 🌐 (ضربه بعدی: راهنما)
-                    </div>
                 </div>
             </div>
 
@@ -85,7 +80,7 @@ class NovoAutonomousTranslate {
 
                     <div class="mt-4 flex items-center justify-between gap-2 pt-2 border-t border-slate-300/80">
                         <button id="D01_cancelMain" class="btn-ice-glass px-3 py-1.5 rounded-xl text-[11px]">
-                            مرحله قبل
+                            انصراف
                         </button>
                         <button id="D01_okBtn" class="btn-ice-glass px-4 py-1.5 rounded-xl text-[11px] bg-amber-500/20 font-black">
                             ادامه و انتخاب زبان ➔
@@ -133,24 +128,17 @@ class NovoAutonomousTranslate {
 
     bindEvents() {
         const btn = document.getElementById('D01_mainBtn');
-        const tooltip = document.getElementById('D01_tooltip');
         const mainModal = document.getElementById('D01_mainModal');
         const langModal = document.getElementById('D01_langModal');
 
-        // مرحله اول: ضربه اول = نمایش معرفی کوچک، ضربه دوم = باز شدن توضیحات اصلی
+        // با کلیک روی دکمه بالا سمت راست، مستقیماً پنجره توضیحات اصلی باز می‌شود
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (tooltip.classList.contains('hidden')) {
-                tooltip.classList.remove('hidden');
-            } else {
-                tooltip.classList.add('hidden');
-                mainModal.classList.add('active');
-            }
+            mainModal.classList.add('active');
         });
 
         const closeModalFunc = () => {
             mainModal.classList.remove('active');
-            tooltip.classList.add('hidden');
         };
 
         document.getElementById('D01_closeMain').addEventListener('click', closeModalFunc);
@@ -164,7 +152,6 @@ class NovoAutonomousTranslate {
 
         document.getElementById('D01_closeLang').addEventListener('click', () => {
             langModal.classList.remove('active');
-            tooltip.classList.add('hidden');
         });
 
         document.getElementById('D01_backToMain').addEventListener('click', () => {
@@ -178,20 +165,15 @@ class NovoAutonomousTranslate {
         localStorage.setItem('novo_lang_code', code);
         localStorage.setItem('novo_lang_dir', dir);
         
-        // اعمال جهت صفحه (RTL / LTR) روی ریشه سند
         const root = document.getElementById('htmlRoot') || document.documentElement;
         root.setAttribute('dir', dir);
         root.setAttribute('lang', code);
 
-        // به‌روزرسانی لیست
         const modal = document.getElementById('D01_langModal');
         if (modal) {
             modal.classList.remove('active');
         }
         this.injectComponent();
-        
-        // اعلان موفقیت‌آمیز
-        console.log(`Language changed to: ${code} (${dir})`);
     }
 }
 
