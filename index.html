@@ -6,57 +6,31 @@
     <title>NOVO-BAY | Autonomous Layered Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="D03-landing-style.css?v=6">
+    <link rel="stylesheet" href="D03-landing-style.css">
     <style>
-        /* ==========================================================
-           استاندارد سراسری تم شیشه‌ای سفید یخی (مات، سه‌بعدی، قابل تغییر سایز)
-           ========================================================== */
+        /* استانداردهای سراسری لایه‌ها و تم شیشه‌ای سفید یخی */
         .ice-glass-overlay {
-            position: fixed; inset: 0;
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            z-index: 99999;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; visibility: hidden; 
-            transition: all 0.3s ease-in-out;
+            position: fixed; inset: 0; background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            z-index: 99999; display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: all 0.3s ease-in-out;
         }
         .ice-glass-overlay.active { opacity: 1; visibility: visible; }
-        
         .ice-glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            border: 1.5px solid rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.88);
+            border: 1.5px solid rgba(255, 255, 255, 0.98);
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 1);
-            backdrop-filter: blur(24px);
-            border-radius: 1.25rem;
-            padding: 1.5rem;
-            color: #0f172a;
-            transform: scale(0.92);
-            transition: transform 0.3s ease-in-out;
-            text-align: right; direction: rtl;
-            font-weight: 700;
-            resize: both;
-            overflow: auto;
-            width: auto;
-            max-width: 480px;
+            backdrop-filter: blur(24px); border-radius: 1.25rem; padding: 1.5rem;
+            color: #0f172a; transform: scale(0.92); transition: transform 0.3s ease-in-out;
+            text-align: right; direction: rtl; font-weight: 700; resize: both; overflow: auto; max-width: 480px;
         }
         .ice-glass-overlay.active .ice-glass-card { transform: scale(1); }
-
-        /* دکمه‌های یک‌دست سفید یخی */
         .btn-ice-glass {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(255, 255, 255, 1);
-            color: #0f172a;
-            font-weight: 800;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(255, 255, 255, 1);
+            color: #0f172a; font-weight: 800; transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor: pointer;
         }
-        .btn-ice-glass:hover {
-            background: #ffffff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transform: translateY(-1px);
-        }
-
+        .btn-ice-glass:hover { background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(-1px); }
         .independent-layer { position: absolute; inset: 0; pointer-events: none; }
         .interactive-node { pointer-events: auto; }
     </style>
@@ -71,158 +45,17 @@
         <div class="absolute inset-0 bg-black/10"></div>
     </div>
 
-    <!-- لایه اصلی کنترلی -->
+    <!-- اتاق فرمان: فقط ایجاد کننده بستر لایه‌ها -->
     <main class="independent-layer z-10">
+        <!-- لایه اختصاصی و خودمختار D07 (توسط خود فایل D07-audio.js مدیریت می‌شود) -->
+        <div class="independent-layer z-40" id="layer-D07"></div>
 
-        <!-- دکمه خورشید -->
-        <div class="sun-hotspot interactive-node flex flex-col items-center">
-            <button onclick="handleButtonClick('sun')" class="pulsing-dot w-6 h-6 md:w-7 md:h-7 bg-amber-500 hover:bg-amber-400 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border border-amber-200 cursor-pointer">
-                <i class="fa-solid fa-sun text-[9px]"></i>
-            </button>
-        </div>
-
-        <!-- دکمه ماه -->
-        <div class="moon-hotspot interactive-node flex flex-col items-center">
-            <button onclick="handleButtonClick('moon')" class="pulsing-dot w-6 h-6 md:w-7 md:h-7 bg-sky-400 hover:bg-sky-300 text-gray-950 rounded-full flex items-center justify-center shadow-2xl border border-sky-200 cursor-pointer">
-                <i class="fa-solid fa-moon text-[9px]"></i>
-            </button>
-        </div>
-
-        <!-- لایه اختصاصی D07 (موزیک پلیر) -->
-        <div class="independent-layer z-40" id="layer-D07">
-            <div class="absolute bottom-4 left-4 interactive-node flex items-center">
-                <div class="relative">
-                    <!-- با هاور تم کوچک باز می‌شود، با دبل‌کلیک تم بزرگ توضیحات باز می‌شود -->
-                    <button ondblclick="D07_openMainModal()" onmouseenter="D07_showTooltip()" onmouseleave="D07_hideTooltip()" class="bg-gray-900/80 hover:bg-gray-800 text-amber-400 px-3 py-2 rounded-xl border border-gray-700 shadow-xl flex items-center gap-2 cursor-pointer transition">
-                        <i class="fa-solid fa-music text-xs"></i>
-                        <span class="text-[11px] font-bold">موزیک پلیر</span>
-                    </button>
-                    <!-- تم کوچک توضیحات (فقط با قرار گرفتن موس) -->
-                    <div id="D07_tooltip" class="hidden absolute bottom-12 left-0 bg-white/90 backdrop-blur-md text-slate-900 border border-white text-[10px] font-bold py-1 px-2.5 rounded-xl whitespace-nowrap shadow-xl">
-                        آوای ملل و موسیقی‌های شاخص 🎵 (برای مطالعه راهنما، دبل‌کلیک کنید)
-                    </div>
-                </div>
-            </div>
-
-            <!-- تم توضیحات بزرگ (با متن ویرایش‌شده ادبی و دکمه‌های یک‌دست سفید یخی) -->
-            <div id="D07_mainModal" class="ice-glass-overlay">
-                <div class="ice-glass-card text-xs leading-relaxed">
-                    <div class="flex items-center justify-between mb-3 border-b border-slate-300/80 pb-2">
-                        <h3 class="text-xs text-slate-900 flex items-center gap-2 font-black">
-                            <i class="fa-solid fa-music text-amber-600"></i>
-                            راهنمای جامع پخش صوتی و آوای ملل (NOVO-BAY)
-                        </h3>
-                        <button onclick="D07_closeMainModal()" class="text-slate-500 hover:text-slate-900 cursor-pointer text-sm">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="space-y-2 text-[11px] text-slate-800 font-bold leading-relaxed">
-                        <p>در این بخش، نواها و قطعات موسیقی شاخص از سرزمین‌های مختلف جهان — که زبان‌های آن مناطق در این پلتفرم پشتیبانی می‌شوند — طنین‌انداز می‌گردد.</p>
-                        <p>شما آزادانه‌ می‌توانید نوایی خاص را به‌صورت مکرر بشنوید، اجازه دهید سلسله‌ای از نواها به‌نوبت نواخته شوند، یا جریان پخش صوتی را در بدو ورود به پلتفرم و یا در هر بخش دلخواه دیگر متوقف سازید.</p>
-                        <p class="text-slate-700 bg-white/60 p-2.5 rounded-xl border border-white">هدف از ارائه‌ی این مجموعه‌ی گزیده، صرفاً معرفی اصالت‌های موسیقایی ملل گوناگون است. چنانچه پیشنهاد ارزنده‌ای در خصوص قطعه‌ای خاص مدنظر دارید، با ما به اشتراک بگذارید؛ در صورت استقبال و فزونی درخواست‌ها، آن را به لیست پخش سراسری اضافه خواهیم کرد.</p>
-                    </div>
-
-                    <div class="mt-4 flex items-center justify-between gap-2 pt-2 border-t border-slate-300/80">
-                        <button onclick="D07_openSuggestionModal()" class="btn-ice-glass px-3 py-1.5 rounded-xl text-[11px] cursor-pointer">
-                            پیشنهاد موسیقی 💡
-                        </button>
-                        <div class="flex items-center gap-2">
-                            <button onclick="D07_closeMainModal()" class="btn-ice-glass px-3 py-1.5 rounded-xl text-[11px] cursor-pointer">
-                                انصراف
-                            </button>
-                            <button onclick="D07_confirmAndGoToList()" class="btn-ice-glass px-3.5 py-1.5 rounded-xl text-[11px] cursor-pointer">
-                                OK (ورود به لیست پخش)
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- تم کوچک پیشنهاد موسیقی -->
-            <div id="D07_suggestionModal" class="ice-glass-overlay">
-                <div class="ice-glass-card text-xs">
-                    <div class="flex items-center justify-between mb-2 border-b border-slate-300/80 pb-2">
-                        <h3 class="text-xs text-slate-900 font-black">فرم پیشنهاد موسیقی اختصاصی</h3>
-                        <button onclick="D07_closeSuggestionModal()" class="text-slate-500 hover:text-slate-900 cursor-pointer text-sm">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="text-[11px] text-slate-800 mb-2 font-bold leading-relaxed">
-                        هر کدام از اطلاعات زیر را در مورد موسیقی پیشنهادی مایل هستید وارد کنید. اسم موسیقی، خواننده، نوازنده، سال انتشار و سایر اطلاعات تکمیلی در مورد همان موضوع را وارد کنید.
-                    </div>
-
-                    <div class="space-y-2">
-                        <input type="text" id="D07_sugInput" placeholder="نام موسیقی، خواننده، نوازنده و..." class="w-full bg-white/80 border border-slate-300 rounded-xl px-3 py-1.5 text-[11px] text-slate-900 outline-none font-bold shadow-inner">
-                    </div>
-
-                    <div class="mt-3 flex items-center justify-end gap-2 pt-2 border-t border-slate-300/80">
-                        <button onclick="D07_closeSuggestionModal()" class="btn-ice-glass px-3 py-1.5 rounded-xl text-[11px] cursor-pointer">
-                            بستن صفحه
-                        </button>
-                        <button onclick="D07_submitSuggestion()" class="btn-ice-glass px-3.5 py-1.5 rounded-xl text-[11px] cursor-pointer">
-                            تایید و ارسال به مرکز نظرسنجی
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <footer class="absolute bottom-2 w-full text-center text-[9px] text-white/40 z-20" id="footerText">
+        <footer class="absolute bottom-2 w-full text-center text-[9px] text-white/40 z-20">
             NOVO-BAY Platform © 2026
         </footer>
     </main>
 
-    <script src="D07-audio.js?v=6"></script>
-    <script>
-        window.D07_showTooltip = function() {
-            document.getElementById('D07_tooltip').classList.remove('hidden');
-        };
-        window.D07_hideTooltip = function() {
-            document.getElementById('D07_tooltip').classList.add('hidden');
-        };
-        window.D07_openMainModal = function() {
-            document.getElementById('D07_mainModal').classList.add('active');
-        };
-        window.D07_closeMainModal = function() {
-            document.getElementById('D07_mainModal').classList.remove('active');
-        };
-        window.D07_openSuggestionModal = function() {
-            document.getElementById('D07_mainModal').classList.remove('active');
-            document.getElementById('D07_suggestionModal').classList.add('active');
-            const currentDir = document.getElementById('htmlRoot').getAttribute('dir') || 'rtl';
-            document.getElementById('D07_sugInput').setAttribute('dir', currentDir);
-        };
-        window.D07_closeSuggestionModal = function() {
-            document.getElementById('D07_suggestionModal').classList.remove('active');
-            document.getElementById('D07_mainModal').classList.add('active');
-        };
-        window.D07_confirmAndGoToList = function() {
-            D07_closeMainModal();
-            if (typeof novoAudio !== 'undefined' && typeof novoAudio.openPlaylistUI === 'function') {
-                novoAudio.openPlaylistUI();
-            } else {
-                alert("ورود به لیست پخش صوتی...");
-            }
-        };
-        window.D07_submitSuggestion = function() {
-            const val = document.getElementById('D07_sugInput').value;
-            if(val.trim() !== "") {
-                localStorage.setItem('novo_audio_suggestion', val);
-                alert("پیشنهاد ارزشمند شما با موفقیت ثبت شد.");
-                document.getElementById('D07_sugInput'].value = "";
-            }
-            D07_closeSuggestionModal();
-        };
-        
-        function handleButtonClick(type) {
-            if (type === 'sun') {
-                alert("ورود به چالش‌های استراتژیک");
-            } else if (type === 'moon') {
-                alert("ورود به سایت اصلی");
-            }
-        }
-    </script>
+    <!-- فراخوانی بازوی مستقل D07 -->
+    <script src="D07-audio.js?v=8"></script>
 </body>
 </html>
