@@ -27,6 +27,7 @@
             z-index: 10;
         }
 
+        /* شبکه دقیق ۲۰ سطر در ۱۰ ستون */
         .master-coordinate-grid {
             width: 100%;
             height: 100%;
@@ -37,6 +38,7 @@
             box-sizing: border-box;
         }
 
+        /* خطوط مات، محو و بسیار شیک شبکه */
         .grid-node-cell {
             border: 1px dashed rgba(255, 255, 255, 0.04);
             transition: all 0.25s ease;
@@ -73,6 +75,7 @@
             font-weight: bold;
         }
 
+        /* الگوی بالون برای شناورسازی المان‌ها در سلول مربوطه */
         .balloon-element {
             position: absolute;
             pointer-events: auto;
@@ -89,7 +92,7 @@
             left: 2px;
         }
 
-        /* کارت سفید یخی توضیحات (Modal) */
+        /* استایل کارت سفید یخی توضیحات (Ice-Glass Modal) */
         .ice-glass-overlay {
             position: fixed;
             inset: 0;
@@ -128,6 +131,7 @@
 </head>
 <body class="select-none bg-black relative">
 
+    <!-- لایه ۱: پس‌زمینه تصویر/ویدیو (مهر و ماه) -->
     <div class="absolute inset-0 z-1">
         <video id="bgVideo" autoplay muted loop playsinline class="w-full h-full object-cover">
             <source src="video.mp4" type="video/mp4">
@@ -135,12 +139,14 @@
         <div class="absolute inset-0 bg-black/20"></div>
     </div>
 
+    <!-- لایه ۲: شبکه ۲۰۰ سلولی کاملاً فیکس از R1 تا R20 -->
     <div class="grid-wrapper">
         <main class="master-coordinate-grid" id="masterGrid">
+            <!-- سلول‌ها توسط جاوااسکریپت ساخته می‌شوند -->
         </main>
     </div>
 
-    <!-- مودال توضیحات شیشه‌ای پیش‌فرض -->
+    <!-- لایه ۳: مودال سفید یخی توضیحات -->
     <div id="iceGlassModal" class="ice-glass-overlay">
         <div class="ice-glass-card text-right relative">
             <button onclick="closeModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-800 transition-colors">
@@ -177,20 +183,24 @@
                     cell.id = `node-R${r}-C${c}`;
                 }
 
+                // رویداد کلیک برای سلول‌ها
                 cell.addEventListener('click', (e) => {
-                    // برای سلول پلیر R19:C10
+                    // سلول پلیر R19:C10 -> اول پاپ‌آپ راهنما/توضیحات را باز می‌کند
                     if (r === 19 && c === 10) {
+                        e.stopPropagation();
                         openAudioModal();
                         return;
                     }
                     
-                    // برای سلول ترجمه R1:C1
+                    // سلول ترجمه R1:C1 -> ماژول D01 کار خودش را انجام می‌دهد
                     if (r === 1 && c === 1) {
-                        return; // ماژول D01 پاپ‌آپ خودش را باز می‌کند
+                        return; 
                     }
 
-                    // برای سایر سلول‌های عادی شبکه
-                    openModal(`مختصات سلول: R${r}:C${c}`, `این سلول در موقعیت سطر ${r} و ستون ${c} قرار دارد.`);
+                    // سایر سلول‌های عادی شبکه
+                    if (!e.target.closest('button') && !e.target.closest('.dropdown-menu')) {
+                        openModal(`مختصات سلول: R${r}:C${c}`, `این سلول در موقعیت سطر ${r} و ستون ${c} قرار دارد.`);
+                    }
                 });
 
                 gridContainer.appendChild(cell);
@@ -206,21 +216,28 @@
             document.getElementById('iceGlassModal').classList.add('active');
         }
 
-        // پاپ‌آپ اختصاصی راهنمای صوتی و معرفی پلیر
+        // پاپ‌آپ اختصاصی راهنمای صوتی و معرفی پلیر (مشابه ماژول ترجمه)
         function openAudioModal() {
             document.getElementById('modalTitle').innerText = "🎵 راهنمای سیستم صوتی و آوای ملل (NOVO-AUDIO)";
             document.getElementById('modalDesc').innerHTML = `
-                این بخش کنترل‌کننده فضای صوتی و موسیقی‌های هویت فرهنگی شبکه NOVO-BAY است.<br><br>
-                <span class="text-slate-500">با ورود به این ماژول می‌توانید قطعات صوتی ملل را انتخاب کرده، حالت تکرار را تنظیم کنید یا صدای پس‌زمینه را سفارشی‌سازی نمایید.</span>
+                این سلول (<code class="text-amber-600 font-bold">R19:C10</code>) به عنوان هسته صوتی و آوای دیپلماتیک شبکه NOVO-BAY عمل می‌کند.<br><br>
+                <span class="text-slate-500">با ورود به این بخش می‌توانید قطعات صوتی ملل را مدیریت کرده، سطح صدا را تنظیم نموده و پلتفرم شنیداری را فعال کنید.</span>
             `;
             const btn = document.getElementById('modalPrimaryBtn');
             btn.innerText = "ادامه و تنظیمات صوتی 🎧";
+            
+            // با کلیک روی این دکمه، تازه پنل اصلی پلیر باز می‌شود
             btn.onclick = () => {
                 closeModal();
-                if (window.toggleAudioPlaylist) {
-                    window.toggleAudioPlaylist(); // باز کردن لیست پخش صوتی اصلی
+                // شبیه‌سازی کلیک روی دکمه اصلی پلیر داخلی جهت باز شدن لیست پخش
+                const internalPlayerBtn = document.querySelector('#layer-D07 button, #layer-D07 .player-trigger, #D07');
+                if (internalPlayerBtn) {
+                    internalPlayerBtn.click();
+                } else if (window.toggleAudioPlaylist) {
+                    window.toggleAudioPlaylist();
                 }
             };
+
             document.getElementById('iceGlassModal').classList.add('active');
         }
 
@@ -229,8 +246,8 @@
         }
     </script>
 
-    <!-- فراخوانی ماژول‌ها با کش‌شکنی v=28 -->
-    <script src="D01-translate.js?v=28"></script>
-    <script src="D07-audio.js?v=28"></script>
+    <!-- فراخوانی ماژول‌ها با کش‌شکنی v=29 -->
+    <script src="D01-translate.js?v=29"></script>
+    <script src="D07-audio.js?v=29"></script>
 </body>
 </html>
