@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* شبکه شطرنجی ۲۰ سطر در ۱۰ ستون */
+        /* شبکه شطرنجی دقیق ۲۰ سطر در ۱۰ ستون بدون بهم خوردن ابعاد */
         .master-coordinate-grid {
             position: absolute;
             inset: 0;
@@ -19,6 +19,7 @@
             grid-template-rows: repeat(20, 1fr);
             pointer-events: none;
             z-index: 10;
+            box-sizing: border-box;
         }
 
         /* سلول‌های راهنمای مختصات شیشه‌ای */
@@ -30,7 +31,7 @@
             align-items: center;
             justify-content: center;
             pointer-events: auto;
-            overflow: hidden;
+            box-sizing: border-box;
         }
 
         .grid-node-cell:hover {
@@ -57,14 +58,20 @@
             font-size: 10px;
         }
 
-        /* استایل دقیق کانتینرهای المان‌های ثابت */
-        #layer-D01, #layer-D07 {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 50;
+        /* کانتینرهای مستقل ماژول‌ها بدون خراب کردن گرید */
+        #layer-D01 {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 100;
+            pointer-events: auto;
+        }
+
+        #layer-D07 {
+            position: absolute;
+            bottom: 5%;
+            right: 2%;
+            z-index: 100;
             pointer-events: auto;
         }
     </style>
@@ -79,37 +86,32 @@
         <div class="absolute inset-0 bg-black/20"></div>
     </div>
 
-    <!-- لایه ۲: نقشه شطرنجی شبکه ۲۰ سطر در ۱۰ ستون -->
+    <!-- لایه ۲: نقشه شطرنجی شبکه ۲۰۰ سلولی (۲۰ سطر × ۱۰ ستون) -->
     <main class="master-coordinate-grid" id="masterGrid">
-        <!-- سلول‌ها توسط جاوااسکریپت ساخته می‌شوند -->
+        <!-- ساخت هوشمند شبکه ۲۰۰ سلولی -->
     </main>
+
+    <!-- لایه ۳: ماژول‌های ثابت (شناور در جایگاه‌های R1:C1 و R19:C10) -->
+    <div id="layer-D01"></div>
+    <div id="layer-D07"></div>
 
     <script>
         const gridContainer = document.getElementById('masterGrid');
         
+        // ساخت ۲۰۰ سلول کاملاً یکدست
         for (let r = 1; r <= 20; r++) {
             for (let c = 1; c <= 10; c++) {
                 const cell = document.createElement('div');
                 cell.className = 'grid-node-cell';
                 cell.setAttribute('data-coord', `R${r}:C${c}`);
-                
-                // جانمایی D01 دقیقاً در R1:C1 (بالا چپ)
-                if (r === 1 && c === 1) {
-                    cell.id = 'layer-D01';
-                } else if (r === 19 && c === 10) {
-                    // جانمایی D07 دقیقاً در R19:C10 (پایین راست)
-                    cell.id = 'layer-D07';
-                } else {
-                    cell.id = `node-R${r}-C${c}`;
-                }
-
+                cell.id = `node-R${r}-C${c}`;
                 gridContainer.appendChild(cell);
             }
         }
     </script>
 
     <!-- فراخوانی ماژول‌ها -->
-    <script src="D01-translate.js?v=22"></script>
-    <script src="D07-audio.js?v=22"></script>
+    <script src="D01-translate.js?v=23"></script>
+    <script src="D07-audio.js?v=23"></script>
 </body>
 </html>
