@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* شبکه شطرنجی دقیق ۲۰ سطر در ۱۰ ستون بدون بهم خوردن ابعاد */
+        /* شبکه دقیق ۲۰ سطر در ۱۰ ستون (پوشش ۱۰۰٪ صفحه بدون scroll) */
         .master-coordinate-grid {
             position: absolute;
             inset: 0;
@@ -22,7 +22,7 @@
             box-sizing: border-box;
         }
 
-        /* سلول‌های راهنمای مختصات شیشه‌ای */
+        /* سلول‌های مختصات شیشه‌ای */
         .grid-node-cell {
             border: 1px dashed rgba(255, 255, 255, 0.08);
             transition: all 0.2s ease;
@@ -32,6 +32,7 @@
             justify-content: center;
             pointer-events: auto;
             box-sizing: border-box;
+            overflow: hidden;
         }
 
         .grid-node-cell:hover {
@@ -40,7 +41,6 @@
             box-shadow: inset 0 0 12px rgba(245, 158, 11, 0.2);
         }
 
-        /* آدرس مختصات شناور روی هر سلول */
         .grid-node-cell::after {
             content: attr(data-coord);
             font-size: 8px;
@@ -58,27 +58,74 @@
             font-size: 10px;
         }
 
-        /* کانتینرهای مستقل ماژول‌ها بدون خراب کردن گرید */
+        /* جانمایی دکمه آیکون ترجمه دقیقاً در R1:C1 */
         #layer-D01 {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 100;
+            grid-row: 1;
+            grid-column: 1;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* جانمایی و فیت کردن ابعاد پلیر دقیقاً در R19:C10 */
+        #layer-D07 {
+            grid-row: 19;
+            grid-column: 10;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+        }
+
+        /* فشرده‌سازی و متناسب‌سازی آیکون‌ها با سلول گرید */
+        #layer-D07 > * {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            transform: scale(0.85);
+        }
+
+        /* استایل کارت سفید یخی توضیحات (Ice-Glass Modal) */
+        .ice-glass-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .ice-glass-overlay.active {
+            opacity: 1;
+            visibility: visible;
             pointer-events: auto;
         }
 
-        #layer-D07 {
-            position: absolute;
-            bottom: 5%;
-            right: 2%;
-            z-index: 100;
-            pointer-events: auto;
+        .ice-glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            border-radius: 1.5rem;
+            color: #0f172a;
+            max-width: 90vw;
+            width: 420px;
+            padding: 1.5rem;
         }
     </style>
 </head>
 <body class="select-none bg-black overflow-hidden relative w-screen h-screen">
 
-    <!-- لایه ۱: پس‌زمینه ویدیو/تصویر مهر و ماه -->
+    <!-- لایه ۱: پس‌زمینه تصویر/ویدیو (مهر و ماه) -->
     <div class="absolute inset-0 z-1">
         <video id="bgVideo" autoplay muted loop playsinline class="w-full h-full object-cover">
             <source src="video.mp4" type="video/mp4">
@@ -86,32 +133,66 @@
         <div class="absolute inset-0 bg-black/20"></div>
     </div>
 
-    <!-- لایه ۲: نقشه شطرنجی شبکه ۲۰۰ سلولی (۲۰ سطر × ۱۰ ستون) -->
+    <!-- لایه ۲: شبکه ۲۰۰ سلولی (۲۰ سطر × ۱۰ ستون) -->
     <main class="master-coordinate-grid" id="masterGrid">
-        <!-- ساخت هوشمند شبکه ۲۰۰ سلولی -->
+        <!-- سلول‌ها توسط جاوااسکریپت ساخته می‌شوند -->
     </main>
 
-    <!-- لایه ۳: ماژول‌های ثابت (شناور در جایگاه‌های R1:C1 و R19:C10) -->
-    <div id="layer-D01"></div>
-    <div id="layer-D07"></div>
+    <!-- لایه ۳: مودال سفید یخی (بازگردانده شد) -->
+    <div id="iceGlassModal" class="ice-glass-overlay">
+        <div class="ice-glass-card text-right relative">
+            <button onclick="closeModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-800 transition-colors">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+            <h3 id="modalTitle" class="text-xl font-bold mb-3 text-slate-900">اطلاعات سلول</h3>
+            <p id="modalDesc" class="text-sm leading-relaxed text-slate-600 mb-4">توضیحات و محتوای مربوط به این موقعیت در این لایه شیشه‌ای قرار می‌گیرد.</p>
+            <div id="modalFooter" class="flex justify-end gap-2 pt-2 border-t border-slate-200/60">
+                <button onclick="closeModal()" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md">تایید</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const gridContainer = document.getElementById('masterGrid');
         
-        // ساخت ۲۰۰ سلول کاملاً یکدست
+        // ساخت ۲۰۰ سلول و جانمایی دقیق D01 در R1:C1 و D07 در R19:C10
         for (let r = 1; r <= 20; r++) {
             for (let c = 1; c <= 10; c++) {
                 const cell = document.createElement('div');
                 cell.className = 'grid-node-cell';
                 cell.setAttribute('data-coord', `R${r}:C${c}`);
-                cell.id = `node-R${r}-C${c}`;
+                
+                if (r === 1 && c === 1) {
+                    cell.id = 'layer-D01';
+                } else if (r === 19 && c === 10) {
+                    cell.id = 'layer-D07';
+                } else {
+                    cell.id = `node-R${r}-C${c}`;
+                }
+
+                // رویداد کلیک جهت تست باز شدن کارت سفید یخی توضیحات
+                cell.addEventListener('click', () => {
+                    openModal(`مختصات سلول: R${r}:C${c}`, `این سلول در موقعیت سطر ${r} و ستون ${c} قرار دارد.`);
+                });
+
                 gridContainer.appendChild(cell);
             }
+        }
+
+        // توابع مدال سفید یخی
+        function openModal(title, desc) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('iceGlassModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('iceGlassModal').classList.remove('active');
         }
     </script>
 
     <!-- فراخوانی ماژول‌ها -->
-    <script src="D01-translate.js?v=23"></script>
-    <script src="D07-audio.js?v=23"></script>
+    <script src="D01-translate.js?v=24"></script>
+    <script src="D07-audio.js?v=24"></script>
 </body>
 </html>
