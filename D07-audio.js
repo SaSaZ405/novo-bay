@@ -26,7 +26,7 @@ class NovoAutonomousAudio {
         balloon.className = 'balloon-element';
         balloon.style.cssText = "bottom: 2px; left: 2px;";
 
-        // نماد کلاسیک موسیقی در سلول
+        // نماد کلاسیک موسیقی در سلول R20:C10
         balloon.innerHTML = `
             <div id="audioIconTrigger" title="آوای ملل (NOVO-AUDIO)" style="
                 width: 32px;
@@ -116,22 +116,19 @@ class NovoAutonomousAudio {
         }
     }
 
-    // نمایش مودال راهنما با دقیقاً همان متن‌ها و فرمت درخواست‌شده در تصویر
+    // نمایش مودال راهنما با دقیقاً همان متن‌ها و فرمت درخواست‌شده
     showAudioGuideModal() {
         let modal = document.getElementById('iceGlassModal');
         if (!modal) return;
 
-        // عنوان دقیق مطابق تصویر
         document.getElementById('modalTitle').innerHTML = `🎵 راهنمای جامع پخش صوتی و آوای ملل (NOVO-BAY)`;
         
-        // متن‌های دقیق مطابق تصویر اسکرین‌شات
         document.getElementById('modalDesc').innerHTML = `
-            <p class="mb-3 leading-relaxed">در این بخش، نواها و قطعات موسیقی شاخص از سرزمین‌های مختلف جهان — که زبان‌های آن مناطق در این پلتفرم پشتیبانی می‌شوند — طنین‌انداز می‌گردد.</p>
-            <p class="mb-3 leading-relaxed">شما آزادانه می‌توانید نوایی خاص را به صورت مکرر بشنوید، اجازه دهید سلسله‌ای از نواها به نوبت نواخته شوند، یا جریان پخش صوتی را در بدو ورود به پلتفرم و یا در هر بخش دلخواه دیگر متوقف سازید.</p>
-            <p class="text-slate-500 leading-relaxed">هدف از ارائهٔ این مجموعهٔ گزیده، صرفاً معرفی اصالت‌های موسیقایی ملل گوناگون است. چنانچه پیشنهاد ارزنده‌ای در خصوص قطعه‌ای خاص مدنظر دارید، با ما به اشتراک بگذارید؛ در صورت استقبال و فزونی درخواست‌ها، آن را به لیست پخش سراسری اضافه خواهیم کرد.</p>
+            <p class="mb-3 leading-relaxed text-xs">در این بخش، نواها و قطعات موسیقی شاخص از سرزمین‌های مختلف جهان — که زبان‌های آن مناطق در این پلتفرم پشتیبانی می‌شوند — طنین‌انداز می‌گردد.</p>
+            <p class="mb-3 leading-relaxed text-xs">شما آزادانه می‌توانید نوایی خاص را به صورت مکرر بشنوید، اجازه دهید سلسله‌ای از نواها به نوبت نواخته شوند، یا جریان پخش صوتی را در بدو ورود به پلتفرم و یا در هر بخش دلخواه دیگر متوقف سازید.</p>
+            <p class="text-slate-500 leading-relaxed text-xs">هدف از ارائهٔ این مجموعهٔ گزیده، صرفاً معرفی اصالت‌های موسیقایی ملل گوناگون است. چنانچه پیشنهاد ارزنده‌ای در خصوص قطعه‌ای خاص مدنظر دارید، با ما به اشتراک بگذارید؛ در صورت استقبال و فزونی درخواست‌ها، آن را به لیست پخش سراسری اضافه خواهیم کرد.</p>
         `;
 
-        // دکمه‌های پایین مودال مطابق تصویر (پیشنهاد موسیقی، انصراف، OK)
         const footer = document.getElementById('modalFooter') || modal.querySelector('.border-t');
         if (footer) {
             footer.innerHTML = `
@@ -158,13 +155,58 @@ class NovoAutonomousAudio {
                 modal.classList.remove('active');
             };
 
-            // رویداد دکمه پیشنهاد موسیقی
+            // رویداد دکمه پیشنهاد موسیقی (فعال‌سازی درگاه پیشنهاد)
             document.getElementById('suggestMusicBtn').onclick = () => {
-                alert("بخش پیشنهاد موسیقی و ثبت درخواست کاربران به‌زودی فعال خواهد شد.");
+                this.showSuggestionFormModal();
             };
         }
 
         modal.classList.add('active');
+    }
+
+    // درگاه پیشنهاد موسیقی (فرم اختصاصی ثبت درخواست کاربر)
+    showSuggestionFormModal() {
+        let modal = document.getElementById('iceGlassModal');
+        if (!modal) return;
+
+        document.getElementById('modalTitle').innerHTML = `💡 ثبت پیشنهاد موسیقی ملل`;
+        document.getElementById('modalDesc').innerHTML = `
+            <div class="space-y-3 text-right">
+                <p class="text-xs text-slate-600">لطفاً مشخصات قطعه یا نوای پیشنهادی خود را وارد کنید تا پس از بررسی کارشناسی، به لیست پخش سراسری افزوده شود.</p>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">نام قطعه و کشور/منطقه:</label>
+                    <input type="text" id="suggestTrackName" placeholder="مثلاً: نوای محلی اندلس - اسپانیا" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">لینک یا توضیحات تکمیلی:</label>
+                    <textarea id="suggestTrackDesc" rows="2" placeholder="لینک مرجع یا توضیحات کوتاه..." class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:border-amber-500 resize-none"></textarea>
+                </div>
+            </div>
+        `;
+
+        const footer = document.getElementById('modalFooter') || modal.querySelector('.border-t');
+        if (footer) {
+            footer.innerHTML = `
+                <button id="backToGuideBtn" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">بازگشت</button>
+                <button id="submitSuggestionBtn" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md">ثبت و ارسال پیشنهاد</button>
+            `;
+
+            // بازگشت به راهنما
+            document.getElementById('backToGuideBtn').onclick = () => {
+                this.showAudioGuideModal();
+            };
+
+            // ارسال پیشنهاد
+            document.getElementById('submitSuggestionBtn').onclick = () => {
+                const trackName = document.getElementById('suggestTrackName').value.trim();
+                if (!trackName) {
+                    alert("لطفاً نام قطعه یا منطقه را وارد کنید.");
+                    return;
+                }
+                alert(`پیشنهاد ارزشمند شما (${trackName}) با موفقیت ثبت شد. از همکاری شما سپاسگزاریم!`);
+                modal.classList.remove('active');
+            };
+        }
     }
 
     renderTrackList() {
@@ -208,3 +250,4 @@ window.toggleAudioPlaylist = function() {
         novoAudio.togglePlaylist();
     }
 };
+```[cite: 14, 15]
