@@ -27,7 +27,7 @@
             z-index: 10;
         }
 
-        /* شبکه دقیق ۲۰ سطر در ۱۰ ستون */
+        /* شبکه دقیق ۲۰ سطر در ۱۰ ستون (اتاق فرمان) */
         .master-coordinate-grid {
             width: 100%;
             height: 100%;
@@ -38,7 +38,6 @@
             box-sizing: border-box;
         }
 
-        /* خطوط مات، محو و بسیار شیک شبکه */
         .grid-node-cell {
             border: 1px dashed rgba(255, 255, 255, 0.04);
             transition: all 0.25s ease;
@@ -67,15 +66,8 @@
             bottom: 1px;
             right: 2px;
             pointer-events: none;
-            transition: color 0.2s ease;
         }
 
-        .grid-node-cell:hover::after {
-            color: #fbbf24;
-            font-weight: bold;
-        }
-
-        /* الگوی بالون برای شناورسازی المان‌ها در سلول مربوطه */
         .balloon-element {
             position: absolute;
             pointer-events: auto;
@@ -92,7 +84,7 @@
             left: 2px;
         }
 
-        /* استایل کارت سفید یخی توضیحات (Ice-Glass Modal) */
+        /* مودال عمومی مشترک برای سلول‌های ساده شبکه */
         .ice-glass-overlay {
             position: fixed;
             inset: 0;
@@ -131,7 +123,6 @@
 </head>
 <body class="select-none bg-black relative">
 
-    <!-- لایه ۱: پس‌زمینه تصویر/ویدیو (مهر و ماه) -->
     <div class="absolute inset-0 z-1">
         <video id="bgVideo" autoplay muted loop playsinline class="w-full h-full object-cover">
             <source src="video.mp4" type="video/mp4">
@@ -139,14 +130,12 @@
         <div class="absolute inset-0 bg-black/20"></div>
     </div>
 
-    <!-- لایه ۲: شبکه ۲۰۰ سلولی کاملاً فیکس از R1 تا R20 -->
     <div class="grid-wrapper">
         <main class="master-coordinate-grid" id="masterGrid">
-            <!-- سلول‌ها توسط جاوااسکریپت ساخته می‌شوند -->
         </main>
     </div>
 
-    <!-- لایه ۳: مودال سفید یخی توضیحات -->
+    <!-- مودال عمومی شبکه -->
     <div id="iceGlassModal" class="ice-glass-overlay">
         <div class="ice-glass-card text-right relative">
             <button onclick="closeModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-800 transition-colors">
@@ -155,7 +144,7 @@
             <h3 id="modalTitle" class="text-lg font-bold mb-2 text-slate-900">اطلاعات سلول</h3>
             <p id="modalDesc" class="text-xs leading-relaxed text-slate-600 mb-4">توضیحات مربوط به این بخش در این لایه قرار می‌گیرد.</p>
             <div id="modalFooter" class="flex justify-end gap-2 pt-2 border-t border-slate-200/60">
-                <button id="modalPrimaryBtn" onclick="closeModal()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md">متوجه شدم</button>
+                <button onclick="closeModal()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md">متوجه شدم</button>
             </div>
         </div>
     </div>
@@ -175,33 +164,17 @@
                     balloon.className = 'balloon-element';
                     cell.appendChild(balloon);
                 } else if (r === 19 && c === 10) {
-                    cell.id = 'layer-D07';
+                    cell.id = 'layer-D07'; // جایگاه پلیر صوتی (مدیریت جزئیات داخل خود فایل اسکریپت D07 است)
                     const balloon = document.createElement('div');
                     balloon.className = 'balloon-element';
                     cell.appendChild(balloon);
                 } else {
                     cell.id = `node-R${r}-C${c}`;
+                    // کلیک روی سلول‌های عادی شبکه
+                    cell.addEventListener('click', (e) => {
+                        openModal(`مختصات سلول: R${r}:C${c}`, `این سلول در موقعیت سطر ${r} و ستون ${c} از شبکه فرماندهی NOVO-BAY قرار دارد.`);
+                    });
                 }
-
-                // رویداد کلیک برای سلول‌ها
-                cell.addEventListener('click', (e) => {
-                    // سلول پلیر R19:C10 -> اول پاپ‌آپ راهنما/توضیحات را باز می‌کند
-                    if (r === 19 && c === 10) {
-                        e.stopPropagation();
-                        openAudioModal();
-                        return;
-                    }
-                    
-                    // سلول ترجمه R1:C1 -> ماژول D01 کار خودش را انجام می‌دهد
-                    if (r === 1 && c === 1) {
-                        return; 
-                    }
-
-                    // سایر سلول‌های عادی شبکه
-                    if (!e.target.closest('button') && !e.target.closest('.dropdown-menu')) {
-                        openModal(`مختصات سلول: R${r}:C${c}`, `این سلول در موقعیت سطر ${r} و ستون ${c} قرار دارد.`);
-                    }
-                });
 
                 gridContainer.appendChild(cell);
             }
@@ -210,34 +183,6 @@
         function openModal(title, desc) {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalDesc').innerText = desc;
-            const btn = document.getElementById('modalPrimaryBtn');
-            btn.innerText = "متوجه شدم";
-            btn.onclick = closeModal;
-            document.getElementById('iceGlassModal').classList.add('active');
-        }
-
-        // پاپ‌آپ اختصاصی راهنمای صوتی و معرفی پلیر (مشابه ماژول ترجمه)
-        function openAudioModal() {
-            document.getElementById('modalTitle').innerText = "🎵 راهنمای سیستم صوتی و آوای ملل (NOVO-AUDIO)";
-            document.getElementById('modalDesc').innerHTML = `
-                این سلول (<code class="text-amber-600 font-bold">R19:C10</code>) به عنوان هسته صوتی و آوای دیپلماتیک شبکه NOVO-BAY عمل می‌کند.<br><br>
-                <span class="text-slate-500">با ورود به این بخش می‌توانید قطعات صوتی ملل را مدیریت کرده، سطح صدا را تنظیم نموده و پلتفرم شنیداری را فعال کنید.</span>
-            `;
-            const btn = document.getElementById('modalPrimaryBtn');
-            btn.innerText = "ادامه و تنظیمات صوتی 🎧";
-            
-            // با کلیک روی این دکمه، تازه پنل اصلی پلیر باز می‌شود
-            btn.onclick = () => {
-                closeModal();
-                // شبیه‌سازی کلیک روی دکمه اصلی پلیر داخلی جهت باز شدن لیست پخش
-                const internalPlayerBtn = document.querySelector('#layer-D07 button, #layer-D07 .player-trigger, #D07');
-                if (internalPlayerBtn) {
-                    internalPlayerBtn.click();
-                } else if (window.toggleAudioPlaylist) {
-                    window.toggleAudioPlaylist();
-                }
-            };
-
             document.getElementById('iceGlassModal').classList.add('active');
         }
 
@@ -246,8 +191,8 @@
         }
     </script>
 
-    <!-- فراخوانی ماژول‌ها با کش‌شکنی v=29 -->
-    <script src="D01-translate.js?v=29"></script>
-    <script src="D07-audio.js?v=29"></script>
+    <!-- فراخوانی ماژول‌های کاملاً مستقل با کش‌شکنی v=31 -->
+    <script src="D01-translate.js?v=31"></script>
+    <script src="D07-audio.js?v=31"></script>
 </body>
 </html>
