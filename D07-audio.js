@@ -1,224 +1,189 @@
-/* ==========================================================
-   NOVO-BAY AUTONOMOUS AUDIO MODULE (D07 - FINAL STABLE)
-   ========================================================== */
 class NovoAutonomousAudio {
     constructor() {
-        if (window.D07_instance) return window.D07_instance;
-        
         this.tracks = [
-            { name: "آوای ملل ۱", src: "trac1.mp3" },
-            { name: "آوای ملل ۲", src: "trac2.mp3" },
-            { name: "آوای ملل ۳", src: "trac3.mp3" },
-            { name: "آوای ملل ۴", src: "trac4.mp3" },
-            { name: "آوای ملل ۵", src: "trac5.mp3" },
-            { name: "آوای ملل ۶", src: "trac6.mp3" },
-            { name: "آوای ملل ۷", src: "trac7.mp3" },
-            { name: "آوای ملل ۸", src: "trac8.mp3" },
-            { name: "آوای ملل ۹", src: "trac9.mp3" }
+            { title: "آوای ملل ۱ - نوای باستانی", src: "audio1.mp3" },
+            { title: "آوای ملل ۲ - امواج دیپلماسی", src: "audio2.mp3" },
+            { title: "آوای ملل ۳ - افق‌های نوین", src: "audio3.mp3" },
+            { title: "آوای ملل ۴ - همگرایی جهانی", src: "audio4.mp3" }
         ];
-        
-        this.currentTrackIndex = parseInt(localStorage.getItem('novo_track_idx') || '0');
-        this.loopMode = localStorage.getItem('novo_loop_mode') || 'all';
-        
+        this.currentTrackIndex = 1;
+        this.isPlaying = false;
         this.audioElement = new Audio(this.tracks[this.currentTrackIndex].src);
-        this.audioElement.volume = parseFloat(localStorage.getItem('novo_vol_state') || '0.8');
-
-        this.audioElement.addEventListener('ended', () => {
-            if (this.loopMode === 'one') {
-                this.audioElement.play();
-            } else if (this.loopMode === 'all') {
-                this.playNext();
-            }
-        });
-
-        window.D07_instance = this;
-        this.init();
+        
+        this.initDOM();
+        this.initEvents();
     }
 
-    init() {
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.injectComponent());
-        } else {
-            this.injectComponent();
-        }
-    }
+    initDOM() {
+        // یافتن سلول R20:C10 در اتاق فرمان کل
+        const layerD07 = document.getElementById('layer-D07');
+        if (!layerD07) return;
 
-    injectComponent() {
-        const layer = document.getElementById('layer-D07');
-        if (!layer) return;
+        // تغییر جایگاه به R20:C10
+        layerD07.style.gridRow = "20";
+        layerD07.style.gridColumn = "10";
 
-        const currentTrack = this.tracks[this.currentTrackIndex];
+        const balloon = layerD07.querySelector('.balloon-element') || document.createElement('div');
+        balloon.className = 'balloon-element';
+        balloon.style.cssText = "bottom: 2px; left: 2px;";
 
-        const htmlContent = `
-            <!-- پلیر کلاسیک در پایین سمت چپ با بالاترین سطح تعامل -->
-            <div class="absolute bottom-4 left-4 interactive-node flex items-center z-50">
-                <div class="relative flex items-center gap-2 bg-gray-900/90 backdrop-blur-md text-amber-400 px-3 py-2 rounded-2xl border border-gray-700 shadow-2xl select-none">
-                    
-                    <!-- دکمه پخش / توقف سریع -->
-                    <button id="D07_quickPlayBtn" class="w-8 h-8 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 flex items-center justify-center cursor-pointer transition border border-amber-500/40">
-                        <i id="D07_quickPlayIcon" class="fa-solid ${this.audioElement.paused ? 'fa-play' : 'fa-pause'} text-xs"></i>
+        // طراحی نماد کلاسیک و مینیمال موسیقی در سلول R20:C10
+        balloon.innerHTML = `
+            <div id="audioIconTrigger" title="آوای ملل (NOVO-AUDIO)" style="
+                width: 32px;
+                height: 32px;
+                background: rgba(15, 23, 42, 0.85);
+                backdrop-filter: blur(8px);
+                border: 1px solid rgba(245, 158, 11, 0.4);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.25s ease;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            ">
+                <i class="fas fa-music text-amber-400 text-xs"></i>
+            </div>
+
+            <!-- پنل اصلی پلیر و لیست پخش (که پس از تایید توضیحات نمایان می‌شود) -->
+            <div id="audioPlaylistModal" class="hidden" style="
+                position: absolute;
+                bottom: 40px;
+                left: 0;
+                width: 280px;
+                background: rgba(255, 255, 255, 0.92);
+                backdrop-filter: blur(16px);
+                border: 1px solid rgba(255, 255, 255, 0.95);
+                border-radius: 1rem;
+                padding: 1rem;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+                z-index: 100;
+                color: #0f172a;
+                direction: rtl;
+                text-align: right;
+            ">
+                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-200">
+                    <span class="text-xs font-bold text-slate-800">لیست پخش و تنظیمات صوتی</span>
+                    <button id="closePlaylistBtn" class="text-slate-400 hover:text-slate-700 text-sm"><i class="fas fa-times"></i></button>
+                </div>
+                <div id="trackListContainer" class="space-y-1.5 max-h-40 overflow-y-auto mb-3"></div>
+                <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs text-slate-600">
+                    <span id="currentPlayingTitle" class="truncate font-medium">در حال پخش: --</span>
+                    <button id="masterPlayBtn" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-bold transition-all shadow">
+                        <i class="fas fa-play"></i>
                     </button>
-
-                    <!-- دکمه ترک بعدی -->
-                    <button id="D07_quickNextBtn" class="w-7 h-7 rounded-lg hover:bg-gray-800 text-gray-300 flex items-center justify-center cursor-pointer transition">
-                        <i class="fa-solid fa-forward-step text-xs"></i>
-                    </button>
-
-                    <!-- عنوان تراک و دکمه ورود به لیست پخش -->
-                    <div id="D07_mainBtn" class="flex flex-col cursor-pointer border-r border-gray-700 pr-2.5 mr-1">
-                        <span class="text-[9px] text-gray-400 font-bold">NOVO-AUDIO</span>
-                        <span id="D07_trackTitleDisplay" class="text-[11px] font-bold text-amber-400 max-w-[90px] truncate">${currentTrack.name}</span>
-                    </div>
                 </div>
             </div>
         `;
 
-        layer.innerHTML = htmlContent;
-        this.bindEvents();
-    }
-
-    bindEvents() {
-        document.getElementById('D07_quickPlayBtn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.togglePlay();
-        });
-
-        document.getElementById('D07_quickNextBtn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.playNext();
-        });
-
-        // کلیک روی بخش عنوان، مستقیماً پنجره لیست پخش را باز می‌کند
-        document.getElementById('D07_mainBtn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.openPlaylistUI();
-        });
-    }
-
-    openPlaylistUI() {
-        let plModal = document.getElementById('D07_playlistModal');
-        if (!plModal) {
-            const modalHTML = `
-                <div id="D07_playlistModal" class="ice-glass-overlay active">
-                    <div class="ice-glass-card max-w-[400px] w-[90vw] text-xs">
-                        <div class="flex items-center justify-between mb-3 border-b border-slate-300/80 pb-2">
-                            <h3 class="text-xs text-slate-900 font-black flex items-center gap-2">
-                                <i class="fa-solid fa-list-music text-amber-600"></i> لیست پخش و تنظیمات صوتی
-                            </h3>
-                            <button onclick="document.getElementById('D07_playlistModal').classList.remove('active')" class="text-slate-500 hover:text-slate-900 cursor-pointer text-sm font-bold p-1">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                        </div>
-                        
-                        <div class="space-y-1.5 max-h-[180px] overflow-y-auto mb-3 p-1" id="D07_trackContainer">
-                            ${this.renderTrackList()}
-                        </div>
-
-                        <div class="pt-3 border-t border-slate-300/80 space-y-2.5 text-[11px] font-bold text-slate-800">
-                            <div class="flex items-center justify-between">
-                                <span>حالت تکرار پخش:</span>
-                                <select id="D07_loopSelect" onchange="window.D07_instance.changeLoopMode(this.value)" class="bg-white/80 border border-slate-300 rounded-xl px-2.5 py-1 text-[10px] font-bold outline-none text-slate-900 cursor-pointer">
-                                    <option value="all" ${this.loopMode === 'all' ? 'selected' : ''}>🔁 تکرار همه آهنگ‌ها</option>
-                                    <option value="one" ${this.loopMode === 'one' ? 'selected' : ''}>🔂 تکرار همین آهنگ</option>
-                                    <option value="none" ${this.loopMode === 'none' ? 'selected' : ''}>➡️ پخش ترتیبی (بدون تکرار)</option>
-                                </select>
-                            </div>
-                            <div class="flex items-center justify-between gap-2">
-                                <span>تنظیم صدا:</span>
-                                <input type="range" min="0" max="1" step="0.1" value="${this.audioElement.volume}" oninput="window.D07_instance.setVolume(this.value)" class="w-28 accent-amber-500 cursor-pointer">
-                            </div>
-                        </div>
-
-                        <div class="mt-4 flex justify-end">
-                            <button onclick="document.getElementById('D07_playlistModal').classList.remove('active');" class="btn-ice-glass px-4 py-2 rounded-xl text-[11px]">
-                                بستن پنجره
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-        } else {
-            plModal.classList.add('active');
+        if (!layerD07.contains(balloon)) {
+            layerD07.appendChild(balloon);
         }
+
+        this.renderTrackList();
+    }
+
+    initEvents() {
+        const trigger = document.getElementById('audioIconTrigger');
+        const closePlaylistBtn = document.getElementById('closePlaylistBtn');
+        const masterPlayBtn = document.getElementById('masterPlayBtn');
+
+        if (trigger) {
+            // لمس اول: نمایش کارت توضیحات سفید یخی (بدون باز کردن مستقیم پلیر)
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.showAudioGuideModal();
+            });
+        }
+
+        if (closePlaylistBtn) {
+            closePlaylistBtn.addEventListener('click', () => {
+                document.getElementById('audioPlaylistModal').classList.add('hidden');
+            });
+        }
+
+        if (masterPlayBtn) {
+            masterPlayBtn.addEventListener('click', () => {
+                if (this.isPlaying) {
+                    this.audioElement.pause();
+                    this.isPlaying = false;
+                    masterPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
+                } else {
+                    this.audioElement.play().catch(err => console.log(err));
+                    this.isPlaying = true;
+                    masterPlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                }
+            });
+        }
+    }
+
+    // نمایش کارت توضیحات سفید یخی اختصاصی پلیر (مشابه استاندارد پروژه)
+    showAudioGuideModal() {
+        let modal = document.getElementById('iceGlassModal');
+        if (!modal) return;
+
+        document.getElementById('modalTitle').innerText = "🎵 راهنمای سیستم صوتی و آوای ملل (NOVO-AUDIO)";
+        document.getElementById('modalDesc').innerHTML = `
+            این سلول (<code class="text-amber-600 font-bold">R20:C10</code>) به عنوان هسته صوتی و آوای دیپلماتیک شبکه NOVO-BAY عمل می‌کند.<br><br>
+            <span class="text-slate-500">با ورود به این بخش می‌توانید قطعات صوتی ملل را انتخاب کرده، فضای صوتی شبکه را مدیریت کنید و به آواهای دیپلماتیک گوش دهید.</span>
+        `;
+        
+        const btn = document.getElementById('modalPrimaryBtn') || document.querySelector('#iceGlassModal button.bg-amber-500');
+        if (btn) {
+            btn.innerText = "ادامه و تنظیمات صوتی 🎧";
+            btn.onclick = () => {
+                // بستن مودال توضیحات
+                modal.classList.remove('active');
+                // باز کردن پنل اصلی پلیر و لیست پخش
+                const playlistModal = document.getElementById('audioPlaylistModal');
+                if (playlistModal) {
+                    playlistModal.classList.remove('hidden');
+                }
+            };
+        }
+
+        modal.classList.add('active');
     }
 
     renderTrackList() {
-        return this.tracks.map((tr, idx) => `
-            <div onclick="window.D07_instance.selectTrack(${idx})" class="p-2.5 ${idx === this.currentTrackIndex ? 'bg-amber-100 border-amber-400' : 'bg-white/50'} hover:bg-white/90 rounded-xl cursor-pointer flex justify-between items-center text-[11px] font-bold border border-slate-200 transition">
-                <span>${idx + 1}. ${tr.name}</span>
-                <i class="fa-solid ${idx === this.currentTrackIndex && !this.audioElement.paused ? 'fa-pause text-amber-600' : 'fa-play text-amber-600'} text-[10px]"></i>
-            </div>
-        `).join('');
+        const container = document.getElementById('trackListContainer');
+        if (!container) return;
+
+        container.innerHTML = '';
+        this.tracks.forEach((track, index) => {
+            const item = document.createElement('div');
+            item.className = `p-2 rounded-lg text-xs cursor-pointer flex items-center justify-between transition-all ${index === this.currentTrackIndex ? 'bg-amber-100 text-amber-900 font-bold' : 'hover:bg-slate-100 text-slate-700'}`;
+            item.innerHTML = `<span>${index + 1}. ${track.title}</span> <i class="fas fa-play text-[10px] text-amber-600"></i>`;
+            
+            item.addEventListener('click', () => {
+                this.currentTrackIndex = index;
+                this.audioElement.src = track.src;
+                this.audioElement.play().catch(e => console.log(e));
+                this.isPlaying = true;
+                document.getElementById('currentPlayingTitle').innerText = `در حال پخش: ${track.title}`;
+                const masterPlayBtn = document.getElementById('masterPlayBtn');
+                if (masterPlayBtn) masterPlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                this.renderTrackList();
+            });
+
+            container.appendChild(item);
+        });
     }
 
-    selectTrack(idx) {
-        if (this.currentTrackIndex === idx) {
-            this.togglePlay();
-        } else {
-            this.currentTrackIndex = idx;
-            localStorage.setItem('novo_track_idx', idx);
-            this.audioElement.src = this.tracks[idx].src;
-            this.audioElement.play().catch(e => console.log(e));
-        }
-        this.updateUI();
-    }
-
-    togglePlay() {
-        if (this.audioElement.paused) {
-            this.audioElement.play().catch(e => console.log(e));
-        } else {
-            this.audioElement.pause();
-        }
-        this.updateUI();
-    }
-
-    playNext() {
-        this.currentTrackIndex = (this.currentTrackIndex + 1) % this.tracks.length;
-        localStorage.setItem('novo_track_idx', this.currentTrackIndex);
-        this.audioElement.src = this.tracks[this.currentTrackIndex].src;
-        this.audioElement.play().catch(e => console.log(e));
-        this.updateUI();
-    }
-
-    changeLoopMode(val) {
-        this.loopMode = val;
-        localStorage.setItem('novo_loop_mode', val);
-    }
-
-    setVolume(val) {
-        this.audioElement.volume = val;
-        localStorage.setItem('novo_vol_state', val);
-    }
-
-    updateUI() {
-        const playIcon = document.getElementById('D07_quickPlayIcon');
-        if (playIcon) {
-            playIcon.className = `fa-solid ${this.audioElement.paused ? 'fa-play' : 'fa-pause'} text-xs`;
-        }
-
-        const titleDisplay = document.getElementById('D07_trackTitleDisplay');
-        if (titleDisplay) {
-            titleDisplay.innerText = this.tracks[this.currentTrackIndex].name;
-        }
-
-        const container = document.getElementById('D07_trackContainer');
-        if (container) {
-            container.innerHTML = this.renderTrackList();
+    togglePlaylist() {
+        const playlistModal = document.getElementById('audioPlaylistModal');
+        if (playlistModal) {
+            playlistModal.classList.toggle('hidden');
         }
     }
 }
 
+// راه‌اندازی ماژول صوتی
 const novoAudio = new NovoAutonomousAudio();
-// اتصال تابع سراسری برای باز کردن لیست پخش صوتی از طریق کارت راهنما
+
 window.toggleAudioPlaylist = function() {
     if (typeof novoAudio !== 'undefined' && typeof novoAudio.togglePlaylist === 'function') {
         novoAudio.togglePlaylist();
-    } else {
-        // روش جایگزین در صورت نیاز به جستجوی المان DOM
-        const audioModal = document.getElementById('audioPlaylistModal') || document.querySelector('.audio-playlist-container');
-        if (audioModal) {
-            audioModal.classList.toggle('hidden');
-        }
     }
 };
