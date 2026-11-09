@@ -163,12 +163,14 @@
                     const balloon = document.createElement('div');
                     balloon.className = 'balloon-element';
                     cell.appendChild(balloon);
-                } else if (r === 19 && c === 10) {
-                    cell.id = 'layer-D07'; // جایگاه پلیر صوتی (مدیریت جزئیات داخل خود فایل اسکریپت D07 است)
+                } 
+                else if (r === 20 && c === 10) {
+                    cell.id = 'layer-D07'; // جایگاه پلیر صوتی در R20:C10
                     const balloon = document.createElement('div');
                     balloon.className = 'balloon-element';
                     cell.appendChild(balloon);
-                } else {
+                } 
+                else {
                     cell.id = `node-R${r}-C${c}`;
                     // کلیک روی سلول‌های عادی شبکه
                     cell.addEventListener('click', (e) => {
@@ -191,8 +193,8 @@
         }
     </script>
 
-    <!-- فراخوانی ماژول‌های کاملاً مستقل با کش‌شکنی v=31 -->
-    <script src="D01-translate.js?v=31"></script>
-    <script src="D07-audio.js?v=31"></script>
+    <!-- فراخوانی ماژول‌های کاملاً مستقل با کش‌شکنی v=32 -->
+    <script src="D01-translate.js?v=32"></script>
+    <script src="D07-audio.js?v=32"></script>
 </body>
 </html>
