@@ -210,3 +210,15 @@ class NovoAutonomousAudio {
 }
 
 const novoAudio = new NovoAutonomousAudio();
+// اتصال تابع سراسری برای باز کردن لیست پخش صوتی از طریق کارت راهنما
+window.toggleAudioPlaylist = function() {
+    if (typeof novoAudio !== 'undefined' && typeof novoAudio.togglePlaylist === 'function') {
+        novoAudio.togglePlaylist();
+    } else {
+        // روش جایگزین در صورت نیاز به جستجوی المان DOM
+        const audioModal = document.getElementById('audioPlaylistModal') || document.querySelector('.audio-playlist-container');
+        if (audioModal) {
+            audioModal.classList.toggle('hidden');
+        }
+    }
+};
