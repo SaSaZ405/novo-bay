@@ -10,76 +10,71 @@ class NovoAutonomousAudio {
         this.isPlaying = false;
         this.audioElement = new Audio(this.tracks[this.currentTrackIndex].src);
         
-        this.initDOM();
-        this.initEvents();
+        // اطمینان از بارگذاری کامل DOM
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.initDOM());
+        } else {
+            this.initDOM();
+        }
     }
 
     initDOM() {
-        const layerD07 = document.getElementById('layer-D07');
+        const layerD07 = document.getElementById('layer-D07') || document.getElementById('node-R20-C10');
         if (!layerD07) return;
 
-        // استقرار دقیق در سلول R20:C10
-        layerD07.style.gridRow = "20";
-        layerD07.style.gridColumn = "10";
-
-        const balloon = layerD07.querySelector('.balloon-element') || document.createElement('div');
-        balloon.className = 'balloon-element';
-        balloon.style.cssText = "bottom: 2px; left: 2px;";
-
-        // نماد کلاسیک موسیقی در سلول R20:C10
-        balloon.innerHTML = `
-            <div id="audioIconTrigger" title="آوای ملل (NOVO-AUDIO)" style="
-                width: 32px;
-                height: 32px;
-                background: rgba(15, 23, 42, 0.85);
-                backdrop-filter: blur(8px);
-                border: 1px solid rgba(245, 158, 11, 0.4);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: all 0.25s ease;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            ">
-                <i class="fas fa-music text-amber-400 text-xs"></i>
-            </div>
-
-            <!-- پنل اصلی لیست پخش و تنظیمات صوتی -->
-            <div id="audioPlaylistModal" class="hidden" style="
-                position: absolute;
-                bottom: 40px;
-                left: 0;
-                width: 280px;
-                background: rgba(255, 255, 255, 0.92);
-                backdrop-filter: blur(16px);
-                border: 1px solid rgba(255, 255, 255, 0.95);
-                border-radius: 1rem;
-                padding: 1rem;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-                z-index: 100;
-                color: #0f172a;
-                direction: rtl;
-                text-align: right;
-            ">
-                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-200">
-                    <span class="text-xs font-bold text-slate-800">لیست پخش و تنظیمات صوتی</span>
-                    <button id="closePlaylistBtn" class="text-slate-400 hover:text-slate-700 text-sm"><i class="fas fa-times"></i></button>
+        // تزریق آیکون کلاسیک و پنل صوتی درون سلول R20:C10
+        layerD07.innerHTML = `
+            <div class="balloon-element" style="position: absolute; bottom: 2px; left: 2px; z-index: 60;">
+                <div id="audioIconTrigger" title="آوای ملل (NOVO-AUDIO)" style="
+                    width: 32px;
+                    height: 32px;
+                    background: rgba(15, 23, 42, 0.85);
+                    backdrop-filter: blur(8px);
+                    border: 1px solid rgba(245, 158, 11, 0.5);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    transition: all 0.25s ease;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+                ">
+                    <i class="fas fa-music text-amber-400 text-xs"></i>
                 </div>
-                <div id="trackListContainer" class="space-y-1.5 max-h-40 overflow-y-auto mb-3"></div>
-                <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs text-slate-600">
-                    <span id="currentPlayingTitle" class="truncate font-medium">در حال پخش: --</span>
-                    <button id="masterPlayBtn" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-bold transition-all shadow">
-                        <i class="fas fa-play"></i>
-                    </button>
+
+                <!-- پنل اصلی لیست پخش -->
+                <div id="audioPlaylistModal" class="hidden" style="
+                    position: absolute;
+                    bottom: 40px;
+                    left: 0;
+                    width: 280px;
+                    background: rgba(255, 255, 255, 0.94);
+                    backdrop-filter: blur(16px);
+                    border: 1px solid rgba(255, 255, 255, 0.95);
+                    border-radius: 1rem;
+                    padding: 1rem;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+                    z-index: 100;
+                    color: #0f172a;
+                    direction: rtl;
+                    text-align: right;
+                ">
+                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-200">
+                        <span class="text-xs font-bold text-slate-800">لیست پخش و تنظیمات صوتی</span>
+                        <button id="closePlaylistBtn" class="text-slate-400 hover:text-slate-700 text-sm"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div id="trackListContainer" class="space-y-1.5 max-h-40 overflow-y-auto mb-3"></div>
+                    <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs text-slate-600">
+                        <span id="currentPlayingTitle" class="truncate font-medium">در حال پخش: --</span>
+                        <button id="masterPlayBtn" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-bold transition-all shadow">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
 
-        if (!layerD07.contains(balloon)) {
-            layerD07.appendChild(balloon);
-        }
-
+        this.initEvents();
         this.renderTrackList();
     }
 
@@ -116,7 +111,7 @@ class NovoAutonomousAudio {
         }
     }
 
-    // نمایش مودال راهنما با دقیقاً همان متن‌ها و فرمت درخواست‌شده
+    // راهنمای جامع صوتی
     showAudioGuideModal() {
         let modal = document.getElementById('iceGlassModal');
         if (!modal) return;
@@ -141,7 +136,6 @@ class NovoAutonomousAudio {
                 </div>
             `;
 
-            // رویداد دکمه OK (ورود به لیست پخش)
             document.getElementById('okGuideBtn').onclick = () => {
                 modal.classList.remove('active');
                 const playlistModal = document.getElementById('audioPlaylistModal');
@@ -150,12 +144,10 @@ class NovoAutonomousAudio {
                 }
             };
 
-            // رویداد دکمه انصراف
             document.getElementById('cancelGuideBtn').onclick = () => {
                 modal.classList.remove('active');
             };
 
-            // رویداد دکمه پیشنهاد موسیقی (فعال‌سازی درگاه پیشنهاد)
             document.getElementById('suggestMusicBtn').onclick = () => {
                 this.showSuggestionFormModal();
             };
@@ -164,7 +156,7 @@ class NovoAutonomousAudio {
         modal.classList.add('active');
     }
 
-    // درگاه پیشنهاد موسیقی (فرم اختصاصی ثبت درخواست کاربر)
+    // فرم پیشنهاد موسیقی
     showSuggestionFormModal() {
         let modal = document.getElementById('iceGlassModal');
         if (!modal) return;
@@ -191,12 +183,10 @@ class NovoAutonomousAudio {
                 <button id="submitSuggestionBtn" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md">ثبت و ارسال پیشنهاد</button>
             `;
 
-            // بازگشت به راهنما
             document.getElementById('backToGuideBtn').onclick = () => {
                 this.showAudioGuideModal();
             };
 
-            // ارسال پیشنهاد
             document.getElementById('submitSuggestionBtn').onclick = () => {
                 const trackName = document.getElementById('suggestTrackName').value.trim();
                 if (!trackName) {
@@ -233,21 +223,7 @@ class NovoAutonomousAudio {
             container.appendChild(item);
         });
     }
-
-    togglePlaylist() {
-        const playlistModal = document.getElementById('audioPlaylistModal');
-        if (playlistModal) {
-            playlistModal.classList.toggle('hidden');
-        }
-    }
 }
 
 // راه‌اندازی ماژول صوتی
 const novoAudio = new NovoAutonomousAudio();
-
-window.toggleAudioPlaylist = function() {
-    if (typeof novoAudio !== 'undefined' && typeof novoAudio.togglePlaylist === 'function') {
-        novoAudio.togglePlaylist();
-    }
-};
-```[cite: 14, 15]
