@@ -30,6 +30,7 @@
             align-items: center;
             justify-content: center;
             pointer-events: auto;
+            overflow: hidden;
         }
 
         .grid-node-cell:hover {
@@ -45,6 +46,10 @@
             font-family: monospace;
             color: rgba(255, 255, 255, 0.25);
             font-weight: bold;
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            pointer-events: none;
         }
 
         .grid-node-cell:hover::after {
@@ -52,23 +57,15 @@
             font-size: 10px;
         }
 
-        /* جانمایی دقیق لایه‌ها در شبکه */
-        #layer-D01 {
-            grid-row: 1;
-            grid-column: 9 / span 2;
-            z-index: 50;
-            pointer-events: auto;
-        }
-
-        /* جانمایی دقیق موزیک پلیر در سطر ۱۹ و ستون ۱۰ (R19:C10) */
-        #layer-D07 {
-            grid-row: 19;
-            grid-column: 10;
-            z-index: 50;
-            pointer-events: auto;
+        /* استایل دقیق کانتینرهای المان‌های ثابت */
+        #layer-D01, #layer-D07 {
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 50;
+            pointer-events: auto;
         }
     </style>
 </head>
@@ -88,7 +85,6 @@
     </main>
 
     <script>
-        // ساخت شبکه ۲۰x۱۰ و تزریق مستقیم لایه‌های D01 و D07 در مختصات دقیق
         const gridContainer = document.getElementById('masterGrid');
         
         for (let r = 1; r <= 20; r++) {
@@ -96,16 +92,15 @@
                 const cell = document.createElement('div');
                 cell.className = 'grid-node-cell';
                 cell.setAttribute('data-coord', `R${r}:C${c}`);
-                cell.id = `node-R${r}-C${c}`;
-
-                // جانمایی D01 در R1:C9-C10
-                if (r === 1 && c === 9) {
+                
+                // جانمایی D01 دقیقاً در R1:C1 (بالا چپ)
+                if (r === 1 && c === 1) {
                     cell.id = 'layer-D01';
-                }
-
-                // جانمایی D07 دقیقاً در R19:C10
-                if (r === 19 && c === 10) {
+                } else if (r === 19 && c === 10) {
+                    // جانمایی D07 دقیقاً در R19:C10 (پایین راست)
                     cell.id = 'layer-D07';
+                } else {
+                    cell.id = `node-R${r}-C${c}`;
                 }
 
                 gridContainer.appendChild(cell);
@@ -114,7 +109,7 @@
     </script>
 
     <!-- فراخوانی ماژول‌ها -->
-    <script src="D01-translate.js?v=21"></script>
-    <script src="D07-audio.js?v=21"></script>
+    <script src="D01-translate.js?v=22"></script>
+    <script src="D07-audio.js?v=22"></script>
 </body>
 </html>
