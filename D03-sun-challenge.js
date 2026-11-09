@@ -48,8 +48,33 @@
     document.head.appendChild(style);
 })();
 
-// ساختار HTML پنل شیشه‌ای با متن دقیق مورد نظر شما
+// ساختار HTML پنل شیشه‌ای و قرار دادن آیکون خورشید در سلول R11:C8
 (function createChallengeModalDOM() {
+    // ۱. تزریق آیکون خورشید در سلول R11:C8 (layer-D03)
+    const layerD03 = document.getElementById('layer-D03');
+    if (layerD03 && !document.getElementById('sunTrigger')) {
+        const balloon = layerD03.querySelector('.balloon-element') || layerD03;
+        balloon.innerHTML = `
+            <div id="sunTrigger" title="درگاه چالش‌های ساختاری (NOVO-SUN)" style="
+                width: 32px;
+                height: 32px;
+                background: rgba(15, 23, 42, 0.85);
+                backdrop-filter: blur(8px);
+                border: 1px solid rgba(245, 158, 11, 0.5);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.25s ease;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            ">
+                <i class="fa-solid fa-sun text-amber-400 text-xs"></i>
+            </div>
+        `;
+    }
+
+    // ۲. ساخت مودال چالش در بدنه صفحه
     if (document.getElementById('challengeModalOverlay')) return;
 
     const modalHTML = `
@@ -85,6 +110,17 @@
         </div>
     `;
     document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    // اتصال رویداد کلیک به آیکون خورشید
+    setTimeout(() => {
+        const sunTrigger = document.getElementById('sunTrigger');
+        if (sunTrigger) {
+            sunTrigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                openChallengeModal();
+            });
+        }
+    }, 100);
 })();
 
 // توابع کنترل‌کننده
