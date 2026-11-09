@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* شبکه شطرنجی ۲۰ سطر در ۱۰ ستون (20 Rows x 10 Columns Grid) */
+        /* شبکه شطرنجی ۲۰ سطر در ۱۰ ستون */
         .master-coordinate-grid {
             position: absolute;
             inset: 0;
@@ -52,57 +52,29 @@
             font-size: 10px;
         }
 
-        /* جانمایی اختصاصی المان‌های تثبیت‌شده قبلی */
-        .slot-D01 {
-            grid-row: 1 / span 2;
+        /* جانمایی دقیق لایه‌ها در شبکه */
+        #layer-D01 {
+            grid-row: 1;
             grid-column: 9 / span 2;
             z-index: 50;
             pointer-events: auto;
         }
 
-        .slot-D07 {
-            grid-row: 19 / span 2;
-            grid-column: 1 / span 3;
+        /* جانمایی دقیق موزیک پلیر در سطر ۱۹ و ستون ۱۰ (R19:C10) */
+        #layer-D07 {
+            grid-row: 19;
+            grid-column: 10;
             z-index: 50;
             pointer-events: auto;
-        }
-
-        /* استایل آیس‌گلس مادری */
-        .ice-glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border-radius: 1.5rem;
-            color: #0f172a;
-        }
-
-        .ice-glass-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            pointer-events: none;
-        }
-        .ice-glass-overlay.active {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
         }
     </style>
 </head>
 <body class="select-none bg-black overflow-hidden relative w-screen h-screen">
 
-    <!-- لایه ۱: پس‌زمینه تصویر/ویدیو (مهر و ماه) بدون دفرمه شدن -->
+    <!-- لایه ۱: پس‌زمینه ویدیو/تصویر مهر و ماه -->
     <div class="absolute inset-0 z-1">
         <video id="bgVideo" autoplay muted loop playsinline class="w-full h-full object-cover">
             <source src="video.mp4" type="video/mp4">
@@ -112,29 +84,37 @@
 
     <!-- لایه ۲: نقشه شطرنجی شبکه ۲۰ سطر در ۱۰ ستون -->
     <main class="master-coordinate-grid" id="masterGrid">
-        <!-- سلول‌های ۲۰x۱۰ به صورت خودکار توسط جاوااسکریپت برای آدرس‌دهی دقیق ساخته می‌شوند -->
+        <!-- سلول‌ها توسط جاوااسکریپت ساخته می‌شوند -->
     </main>
 
-    <!-- لایه‌های تزریق ماژول‌های قبلی (سر جای ثابت خودشان) -->
-    <div id="layer-D01" class="absolute inset-0 pointer-events-none z-50"></div>
-    <div id="layer-D07" class="absolute inset-0 pointer-events-none z-50"></div>
-
     <script>
-        // ساخت هوشمند شبکه ۲۰۰ سلولی (۲۰ سطر × ۱۰ ستون) جهت آدرس‌دهی مستقیم سعیده جان
+        // ساخت شبکه ۲۰x۱۰ و تزریق مستقیم لایه‌های D01 و D07 در مختصات دقیق
         const gridContainer = document.getElementById('masterGrid');
+        
         for (let r = 1; r <= 20; r++) {
             for (let c = 1; c <= 10; c++) {
                 const cell = document.createElement('div');
                 cell.className = 'grid-node-cell';
                 cell.setAttribute('data-coord', `R${r}:C${c}`);
                 cell.id = `node-R${r}-C${c}`;
+
+                // جانمایی D01 در R1:C9-C10
+                if (r === 1 && c === 9) {
+                    cell.id = 'layer-D01';
+                }
+
+                // جانمایی D07 دقیقاً در R19:C10
+                if (r === 19 && c === 10) {
+                    cell.id = 'layer-D07';
+                }
+
                 gridContainer.appendChild(cell);
             }
         }
     </script>
 
-    <!-- فراخوانی ماژول‌های قبلی بدون هیچ‌گونه تغییر -->
-    <script src="D01-translate.js?v=20"></script>
-    <script src="D07-audio.js?v=20"></script>
+    <!-- فراخوانی ماژول‌ها -->
+    <script src="D01-translate.js?v=21"></script>
+    <script src="D07-audio.js?v=21"></script>
 </body>
 </html>
