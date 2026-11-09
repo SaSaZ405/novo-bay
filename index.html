@@ -10,16 +10,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* ایجاد فضای خالی امن (Margin/Padding) دور تا دور شبکه جهت دسترسی راحت به سلول‌های حاشیه */
         .grid-wrapper {
             position: absolute;
             inset: 0;
-            padding: 12px; /* فاصله امن دور تا دور صفحه */
+            padding: 12px;
             box-sizing: border-box;
             z-index: 10;
         }
 
-        /* شبکه دقیق ۲۰ سطر در ۱۰ ستون */
         .master-coordinate-grid {
             width: 100%;
             height: 100%;
@@ -30,7 +28,6 @@
             box-sizing: border-box;
         }
 
-        /* سلول‌های مختصات (سبد بالون‌ها) */
         .grid-node-cell {
             border: 1px dashed rgba(255, 255, 255, 0.08);
             transition: all 0.2s ease;
@@ -40,7 +37,6 @@
             justify-content: center;
             pointer-events: auto;
             box-sizing: border-box;
-            /* اجازه خروج بالون از سبد بدون بهم زدن گرید */
             overflow: visible !important; 
         }
 
@@ -67,10 +63,8 @@
             font-size: 10px;
         }
 
-        /* ساختار بالون (Balloon Oversize Container) */
         .balloon-element {
             position: absolute;
-            /* مرکزیت نسبت به سبد */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -79,14 +73,12 @@
             white-space: nowrap;
         }
 
-        /* الگوی بالون برای ترجمه در R1:C1 */
         #layer-D01 .balloon-element {
             top: 0;
             left: 0;
             transform: translate(0, 0);
         }
 
-        /* الگوی بالون برای پلیر در R19:C10 */
         #layer-D07 .balloon-element {
             bottom: 0;
             right: 0;
@@ -166,7 +158,6 @@
     <script>
         const gridContainer = document.getElementById('masterGrid');
         
-        // ساخت ۲۰۰ سلول به همراه تزریق کانتینر بالون برای المان‌ها
         for (let r = 1; r <= 20; r++) {
             for (let c = 1; c <= 10; c++) {
                 const cell = document.createElement('div');
@@ -187,18 +178,31 @@
                     cell.id = `node-R${r}-C${c}`;
                 }
 
-                // کلیک روی سلول جهت نمایش کارت سفید یخی توضیحات
+                // رویداد کلیک برای نمایش کارت سفید یخی توضیحات
                 cell.addEventListener('click', (e) => {
-                    // جلوگیری از تداخل کلیک بر روی ماژول‌ها
-                    if (e.target.closest('.balloon-element')) return;
-                    openModal(`مختصات سلول: R${r}:C${c}`, `این سلول در موقعیت سطر ${r} و ستون ${c} قرار دارد.`);
+                    // اگر کلیک روی کنترل‌های داخلی پلیر یا ترجمه بود، تداخل ایجاد نکند
+                    if (e.target.closest('#layer-D07') && !e.target.classList.contains('grid-node-cell')) {
+                        return;
+                    }
+                    
+                    let title = `مختصات سلول: R${r}:C${c}`;
+                    let desc = `این سلول در موقعیت سطر ${r} و ستون ${c} قرار دارد.`;
+                    
+                    if (r === 1 && c === 1) {
+                        title = "ماژول فرماندهی مرکزی: مدیریت زبان و ترجمه";
+                        desc = "این سلول (R1:C1) به عنوان هسته کنترل دیپلماسی زبانی و پورتال‌های ترجمه ملل عمل می‌کند.";
+                    } else if (r === 19 && c === 10) {
+                        title = "ماژول فرماندهی مرکزی: صوت، موسیقی و آوای ملل";
+                        desc = "این سلول (R19:C10) کنترل‌کننده فضای صوتی، موزیک‌های پس‌زمینه و پلتفرم شنیداری شبکه است.";
+                    }
+
+                    openModal(title, desc);
                 });
 
                 gridContainer.appendChild(cell);
             }
         }
 
-        // توابع کارت سفید یخی
         function openModal(title, desc) {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalDesc').innerText = desc;
@@ -211,7 +215,7 @@
     </script>
 
     <!-- فراخوانی ماژول‌ها -->
-    <script src="D01-translate.js?v=25"></script>
-    <script src="D07-audio.js?v=25"></script>
+    <script src="D01-translate.js?v=26"></script>
+    <script src="D07-audio.js?v=26"></script>
 </body>
 </html>
