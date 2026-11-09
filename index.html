@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* استفاده از dvh جهت پوشش کامل ۱۰۰٪ صفحه بدون بیرون زدن سطر R20 در موبایل */
         html, body {
             width: 100%;
             height: 100dvh;
@@ -28,7 +27,6 @@
             z-index: 10;
         }
 
-        /* شبکه دقیق ۲۰ سطر در ۱۰ ستون */
         .master-coordinate-grid {
             width: 100%;
             height: 100%;
@@ -39,7 +37,6 @@
             box-sizing: border-box;
         }
 
-        /* خطوط مات، محو و بسیار شیک شبکه */
         .grid-node-cell {
             border: 1px dashed rgba(255, 255, 255, 0.04);
             transition: all 0.25s ease;
@@ -52,14 +49,12 @@
             overflow: visible !important; 
         }
 
-        /* درخشش ملایم هنگام Hover */
         .grid-node-cell:hover {
             background: rgba(245, 158, 11, 0.12);
             border-color: rgba(245, 158, 11, 0.4);
             box-shadow: inset 0 0 10px rgba(245, 158, 11, 0.15);
         }
 
-        /* آدرس‌های بسیار محو که صفحه را شلوغ نکنند */
         .grid-node-cell::after {
             content: attr(data-coord);
             font-size: 7px;
@@ -78,7 +73,6 @@
             font-weight: bold;
         }
 
-        /* الگوی بالون برای شناورسازی المان‌ها */
         .balloon-element {
             position: absolute;
             pointer-events: auto;
@@ -95,7 +89,7 @@
             left: 2px;
         }
 
-        /* استایل کارت سفید یخی توضیحات (Ice-Glass Modal) */
+        /* کارت سفید یخی توضیحات (Modal) */
         .ice-glass-overlay {
             position: fixed;
             inset: 0;
@@ -134,7 +128,6 @@
 </head>
 <body class="select-none bg-black relative">
 
-    <!-- لایه ۱: پس‌زمینه تصویر/ویدیو (مهر و ماه) -->
     <div class="absolute inset-0 z-1">
         <video id="bgVideo" autoplay muted loop playsinline class="w-full h-full object-cover">
             <source src="video.mp4" type="video/mp4">
@@ -142,14 +135,12 @@
         <div class="absolute inset-0 bg-black/20"></div>
     </div>
 
-    <!-- لایه ۲: شبکه ۲۰۰ سلولی کاملاً فیکس از R1 تا R20 -->
     <div class="grid-wrapper">
         <main class="master-coordinate-grid" id="masterGrid">
-            <!-- سلول‌ها توسط جاوااسکریپت ساخته می‌شوند -->
         </main>
     </div>
 
-    <!-- لایه ۳: مودال سفید یخی توضیحات -->
+    <!-- مودال توضیحات شیشه‌ای پیش‌فرض -->
     <div id="iceGlassModal" class="ice-glass-overlay">
         <div class="ice-glass-card text-right relative">
             <button onclick="closeModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-800 transition-colors">
@@ -158,7 +149,7 @@
             <h3 id="modalTitle" class="text-lg font-bold mb-2 text-slate-900">اطلاعات سلول</h3>
             <p id="modalDesc" class="text-xs leading-relaxed text-slate-600 mb-4">توضیحات مربوط به این بخش در این لایه قرار می‌گیرد.</p>
             <div id="modalFooter" class="flex justify-end gap-2 pt-2 border-t border-slate-200/60">
-                <button onclick="closeModal()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md">متوجه شدم</button>
+                <button id="modalPrimaryBtn" onclick="closeModal()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md">متوجه شدم</button>
             </div>
         </div>
     </div>
@@ -186,23 +177,20 @@
                     cell.id = `node-R${r}-C${c}`;
                 }
 
-                // مدیریت باز شدن کارت توضیحات برای همه سلول‌ها از جمله R1:C1 و R19:C10
                 cell.addEventListener('click', (e) => {
-                    let title = `مختصات سلول: R${r}:C${c}`;
-                    let desc = `این سلول در موقعیت سطر ${r} و ستون ${c} از شبکه فرماندهی NOVO-BAY قرار دارد.`;
+                    // برای سلول پلیر R19:C10
+                    if (r === 19 && c === 10) {
+                        openAudioModal();
+                        return;
+                    }
                     
+                    // برای سلول ترجمه R1:C1
                     if (r === 1 && c === 1) {
-                        title = "سلول فرماندهی D01: دیپلماسی زبانی و ترجمه";
-                        desc = "این پورتال مسئولیت هماهنگی زبانی، ترجمه همزمان و اعمال جریمه‌های ساختاری زبان را بر عهده دارد.";
-                    } else if (r === 19 && c === 10) {
-                        title = "سلول فرماندهی D07: آوای ملل و پلیر صوتی";
-                        desc = "این ماژول کنترل‌کننده فضای صوتی، موزیک‌های دیپلماتیک پس‌زمینه و انتشار پیام‌های صوتی شبکه است.";
+                        return; // ماژول D01 پاپ‌آپ خودش را باز می‌کند
                     }
 
-                    // اگر روی دکمه‌های کنترلی داخل ماژول کلیک نشد، مودال باز شود
-                    if (!e.target.closest('button') && !e.target.closest('.dropdown-menu')) {
-                        openModal(title, desc);
-                    }
+                    // برای سایر سلول‌های عادی شبکه
+                    openModal(`مختصات سلول: R${r}:C${c}`, `این سلول در موقعیت سطر ${r} و ستون ${c} قرار دارد.`);
                 });
 
                 gridContainer.appendChild(cell);
@@ -212,6 +200,27 @@
         function openModal(title, desc) {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalDesc').innerText = desc;
+            const btn = document.getElementById('modalPrimaryBtn');
+            btn.innerText = "متوجه شدم";
+            btn.onclick = closeModal;
+            document.getElementById('iceGlassModal').classList.add('active');
+        }
+
+        // پاپ‌آپ اختصاصی راهنمای صوتی و معرفی پلیر
+        function openAudioModal() {
+            document.getElementById('modalTitle').innerText = "🎵 راهنمای سیستم صوتی و آوای ملل (NOVO-AUDIO)";
+            document.getElementById('modalDesc').innerHTML = `
+                این بخش کنترل‌کننده فضای صوتی و موسیقی‌های هویت فرهنگی شبکه NOVO-BAY است.<br><br>
+                <span class="text-slate-500">با ورود به این ماژول می‌توانید قطعات صوتی ملل را انتخاب کرده، حالت تکرار را تنظیم کنید یا صدای پس‌زمینه را سفارشی‌سازی نمایید.</span>
+            `;
+            const btn = document.getElementById('modalPrimaryBtn');
+            btn.innerText = "ادامه و تنظیمات صوتی 🎧";
+            btn.onclick = () => {
+                closeModal();
+                if (window.toggleAudioPlaylist) {
+                    window.toggleAudioPlaylist(); // باز کردن لیست پخش صوتی اصلی
+                }
+            };
             document.getElementById('iceGlassModal').classList.add('active');
         }
 
@@ -220,8 +229,8 @@
         }
     </script>
 
-    <!-- فراخوانی ماژول‌ها -->
-    <script src="D01-translate.js?v=27"></script>
-    <script src="D07-audio.js?v=27"></script>
+    <!-- فراخوانی ماژول‌ها با کش‌شکنی v=28 -->
+    <script src="D01-translate.js?v=28"></script>
+    <script src="D07-audio.js?v=28"></script>
 </body>
 </html>
