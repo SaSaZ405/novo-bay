@@ -1,5 +1,5 @@
 /* ==========================================================
-   NOVO-BAY SEASONAL & THEME MANAGEMENT ENGINE (AUTO-PLAY ON FIRST TOUCH)
+   NOVO-BAY SEASONAL & THEME MANAGEMENT ENGINE (D09)
    ========================================================== */
 
 class NovoSeasonalThemeEngine {
@@ -141,7 +141,7 @@ class NovoSeasonalThemeEngine {
         document.body.prepend(monitor);
     }
 
-    // پخش اتوماتیک موزیک کریسمس با اولین لمس/کلیک کاربر روی هر نقطه از صفحه
+    // پخش اتوماتیک موزیک کریسمس با اولین لمس/کلیک کاربر روی صفحه
     setupAutoPlayOnFirstTouch() {
         let bgAudio = document.getElementById('christmasBgAudio');
         if (!bgAudio) {
@@ -153,16 +153,14 @@ class NovoSeasonalThemeEngine {
         }
         bgAudio.volume = 0.5;
 
-        // شنونده اولین لمس یا کلیک روی صفحه
         const startAudio = () => {
             if (bgAudio.paused) {
                 bgAudio.play().then(() => {
-                    console.log("موزیک کریسمس به صورت اتوماتیک با اولین لمس کاربر فعال شد.");
+                    console.log("موزیک کریسمس به صورت اتوماتیک فعال شد.");
                 }).catch(e => {
                     console.log("خطا در پخش صوتی:", e);
                 });
             }
-            // حذف شنونده‌ها پس از اولین اجرا
             window.removeEventListener('click', startAudio);
             window.removeEventListener('touchstart', startAudio);
             window.removeEventListener('keydown', startAudio);
