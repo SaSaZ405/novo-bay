@@ -20,7 +20,7 @@
         }
 
         /* ==========================================================
-           پکیج موقت تم کریسمس و زمستان (قابل تعویض برای شب یلدا و...)
+           پکیج موقت تم کریسمس و زمستان
            ========================================================== */
         .christmas-seasonal-theme .ice-glass-card,
         .christmas-seasonal-theme .challenge-modal-card,
@@ -28,26 +28,24 @@
             border: 2px solid rgba(239, 68, 68, 0.6) !important;
             box-shadow: 0 0 30px rgba(239, 68, 68, 0.3), 0 25px 50px -12px rgba(0,0,0,0.5) !important;
             background: rgba(255, 255, 255, 0.92) !important;
-            position: relative;
         }
-        /* افزودن المان تزئینی کریسمس به هدر پاپ‌آپ‌ها به صورت موقت */
         .christmas-seasonal-theme h3::before {
             content: "❄️ 🎄 ";
         }
 
-        /* نوار بالای صفحه (دائمی) */
+        /* نوار بالای صفحه (دائمی) - کاملاً فیکس و نمایان */
         .top-news-ticker-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 34px;
-            background: rgba(15, 23, 42, 0.85);
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            height: 38px !important;
+            background: rgba(15, 23, 42, 0.95) !important;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(245, 158, 11, 0.3);
-            z-index: 900;
-            display: flex;
+            border-bottom: 2px solid rgba(245, 158, 11, 0.5) !important;
+            z-index: 99999 !important;
+            display: flex !important;
             align-items: center;
             justify-content: space-between;
             padding: 0 1rem;
@@ -58,7 +56,7 @@
 
         .grid-wrapper {
             position: absolute;
-            inset: 34px 0 0 0; /* فاصله از بالا به خاطر نوار جدید */
+            inset: 38px 0 0 0 !important; /* دقیقاً زیر نوار اخبار */
             padding: 6px;
             box-sizing: border-box;
             z-index: 10;
@@ -121,7 +119,7 @@
             background: rgba(0, 0, 0, 0.45);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
-            z-index: 1000;
+            z-index: 100000;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -153,27 +151,27 @@
 </head>
 <body class="select-none bg-black relative christmas-seasonal-theme" id="bodyRoot">
 
-    <!-- موزیک پس‌زمینه کریسمس (پخش خودکار پیش‌فرض) -->
+    <!-- موزیک کریسمس با نام صحیح christmas.mp3 -->
     <audio id="christmasBgAudio" src="christmas.mp3" loop autoplay></audio>
 
-    <!-- نوار دائمی بالای صفحه (خبرگزاری، رویدادهای فرهنگی ۸ زبان و ساعت/تاریخ) -->
+    <!-- نوار دائمی بالای صفحه (خبرگزاری، ساعت و تاریخ) -->
     <header class="top-news-ticker-bar">
-        <div class="flex items-center gap-3 overflow-hidden">
+        <div class="flex items-center gap-2 overflow-hidden">
             <span class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1">
                 <i class="fas fa-globe"></i> اخبار ملل
             </span>
-            <div class="whitespace-nowrap overflow-hidden text-ellipsis max-w-[220px] md:max-w-xl text-amber-300 font-medium">
-                <span id="tickerText">🎄 آستانه سال نو میلادی و جشن‌های زمستانی در پلتفرم جهانی نوو-بی | Merry Christmas & Happy New Year 2027 ❄️</span>
+            <div class="whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px] md:max-w-xl text-amber-300 font-medium">
+                <span id="tickerText">🎄 آستانه سال نو میلادی و جشن‌های زمستانی در پلتفرم جهانی نوو-بی | Merry Christmas ❄️</span>
             </div>
         </div>
-        <div class="flex items-center gap-3 font-mono text-[10px]">
-            <span id="liveClock" class="text-slate-300">00:00:00</span>
+        <div class="flex items-center gap-2 font-mono text-[10px]">
+            <span id="liveClock" class="text-slate-200">00:00:00</span>
             <span class="text-amber-400">|</span>
-            <span id="liveDate" class="text-slate-300">1405/09/19</span>
+            <span id="liveDate" class="text-slate-200">1405/09/19</span>
         </div>
     </header>
 
-    <div class="absolute inset-0 z-1" style="top: 34px;">
+    <div class="absolute inset-0 z-1" style="top: 38px;">
         <video id="bgVideo" autoplay muted loop playsinline class="w-full h-full object-cover">
             <source src="video.mp4" type="video/mp4">
         </video>
@@ -222,13 +220,13 @@
             document.getElementById('tickerText').innerText = newsTickerItems[tickerIndex];
         }, 5000);
 
-        // تلاش برای پخش خودکار موزیک پس‌زمینه کریسمس
+        // تلاش برای پخش خودکار موزیک کریسمس
         window.addEventListener('load', () => {
             const bgAudio = document.getElementById('christmasBgAudio');
             if (bgAudio) {
-                bgAudio.volume = 0.4;
+                bgAudio.volume = 0.5;
                 bgAudio.play().catch(e => {
-                    console.log("مرورگر پخش خودکار صوتی را به دلایل امنیتی محدود کرد؛ با اول کلیک کاربر پخش می‌شود.");
+                    console.log("پخش خودکار با کلیک کاربر فعال می‌شود.");
                     window.addEventListener('click', () => { bgAudio.play(); }, { once: true });
                 });
             }
@@ -252,7 +250,7 @@
                 }
                 else if (r === 11 && c === 2) {
                     cell.id = 'layer-D04'; // ماه (گالری) در R11:C2
-                    const b.className = 'balloon-element'; cell.appendChild(b);
+                    const b = document.createElement('div'); b.className = 'balloon-element'; cell.appendChild(b);
                 }
                 else if (r === 20 && c === 10) {
                     cell.id = 'layer-D07'; // پلیر صوتی در R20:C10
@@ -261,7 +259,7 @@
                 else {
                     cell.id = `node-R${r}-C${c}`;
                     cell.addEventListener('click', () => {
-                        openModal(`مختصات سلول: R${r}:C${c}`, `این سلول در موقعیت سطر ${r} و ستون ${c} از شبکه فرماندهی NOVO-BAY قرار دارد.`);
+                        openModal(`مختصات سلول: R${r}:C${c}`, `این سلول در موقعیت سطر ${r} و ستون ${c} از شبکه فرماندهی نوو-بی قرار دارد.`);
                     });
                 }
 
@@ -280,10 +278,10 @@
         }
     </script>
 
-    <!-- فراخوانی ماژول‌ها با نسخه کش‌شکن v=45 -->
-    <script src="D01-translate.js?v=45"></script>
-    <script src="D05-sun-challenge.js?v=45"></script>
-    <script src="D04-moon-gallery.js?v=45"></script>
-    <script src="D07-audio.js?v=45"></script>
+    <!-- فراخوانی ماژول‌ها با نسخه کش‌شکن جدید v=55 -->
+    <script src="D01-translate.js?v=55"></script>
+    <script src="D05-sun-challenge.js?v=55"></script>
+    <script src="D04-moon-gallery.js?v=55"></script>
+    <script src="D07-audio.js?v=55"></script>
 </body>
 </html>
