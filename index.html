@@ -136,10 +136,7 @@
 </head>
 <body class="select-none bg-black relative" id="bodyRoot">
 
-    <!-- موزیک پس‌زمینه کریسمس -->
-    <audio id="christmasBgAudio" src="christmas.mp3" loop autoplay></audio>
-
-    <!-- پس‌زمینه اصلی -->
+    <!-- پس‌زمینه اصلی ویدیو -->
     <div class="absolute inset-0 z-1" style="top: 12.5dvh; bottom: 45px;">
         <video autoplay muted loop playsinline class="w-full h-full object-cover">
             <source src="video.mp4" type="video/mp4">
@@ -226,20 +223,10 @@
         function closeModal() {
             document.getElementById('iceGlassModal').classList.remove('active');
         }
-
-        window.addEventListener('load', () => {
-            const bgAudio = document.getElementById('christmasBgAudio');
-            if (bgAudio) {
-                bgAudio.volume = 0.5;
-                bgAudio.play().catch(e => {
-                    window.addEventListener('click', () => { bgAudio.play(); }, { once: true });
-                });
-            }
-        });
     </script>
 
-    <!-- فراخوانی ماژول تم فصلی اختصاصی و سایر ماژول‌ها -->
-    <script src="seasonal-theme.js?v=1"></script>
+    <!-- فراخوانی ماژول تم فصلی جدید D09 و سایر ماژول‌ها -->
+    <script src="D09-seasonal-theme.js?v=2"></script>
     <script src="D01-translate.js?v=75"></script>
     <script src="D05-sun-challenge.js?v=75"></script>
     <script src="D04-moon-gallery.js?v=75"></script>
