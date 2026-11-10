@@ -1,10 +1,10 @@
 /* ==========================================================
-   NOVO-BAY SEASONAL & THEME MANAGEMENT ENGINE
+   NOVO-BAY SEASONAL & THEME MANAGEMENT ENGINE (AUTO-PLAY ON FIRST TOUCH)
    ========================================================== */
 
 class NovoSeasonalThemeEngine {
     constructor() {
-        this.currentTheme = 'christmas'; // تم‌های فعال: christmas, yalda, norouz, default
+        this.currentTheme = 'christmas';
         this.newsItems = [
             "🎄 Merry Christmas & Happy New Year 2027 | آستانه سال نو میلادی و فستیوال زمستانی ❄️",
             "✨ رویدادهای فرهنگی، دیپلماسی و گردشگری زمستانه در سراسر مگا-شهرها فعال شد.",
@@ -26,15 +26,15 @@ class NovoSeasonalThemeEngine {
         this.initSnowfall();
         this.initDateTime();
         this.initNewsTicker();
-        this.applySeasonalModalStyle();
+        this.setupAutoPlayOnFirstTouch();
     }
 
-    // تزریق استایل‌های پویا به document.head
+    // تزریق استایل‌های زمستانی و مانیتور بالا
     injectStyles() {
+        if (document.getElementById('novo-seasonal-styles')) return;
         const style = document.createElement('style');
         style.id = 'novo-seasonal-styles';
         style.innerHTML = `
-            /* انیمیشن بارش برف */
             .snowflake {
                 position: fixed;
                 top: -10px;
@@ -51,7 +51,6 @@ class NovoSeasonalThemeEngine {
                 100% { transform: translateY(105dvh) rotate(360deg); opacity: 0.35; }
             }
 
-            /* مانیتور عریض بالای صفحه (یک هشتم ارتفاع) */
             .top-festive-monitor {
                 position: fixed !important;
                 top: 0 !important;
@@ -87,13 +86,11 @@ class NovoSeasonalThemeEngine {
                 justify-content: space-between;
             }
 
-            /* تنظیم موقعیت گرید مرکزی بین مانیتور بالا و نوار پایین */
             .grid-wrapper {
                 position: absolute !important;
                 inset: 12.5dvh 0 45px 0 !important;
             }
 
-            /* استایل زمستانی پاپ‌آپ‌ها */
             .christmas-seasonal-theme .ice-glass-card,
             .christmas-seasonal-theme .challenge-modal-card,
             .christmas-seasonal-theme div[id*="Modal"] > div {
@@ -110,7 +107,7 @@ class NovoSeasonalThemeEngine {
         document.body.classList.add('christmas-seasonal-theme');
     }
 
-    // ساخت و تزریق مانیتور بالای صفحه
+    // ساخت مانیتور بالای صفحه
     renderTopMonitor() {
         if (document.getElementById('topFestiveMonitor')) return;
 
@@ -142,6 +139,38 @@ class NovoSeasonalThemeEngine {
             </div>
         `;
         document.body.prepend(monitor);
+    }
+
+    // پخش اتوماتیک موزیک کریسمس با اولین لمس/کلیک کاربر روی هر نقطه از صفحه
+    setupAutoPlayOnFirstTouch() {
+        let bgAudio = document.getElementById('christmasBgAudio');
+        if (!bgAudio) {
+            bgAudio = document.createElement('audio');
+            bgAudio.id = 'christmasBgAudio';
+            bgAudio.src = 'christmas.mp3';
+            bgAudio.loop = true;
+            document.body.appendChild(bgAudio);
+        }
+        bgAudio.volume = 0.5;
+
+        // شنونده اولین لمس یا کلیک روی صفحه
+        const startAudio = () => {
+            if (bgAudio.paused) {
+                bgAudio.play().then(() => {
+                    console.log("موزیک کریسمس به صورت اتوماتیک با اولین لمس کاربر فعال شد.");
+                }).catch(e => {
+                    console.log("خطا در پخش صوتی:", e);
+                });
+            }
+            // حذف شنونده‌ها پس از اولین اجرا
+            window.removeEventListener('click', startAudio);
+            window.removeEventListener('touchstart', startAudio);
+            window.removeEventListener('keydown', startAudio);
+        };
+
+        window.addEventListener('click', startAudio, { once: true });
+        window.addEventListener('touchstart', startAudio, { once: true });
+        window.addEventListener('keydown', startAudio, { once: true });
     }
 
     // سیستم بارش برف
@@ -191,11 +220,6 @@ class NovoSeasonalThemeEngine {
             if (el) el.innerText = this.newsItems[this.tickerIndex];
         }, 5000);
     }
-
-    applySeasonalModalStyle() {
-        // آماده‌سازی محیط برای تغییر تم‌های بعدی
-    }
 }
 
-// راه‌اندازی موتور تم فصلی
 const novoSeasonalEngine = new NovoSeasonalThemeEngine();
