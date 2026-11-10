@@ -26,7 +26,6 @@ class NovoSeasonalThemeEngine {
         this.initSnowfall();
         this.initDateTime();
         this.initNewsTicker();
-        this.setupAutoPlayOnFirstTouch();
     }
 
     // تزریق استایل‌های زمستانی و مانیتور بالا
@@ -107,7 +106,7 @@ class NovoSeasonalThemeEngine {
         document.body.classList.add('christmas-seasonal-theme');
     }
 
-    // ساخت مانیتور بالای صفحه (تنظیم‌شده روی video1.mp4)
+    // ساخت مانیتور بالای صفحه با سورس video1.mp4
     renderTopMonitor() {
         if (document.getElementById('topFestiveMonitor')) return;
 
@@ -139,36 +138,6 @@ class NovoSeasonalThemeEngine {
             </div>
         `;
         document.body.prepend(monitor);
-    }
-
-    // پخش اتوماتیک موزیک کریسمس با اولین لمس/کلیک کاربر روی صفحه
-    setupAutoPlayOnFirstTouch() {
-        let bgAudio = document.getElementById('christmasBgAudio');
-        if (!bgAudio) {
-            bgAudio = document.createElement('audio');
-            bgAudio.id = 'christmasBgAudio';
-            bgAudio.src = 'christmas.mp3';
-            bgAudio.loop = true;
-            document.body.appendChild(bgAudio);
-        }
-        bgAudio.volume = 0.5;
-
-        const startAudio = () => {
-            if (bgAudio.paused) {
-                bgAudio.play().then(() => {
-                    console.log("موزیک کریسمس به صورت اتوماتیک فعال شد.");
-                }).catch(e => {
-                    console.log("خطا در پخش صوتی:", e);
-                });
-            }
-            window.removeEventListener('click', startAudio);
-            window.removeEventListener('touchstart', startAudio);
-            window.removeEventListener('keydown', startAudio);
-        };
-
-        window.addEventListener('click', startAudio, { once: true });
-        window.addEventListener('touchstart', startAudio, { once: true });
-        window.addEventListener('keydown', startAudio, { once: true });
     }
 
     // سیستم بارش برف
