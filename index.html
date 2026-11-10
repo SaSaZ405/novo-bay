@@ -19,9 +19,46 @@
             background-color: #000;
         }
 
+        /* ==========================================================
+           پکیج موقت تم کریسمس و زمستان (قابل تعویض برای شب یلدا و...)
+           ========================================================== */
+        .christmas-seasonal-theme .ice-glass-card,
+        .christmas-seasonal-theme .challenge-modal-card,
+        .christmas-seasonal-theme div[id*="Modal"] > div {
+            border: 2px solid rgba(239, 68, 68, 0.6) !important;
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.3), 0 25px 50px -12px rgba(0,0,0,0.5) !important;
+            background: rgba(255, 255, 255, 0.92) !important;
+            position: relative;
+        }
+        /* افزودن المان تزئینی کریسمس به هدر پاپ‌آپ‌ها به صورت موقت */
+        .christmas-seasonal-theme h3::before {
+            content: "❄️ 🎄 ";
+        }
+
+        /* نوار بالای صفحه (دائمی) */
+        .top-news-ticker-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 34px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+            z-index: 900;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            color: #f8fafc;
+            font-size: 11px;
+            direction: rtl;
+        }
+
         .grid-wrapper {
             position: absolute;
-            inset: 0;
+            inset: 34px 0 0 0; /* فاصله از بالا به خاطر نوار جدید */
             padding: 6px;
             box-sizing: border-box;
             z-index: 10;
@@ -114,9 +151,29 @@
         }
     </style>
 </head>
-<body class="select-none bg-black relative">
+<body class="select-none bg-black relative christmas-seasonal-theme" id="bodyRoot">
 
-    <div class="absolute inset-0 z-1">
+    <!-- موزیک پس‌زمینه کریسمس (پخش خودکار پیش‌فرض) -->
+    <audio id="christmasBgAudio" src="christmas.mp3" loop autoplay></audio>
+
+    <!-- نوار دائمی بالای صفحه (خبرگزاری، رویدادهای فرهنگی ۸ زبان و ساعت/تاریخ) -->
+    <header class="top-news-ticker-bar">
+        <div class="flex items-center gap-3 overflow-hidden">
+            <span class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1">
+                <i class="fas fa-globe"></i> اخبار ملل
+            </span>
+            <div class="whitespace-nowrap overflow-hidden text-ellipsis max-w-[220px] md:max-w-xl text-amber-300 font-medium">
+                <span id="tickerText">🎄 آستانه سال نو میلادی و جشن‌های زمستانی در پلتفرم جهانی نوو-بی | Merry Christmas & Happy New Year 2027 ❄️</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-3 font-mono text-[10px]">
+            <span id="liveClock" class="text-slate-300">00:00:00</span>
+            <span class="text-amber-400">|</span>
+            <span id="liveDate" class="text-slate-300">1405/09/19</span>
+        </div>
+    </header>
+
+    <div class="absolute inset-0 z-1" style="top: 34px;">
         <video id="bgVideo" autoplay muted loop playsinline class="w-full h-full object-cover">
             <source src="video.mp4" type="video/mp4">
         </video>
@@ -131,18 +188,52 @@
     <!-- مودال عمومی شبکه -->
     <div id="iceGlassModal" class="ice-glass-overlay">
         <div class="ice-glass-card text-right relative">
-            <button onclick="closeModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-800 transition-colors">
+            <button onclick="closeModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-800 transition-colors cursor-pointer">
                 <i class="fas fa-times text-lg"></i>
             </button>
             <h3 id="modalTitle" class="text-lg font-bold mb-2 text-slate-900">اطلاعات سلول</h3>
             <p id="modalDesc" class="text-xs leading-relaxed text-slate-600 mb-4">توضیحات مربوط به این بخش در این لایه قرار می‌گیرد.</p>
             <div id="modalFooter" class="flex justify-end gap-2 pt-2 border-t border-slate-200/60">
-                <button onclick="closeModal()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md">متوجه شدم</button>
+                <button onclick="closeModal()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer">متوجه شدم</button>
             </div>
         </div>
     </div>
 
     <script>
+        // مدیریت ساعت و تاریخ زنده
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('liveClock').innerText = now.toLocaleTimeString('fa-IR');
+            document.getElementById('liveDate').innerText = now.toLocaleDateString('fa-IR');
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // چرخش اخبار و رویدادهای فرهنگی ۸ زبان در نوار بالا
+        const newsTickerItems = [
+            "🎄 آستانه سال نو میلادی و جشن‌های زمستانی در پلتفرم جهانی نوو-بی | Merry Christmas ❄️",
+            "✨ رویدادهای فرهنگی و گردشگری زمستانه در سراسر مگا-شهرها فعال شد.",
+            "🎁 ویژه برنامه کریسمس و چالش‌های تعاملی بخش خورشید (NOVO-SUN) برقرار است.",
+            "🌐 Multilingual cultural events and winter festive coordination across 8 global hubs."
+        ];
+        let tickerIndex = 0;
+        setInterval(() => {
+            tickerIndex = (tickerIndex + 1) % newsTickerItems.length;
+            document.getElementById('tickerText').innerText = newsTickerItems[tickerIndex];
+        }, 5000);
+
+        // تلاش برای پخش خودکار موزیک پس‌زمینه کریسمس
+        window.addEventListener('load', () => {
+            const bgAudio = document.getElementById('christmasBgAudio');
+            if (bgAudio) {
+                bgAudio.volume = 0.4;
+                bgAudio.play().catch(e => {
+                    console.log("مرورگر پخش خودکار صوتی را به دلایل امنیتی محدود کرد؛ با اول کلیک کاربر پخش می‌شود.");
+                    window.addEventListener('click', () => { bgAudio.play(); }, { once: true });
+                });
+            }
+        });
+
         const gridContainer = document.getElementById('masterGrid');
         
         for (let r = 1; r <= 20; r++) {
@@ -161,7 +252,7 @@
                 }
                 else if (r === 11 && c === 2) {
                     cell.id = 'layer-D04'; // ماه (گالری) در R11:C2
-                    const b = document.createElement('div'); b.className = 'balloon-element'; cell.appendChild(b);
+                    const b.className = 'balloon-element'; cell.appendChild(b);
                 }
                 else if (r === 20 && c === 10) {
                     cell.id = 'layer-D07'; // پلیر صوتی در R20:C10
@@ -189,10 +280,10 @@
         }
     </script>
 
-    <!-- فراخوانی ماژول‌ها با نسخه جدید شکستن کش v=40 -->
-    <script src="D01-translate.js?v=40"></script>
-    <script src="D05-sun-challenge.js?v=40"></script>
-    <script src="D04-moon-gallery.js?v=40"></script>
-    <script src="D07-audio.js?v=40"></script>
+    <!-- فراخوانی ماژول‌ها با نسخه کش‌شکن v=45 -->
+    <script src="D01-translate.js?v=45"></script>
+    <script src="D05-sun-challenge.js?v=45"></script>
+    <script src="D04-moon-gallery.js?v=45"></script>
+    <script src="D07-audio.js?v=45"></script>
 </body>
 </html>
