@@ -136,10 +136,13 @@
 </head>
 <body class="select-none bg-black relative" id="bodyRoot">
 
-    <!-- پس‌زمینه اصلی ویدیو -->
+    <!-- موزیک مستقل کریسمس (کاملاً جدا از لیست پلیر) -->
+    <audio id="christmasBgAudio" src="christmas.mp3" preload="auto" loop></audio>
+
+    <!-- پس‌زمینه اصلی ویدیو با نام video1.mp4 -->
     <div class="absolute inset-0 z-1" style="top: 12.5dvh; bottom: 45px;">
         <video autoplay muted loop playsinline class="w-full h-full object-cover">
-            <source src="video.mp4" type="video/mp4">
+            <source src="video1.mp4" type="video/mp4">
         </video>
         <div class="absolute inset-0 bg-black/20"></div>
     </div>
@@ -223,10 +226,28 @@
         function closeModal() {
             document.getElementById('iceGlassModal').classList.remove('active');
         }
+
+        // فعال‌سازی پخش آهنگ کریسمس با اولین لمس/کلیک کاربر روی هر جای صفحه
+        function triggerChristmasAudioOnce() {
+            const audio = document.getElementById('christmasBgAudio');
+            if (audio && audio.paused) {
+                audio.volume = 0.5;
+                audio.play().then(() => {
+                    console.log("آهنگ کریسمس با موفقیت شروع به پخش کرد.");
+                }).catch(err => {
+                    console.log("مرورگر اجازه پخش صوتی را نداد:", err);
+                });
+            }
+            window.removeEventListener('click', triggerChristmasAudioOnce);
+            window.removeEventListener('touchstart', triggerChristmasAudioOnce);
+        }
+
+        window.addEventListener('click', triggerChristmasAudioOnce);
+        window.addEventListener('touchstart', triggerChristmasAudioOnce);
     </script>
 
-    <!-- فراخوانی ماژول تم فصلی جدید D09 و سایر ماژول‌ها -->
-    <script src="D09-seasonal-theme.js?v=2"></script>
+    <!-- فراخوانی ماژول‌ها -->
+    <script src="D09-seasonal-theme.js?v=10"></script>
     <script src="D01-translate.js?v=75"></script>
     <script src="D05-sun-challenge.js?v=75"></script>
     <script src="D04-moon-gallery.js?v=75"></script>
