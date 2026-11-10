@@ -107,7 +107,7 @@ class NovoSeasonalThemeEngine {
         document.body.classList.add('christmas-seasonal-theme');
     }
 
-    // ساخت مانیتور بالای صفحه
+    // ساخت مانیتور بالای صفحه (تنظیم‌شده روی video1.mp4)
     renderTopMonitor() {
         if (document.getElementById('topFestiveMonitor')) return;
 
@@ -116,7 +116,7 @@ class NovoSeasonalThemeEngine {
         monitor.className = 'top-festive-monitor';
         monitor.innerHTML = `
             <video autoplay muted loop playsinline>
-                <source src="video.mp4" type="video/mp4">
+                <source src="video1.mp4" type="video/mp4">
             </video>
             <div class="top-monitor-content">
                 <div class="flex items-center gap-3 overflow-hidden">
