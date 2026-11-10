@@ -1,10 +1,19 @@
+/* ==========================================================
+   NOVO-BAY AUTONOMOUS AUDIO MANAGER (D07)
+   ========================================================== */
+
 class NovoAutonomousAudio {
     constructor() {
         this.tracks = [
-            { title: "آوای ملل ۱ - نوای باستانی", src: "audio1.mp3" },
-            { title: "آوای ملل ۲ - امواج دیپلماسی", src: "audio2.mp3" },
-            { title: "آوای ملل ۳ - افق‌های نوین", src: "audio3.mp3" },
-            { title: "آوای ملل ۴ - همگرایی جهانی", src: "audio4.mp3" }
+            { title: "آوای ملل ۱ - نوای باستانی", src: "trac1.mp3" },
+            { title: "آوای ملل ۲ - امواج دیپلماسی", src: "trac2.mp3" },
+            { title: "آوای ملل ۳ - افق‌های نوین", src: "trac3.mp3" },
+            { title: "آوای ملل ۴ - همگرایی جهانی", src: "trac4.mp3" },
+            { title: "آوای ملل ۵ - نوای فراتر از مرزها", src: "trac5.mp3" },
+            { title: "آوای ملل ۶ - هارمونی پارادایم", src: "trac6.mp3" },
+            { title: "آوای ملل ۷ - پژواک فرهنگ‌ها", src: "trac7.mp3" },
+            { title: "آوای ملل ۸ - ریتم بیداری", src: "trac8.mp3" },
+            { title: "آوای ملل ۹ - سرود نهایی نوو-بی", src: "trac9.mp3" }
         ];
         this.currentTrackIndex = 0;
         this.isPlaying = false;
@@ -42,12 +51,12 @@ class NovoAutonomousAudio {
                     <i class="fas fa-music text-amber-400 text-xs"></i>
                 </div>
 
-                <!-- پنل اصلی لیست پخش -->
+                <!-- پنل اصلی لیست پخش با قابلیت اسکرول عمودی -->
                 <div id="audioPlaylistModal" class="hidden" style="
                     position: absolute;
                     bottom: 40px;
                     left: 0;
-                    width: 280px;
+                    width: 290px;
                     background: rgba(255, 255, 255, 0.94);
                     backdrop-filter: blur(16px);
                     border: 1px solid rgba(255, 255, 255, 0.95);
@@ -61,12 +70,13 @@ class NovoAutonomousAudio {
                 ">
                     <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-200">
                         <span class="text-xs font-bold text-slate-800">لیست پخش و تنظیمات صوتی</span>
-                        <button id="closePlaylistBtn" class="text-slate-400 hover:text-slate-700 text-sm"><i class="fas fa-times"></i></button>
+                        <button id="closePlaylistBtn" class="text-slate-400 hover:text-slate-700 text-sm cursor-pointer"><i class="fas fa-times"></i></button>
                     </div>
-                    <div id="trackListContainer" class="space-y-1.5 max-h-40 overflow-y-auto mb-3"></div>
+                    <!-- کانتینر با قابلیت اسکرول برای نمایش تمام تراک‌ها -->
+                    <div id="trackListContainer" class="space-y-1.5 max-h-48 overflow-y-auto mb-3 pr-1"></div>
                     <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs text-slate-600">
-                        <span id="currentPlayingTitle" class="truncate font-medium">در حال پخش: --</span>
-                        <button id="masterPlayBtn" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-bold transition-all shadow">
+                        <span id="currentPlayingTitle" class="truncate font-medium max-w-[190px]">در حال پخش: --</span>
+                        <button id="masterPlayBtn" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-bold transition-all shadow cursor-pointer">
                             <i class="fas fa-play"></i>
                         </button>
                     </div>
@@ -121,18 +131,18 @@ class NovoAutonomousAudio {
         document.getElementById('modalDesc').innerHTML = `
             <p class="mb-3 leading-relaxed text-xs">در این بخش، نواها و قطعات موسیقی شاخص از سرزمین‌های مختلف جهان — که زبان‌های آن مناطق در این پلتفرم پشتیبانی می‌شوند — طنین‌انداز می‌گردد.</p>
             <p class="mb-3 leading-relaxed text-xs">شما آزادانه می‌توانید نوایی خاص را به صورت مکرر بشنوید، اجازه دهید سلسله‌ای از نواها به نوبت نواخته شوند، یا جریان پخش صوتی را در بدو ورود به پلتفرم و یا در هر بخش دلخواه دیگر متوقف سازید.</p>
-            <p class="text-slate-500 leading-relaxed text-xs">هدف از ارائهٔ این مجموعهٔ گزیده، صرفاً معرفی اصالت‌های موسیقایی ملل گوناگون است. چنانچه پیشنهاد ارزنده‌ای در خصوص قطعه‌ای خاص مدنظر دارید، با ما به اشتراک بگذارید؛ در صورت استقبال و فزونی درخواست‌ها، آن را به لیست پخش سراسری اضافه خواهیم کرد.</p>
+            <p class="text-slate-500 leading-relaxed text-xs">هدف از ارائهٔ این مجموعهٔ گزیده، صرفاً معرفی اصالت‌های موسیقایی ملل گوناگون است. چنانچه پیشنهاد ارزنده‌ای در خصوص قطعه‌ی خاص مدنظر دارید، با ما به اشتراک بگذارید؛ در صورت استقبال و فزونی درخواست‌ها، آن را به لیست پخش سراسری اضافه خواهیم کرد.</p>
         `;
 
         const footer = document.getElementById('modalFooter') || modal.querySelector('.border-t');
         if (footer) {
             footer.innerHTML = `
-                <button id="suggestMusicBtn" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-300 flex items-center gap-1">
+                <button id="suggestMusicBtn" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-300 flex items-center gap-1 cursor-pointer">
                     <i class="fas fa-lightbulb text-amber-500"></i> پیشنهاد موسیقی
                 </button>
                 <div class="flex gap-2">
-                    <button id="cancelGuideBtn" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">انصراف</button>
-                    <button id="okGuideBtn" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md">OK (ورود به لیست پخش)</button>
+                    <button id="cancelGuideBtn" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all cursor-pointer">انصراف</button>
+                    <button id="okGuideBtn" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer">OK (ورود به لیست پخش)</button>
                 </div>
             `;
 
@@ -179,8 +189,8 @@ class NovoAutonomousAudio {
         const footer = document.getElementById('modalFooter') || modal.querySelector('.border-t');
         if (footer) {
             footer.innerHTML = `
-                <button id="backToGuideBtn" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">بازگشت</button>
-                <button id="submitSuggestionBtn" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md">ثبت و ارسال پیشنهاد</button>
+                <button id="backToGuideBtn" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all cursor-pointer">بازگشت</button>
+                <button id="submitSuggestionBtn" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer">ثبت و ارسال پیشنهاد</button>
             `;
 
             document.getElementById('backToGuideBtn').onclick = () => {
