@@ -1,5 +1,5 @@
 /* ==========================================================
-   NOVO-BAY CHALLENGE MODAL & PROTOCOL MANAGER (D08)
+   NOVO-BAY CHALLENGE MODAL & PROTOCOL MANAGER (D05)
    ========================================================== */
 
 // تزریق استایل‌های پنل شیشه‌ای چالش
@@ -50,10 +50,10 @@
 
 // ساختار HTML پنل شیشه‌ای و قرار دادن آیکون خورشید در سلول R11:C8
 (function createChallengeModalDOM() {
-    // ۱. تزریق آیکون خورشید در سلول R11:C8 (layer-D03)
-    const layerD03 = document.getElementById('layer-D03');
-    if (layerD03 && !document.getElementById('sunTrigger')) {
-        const balloon = layerD03.querySelector('.balloon-element') || layerD03;
+    // ۱. تزریق آیکون خورشید در سلول R11:C8 (layer-D05)
+    const layerD05 = document.getElementById('layer-D05') || document.getElementById('layer-D03');
+    if (layerD05 && !document.getElementById('sunTrigger')) {
+        const balloon = layerD05.querySelector('.balloon-element') || layerD05;
         balloon.innerHTML = `
             <div id="sunTrigger" title="درگاه چالش‌های ساختاری (NOVO-SUN)" style="
                 width: 32px;
