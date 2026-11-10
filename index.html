@@ -19,45 +19,10 @@
             background-color: #000;
         }
 
-        /* ==========================================================
-           پکیج موقت تم کریسمس و زمستان
-           ========================================================== */
-        .christmas-seasonal-theme .ice-glass-card,
-        .christmas-seasonal-theme .challenge-modal-card,
-        .christmas-seasonal-theme div[id*="Modal"] > div {
-            border: 2px solid rgba(239, 68, 68, 0.6) !important;
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.3), 0 25px 50px -12px rgba(0,0,0,0.5) !important;
-            background: rgba(255, 255, 255, 0.92) !important;
-        }
-        .christmas-seasonal-theme h3::before {
-            content: "❄️ 🎄 ";
-        }
-
-        /* نوار بالای صفحه (دائمی) - کاملاً فیکس و نمایان */
-        .top-news-ticker-bar {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            height: 38px !important;
-            background: rgba(15, 23, 42, 0.95) !important;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 2px solid rgba(245, 158, 11, 0.5) !important;
-            z-index: 99999 !important;
-            display: flex !important;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1rem;
-            color: #f8fafc;
-            font-size: 11px;
-            direction: rtl;
-        }
-
         .grid-wrapper {
             position: absolute;
-            inset: 38px 0 0 0 !important; /* دقیقاً زیر نوار اخبار */
-            padding: 6px;
+            inset: 0;
+            padding: 4px;
             box-sizing: border-box;
             z-index: 10;
         }
@@ -113,10 +78,30 @@
         #layer-D04 .balloon-element { top: 2px; left: 2px; }
         #layer-D07 .balloon-element { bottom: 2px; left: 2px; }
 
+        .bottom-control-bar {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            height: 45px !important;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(245, 158, 11, 0.4);
+            z-index: 99999 !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.25rem;
+            color: #f8fafc;
+            font-size: 11px;
+            direction: rtl;
+        }
+
         .ice-glass-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             z-index: 100000;
@@ -136,11 +121,11 @@
         }
 
         .ice-glass-card {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.95);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
             border-radius: 1.5rem;
             color: #0f172a;
             max-width: 88vw;
@@ -149,30 +134,14 @@
         }
     </style>
 </head>
-<body class="select-none bg-black relative christmas-seasonal-theme" id="bodyRoot">
+<body class="select-none bg-black relative" id="bodyRoot">
 
-    <!-- موزیک کریسمس با نام صحیح christmas.mp3 -->
+    <!-- موزیک پس‌زمینه کریسمس -->
     <audio id="christmasBgAudio" src="christmas.mp3" loop autoplay></audio>
 
-    <!-- نوار دائمی بالای صفحه (خبرگزاری، ساعت و تاریخ) -->
-    <header class="top-news-ticker-bar">
-        <div class="flex items-center gap-2 overflow-hidden">
-            <span class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1">
-                <i class="fas fa-globe"></i> اخبار ملل
-            </span>
-            <div class="whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px] md:max-w-xl text-amber-300 font-medium">
-                <span id="tickerText">🎄 آستانه سال نو میلادی و جشن‌های زمستانی در پلتفرم جهانی نوو-بی | Merry Christmas ❄️</span>
-            </div>
-        </div>
-        <div class="flex items-center gap-2 font-mono text-[10px]">
-            <span id="liveClock" class="text-slate-200">00:00:00</span>
-            <span class="text-amber-400">|</span>
-            <span id="liveDate" class="text-slate-200">1405/09/19</span>
-        </div>
-    </header>
-
-    <div class="absolute inset-0 z-1" style="top: 38px;">
-        <video id="bgVideo" autoplay muted loop playsinline class="w-full h-full object-cover">
+    <!-- پس‌زمینه اصلی -->
+    <div class="absolute inset-0 z-1" style="top: 12.5dvh; bottom: 45px;">
+        <video autoplay muted loop playsinline class="w-full h-full object-cover">
             <source src="video.mp4" type="video/mp4">
         </video>
         <div class="absolute inset-0 bg-black/20"></div>
@@ -182,6 +151,20 @@
         <main class="master-coordinate-grid" id="masterGrid">
         </main>
     </div>
+
+    <!-- نوار ابزار پایین صفحه -->
+    <footer class="bottom-control-bar">
+        <div class="flex items-center gap-3 text-[11px] text-slate-300 font-medium">
+            <span><i class="fas fa-circle text-emerald-400 text-[8px] animate-ping ml-1"></i> سیستم ماتریکس فعال</span>
+            <span class="hidden sm:inline text-slate-500">|</span>
+            <span class="hidden sm:inline">پلتفرم جامع دیپلماسی و تحلیل فضایی نوو-بی</span>
+        </div>
+        <div class="flex items-center gap-3 text-[11px] font-mono text-amber-400">
+            <span>Grid: 20×10 Master</span>
+            <span class="text-slate-500">|</span>
+            <span>SEC: <span class="text-white">Active</span></span>
+        </div>
+    </footer>
 
     <!-- مودال عمومی شبکه -->
     <div id="iceGlassModal" class="ice-glass-overlay">
@@ -198,40 +181,7 @@
     </div>
 
     <script>
-        // مدیریت ساعت و تاریخ زنده
-        function updateDateTime() {
-            const now = new Date();
-            document.getElementById('liveClock').innerText = now.toLocaleTimeString('fa-IR');
-            document.getElementById('liveDate').innerText = now.toLocaleDateString('fa-IR');
-        }
-        setInterval(updateDateTime, 1000);
-        updateDateTime();
-
-        // چرخش اخبار و رویدادهای فرهنگی ۸ زبان در نوار بالا
-        const newsTickerItems = [
-            "🎄 آستانه سال نو میلادی و جشن‌های زمستانی در پلتفرم جهانی نوو-بی | Merry Christmas ❄️",
-            "✨ رویدادهای فرهنگی و گردشگری زمستانه در سراسر مگا-شهرها فعال شد.",
-            "🎁 ویژه برنامه کریسمس و چالش‌های تعاملی بخش خورشید (NOVO-SUN) برقرار است.",
-            "🌐 Multilingual cultural events and winter festive coordination across 8 global hubs."
-        ];
-        let tickerIndex = 0;
-        setInterval(() => {
-            tickerIndex = (tickerIndex + 1) % newsTickerItems.length;
-            document.getElementById('tickerText').innerText = newsTickerItems[tickerIndex];
-        }, 5000);
-
-        // تلاش برای پخش خودکار موزیک کریسمس
-        window.addEventListener('load', () => {
-            const bgAudio = document.getElementById('christmasBgAudio');
-            if (bgAudio) {
-                bgAudio.volume = 0.5;
-                bgAudio.play().catch(e => {
-                    console.log("پخش خودکار با کلیک کاربر فعال می‌شود.");
-                    window.addEventListener('click', () => { bgAudio.play(); }, { once: true });
-                });
-            }
-        });
-
+        // ساخت ماتریکس ۲۰x۱۰
         const gridContainer = document.getElementById('masterGrid');
         
         for (let r = 1; r <= 20; r++) {
@@ -245,15 +195,15 @@
                     const b = document.createElement('div'); b.className = 'balloon-element'; cell.appendChild(b);
                 } 
                 else if (r === 11 && c === 8) {
-                    cell.id = 'layer-D05'; // خورشید (چالش) در R11:C8
+                    cell.id = 'layer-D05';
                     const b = document.createElement('div'); b.className = 'balloon-element'; cell.appendChild(b);
                 }
                 else if (r === 11 && c === 2) {
-                    cell.id = 'layer-D04'; // ماه (گالری) در R11:C2
+                    cell.id = 'layer-D04';
                     const b = document.createElement('div'); b.className = 'balloon-element'; cell.appendChild(b);
                 }
                 else if (r === 20 && c === 10) {
-                    cell.id = 'layer-D07'; // پلیر صوتی در R20:C10
+                    cell.id = 'layer-D07';
                     const b = document.createElement('div'); b.className = 'balloon-element'; cell.appendChild(b);
                 } 
                 else {
@@ -276,12 +226,23 @@
         function closeModal() {
             document.getElementById('iceGlassModal').classList.remove('active');
         }
+
+        window.addEventListener('load', () => {
+            const bgAudio = document.getElementById('christmasBgAudio');
+            if (bgAudio) {
+                bgAudio.volume = 0.5;
+                bgAudio.play().catch(e => {
+                    window.addEventListener('click', () => { bgAudio.play(); }, { once: true });
+                });
+            }
+        });
     </script>
 
-    <!-- فراخوانی ماژول‌ها با نسخه کش‌شکن جدید v=55 -->
-    <script src="D01-translate.js?v=55"></script>
-    <script src="D05-sun-challenge.js?v=55"></script>
-    <script src="D04-moon-gallery.js?v=55"></script>
-    <script src="D07-audio.js?v=55"></script>
+    <!-- فراخوانی ماژول تم فصلی اختصاصی و سایر ماژول‌ها -->
+    <script src="seasonal-theme.js?v=1"></script>
+    <script src="D01-translate.js?v=75"></script>
+    <script src="D05-sun-challenge.js?v=75"></script>
+    <script src="D04-moon-gallery.js?v=75"></script>
+    <script src="D07-audio.js?v=75"></script>
 </body>
 </html>
