@@ -26,9 +26,9 @@ class NovoSeasonalThemeEngine {
         this.initSnowfall();
         this.initDateTime();
         this.initNewsTicker();
+        this.setupBackgroundAudio();
     }
 
-    // تزریق استایل‌های زمستانی و مانیتور بالا
     injectStyles() {
         if (document.getElementById('novo-seasonal-styles')) return;
         const style = document.createElement('style');
@@ -106,7 +106,6 @@ class NovoSeasonalThemeEngine {
         document.body.classList.add('christmas-seasonal-theme');
     }
 
-    // ساخت مانیتور بالای صفحه با سورس video1.mp4
     renderTopMonitor() {
         if (document.getElementById('topFestiveMonitor')) return;
 
@@ -114,7 +113,7 @@ class NovoSeasonalThemeEngine {
         monitor.id = 'topFestiveMonitor';
         monitor.className = 'top-festive-monitor';
         monitor.innerHTML = `
-            <video autoplay muted loop playsinline>
+            <video autoplay muted loop playsinline preload="auto">
                 <source src="video1.mp4" type="video/mp4">
             </video>
             <div class="top-monitor-content">
@@ -140,7 +139,34 @@ class NovoSeasonalThemeEngine {
         document.body.prepend(monitor);
     }
 
-    // سیستم بارش برف
+    setupBackgroundAudio() {
+        let bgAudio = document.getElementById('christmasBgAudio');
+        if (!bgAudio) {
+            bgAudio = document.createElement('audio');
+            bgAudio.id = 'christmasBgAudio';
+            bgAudio.src = 'christmas.mp3';
+            bgAudio.loop = true;
+            bgAudio.preload = 'auto';
+            document.body.appendChild(bgAudio);
+        }
+
+        const startPlayback = () => {
+            if (bgAudio.paused) {
+                bgAudio.volume = 0.5;
+                bgAudio.play().then(() => {
+                    console.log("موزیک مناسبتی زمستان با لمس کاربر فعال شد.");
+                }).catch(e => console.log("خطای پخش:", e));
+            }
+            window.removeEventListener('click', startPlayback);
+            window.removeEventListener('touchstart', startPlayback);
+            window.removeEventListener('pointerdown', startPlayback);
+        };
+
+        window.addEventListener('click', startPlayback);
+        window.addEventListener('touchstart', startPlayback);
+        window.addEventListener('pointerdown', startPlayback);
+    }
+
     initSnowfall() {
         const snowCount = 40;
         for (let i = 0; i < snowCount; i++) {
@@ -155,7 +181,6 @@ class NovoSeasonalThemeEngine {
         }
     }
 
-    // تاریخ‌های سه‌گانه و ساعت
     initDateTime() {
         const update = () => {
             const now = new Date();
@@ -179,7 +204,6 @@ class NovoSeasonalThemeEngine {
         update();
     }
 
-    // چرخش اخبار
     initNewsTicker() {
         setInterval(() => {
             this.tickerIndex = (this.tickerIndex + 1) % this.newsItems.length;
