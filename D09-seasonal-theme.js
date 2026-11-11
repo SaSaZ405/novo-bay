@@ -43,7 +43,7 @@ class NovoSeasonalThemeEngine {
         monitor.id = 'topFestiveMonitor';
         monitor.className = 'top-festive-monitor';
         monitor.innerHTML = `
-            <video autoplay muted loop playsinline preload="auto"><source src="fireplace-desk.mp4" type="video/mp4"></video>
+            <video autoplay muted loop playsinline preload="auto"><source src="video1.mp4" type="video/mp4"></video>
             <div class="top-monitor-content">
                 <div class="flex items-center gap-3 overflow-hidden">
                     <span class="bg-red-600 text-white text-[11px] font-bold px-3 py-1 rounded-full animate-pulse flex items-center gap-1.5"><i class="fas fa-snowflake"></i> نوو-بی</span>
