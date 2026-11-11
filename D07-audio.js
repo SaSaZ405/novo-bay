@@ -1,5 +1,5 @@
 /* ==========================================================
-   MODULE D07: AUDIO PLAYER (Tracks 1 to 10)
+   MODULE D07: AUDIO PLAYER (Tracks 1 to 9)
    ========================================================== */
 
 (function() {
@@ -9,14 +9,12 @@
     const balloon = layerCell.querySelector('.balloon-element');
     if (!balloon) return;
 
-    // دکمه دسترسی به پنل صوتی در سلول R20:C10
     balloon.innerHTML = `
         <button id="audioTriggerBtn" class="w-7 h-7 bg-slate-900/90 hover:bg-amber-500 text-amber-400 hover:text-white rounded-lg flex items-center justify-center shadow-lg transition-all border border-amber-500/40 cursor-pointer">
             <i class="fas fa-music text-xs"></i>
         </button>
     `;
 
-    // ایجاد پنجره مودال اختصاصی صوتی با قابلیت اسکرول عمودی برای ۱۰ ترک
     const modalHTML = `
         <div id="audioModalOverlay" class="ice-glass-overlay">
             <div class="ice-glass-card text-right relative" style="width: 340px;">
@@ -24,12 +22,11 @@
                     <i class="fas fa-times text-lg"></i>
                 </button>
                 <h3 class="text-base font-bold mb-3 text-slate-900 flex items-center gap-2">
-                    <i class="fas.fa-headphones text-amber-500"></i> پنل پخش و تنظیمات صوتی (۱۰ ترک)
+                    <i class="fas fa-headphones text-amber-500"></i> آرشیو صوتی (۹ ترک)
                 </h3>
                 
-                <!-- لیست اسکرول‌شونده آهنگ‌ها -->
                 <div class="max-h-48 overflow-y-auto space-y-1.5 mb-4 pr-1 custom-scrollbar">
-                    ${Array.from({length: 10}, (_, i) => `
+                    ${Array.from({length: 9}, (_, i) => `
                         <div class="flex items-center justify-between p-2 bg-slate-100 hover:bg-amber-50 rounded-xl border border-slate-200 transition-all">
                             <span class="text-xs font-medium text-slate-700">ترک شماره ${i + 1} (trac${i + 1}.mp3)</span>
                             <button onclick="playSpecificTrack(${i + 1})" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-[10px] font-bold shadow cursor-pointer transition-all">
@@ -39,7 +36,6 @@
                     `).join('')}
                 </div>
 
-                <!-- کنترلر پخش عمومی -->
                 <div class="bg-slate-900 text-white p-3 rounded-xl flex items-center justify-between shadow-inner">
                     <span id="currentPlayingLabel" class="text-[11px] text-amber-300 font-mono">در حال پخش: متوقف</span>
                     <div class="flex items-center gap-2">
