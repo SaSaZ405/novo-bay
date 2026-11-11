@@ -30,7 +30,6 @@ class NovoSeasonalThemeEngine {
             .snowflake { position: fixed; top: -10px; z-index: 99; user-select: none; pointer-events: none; animation: fall linear infinite; color: #fff; text-shadow: 0 0 6px rgba(255,255,255,0.9); }
             @keyframes fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(105dvh) rotate(360deg); opacity: 0.35; } }
             
-            /* هدر بدون خط قرمز و با استایل مینیمال */
             .top-festive-monitor { 
                 position: fixed !important; 
                 top: 0 !important; 
@@ -64,7 +63,6 @@ class NovoSeasonalThemeEngine {
                 align-items: center; 
                 justify-content: space-between; 
             }
-            /* نوار اطلاع‌رسانی منتقل‌شده به پایین هدر */
             .bottom-ticker-bar {
                 position: relative;
                 z-index: 2;
@@ -77,6 +75,24 @@ class NovoSeasonalThemeEngine {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
+            }
+            .header-audio-btn {
+                background: rgba(255, 255, 255, 0.12);
+                border: 1px solid rgba(245, 158, 11, 0.4);
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                color: #f59e0b;
+                transition: all 0.2s;
+            }
+            .header-audio-btn:hover {
+                background: rgba(245, 158, 11, 0.25);
+                color: #fff;
+                transform: scale(1.08);
             }
         `;
         document.head.appendChild(style);
@@ -91,22 +107,26 @@ class NovoSeasonalThemeEngine {
         monitor.innerHTML = `
             <video autoplay muted loop playsinline preload="auto"><source src="video1.mp4" type="video/mp4"></video>
             
-            <!-- ردیف بالای هدر: ساعت و تاریخ -->
             <div class="top-monitor-content">
                 <div class="flex items-center gap-2">
                     <span class="bg-red-600/80 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow">
                         <i class="fas fa-snowflake"></i> نوو-بی
                     </span>
-                    <span class="text-xs font-semibold text-slate-200">فستیوال زمستانه و دیپلماسی</span>
+                    <span class="text-xs font-semibold text-slate-200 hidden sm:inline">فستیوال زمستانه و دیپلماسی</span>
                 </div>
-                <div class="hidden md:flex items-center gap-2 font-mono text-[10px]">
-                    <span id="liveClock" class="text-white font-bold bg-slate-800/80 px-2 py-0.5 rounded">00:00:00</span> |
-                    <span id="solarDate" class="text-slate-200">--</span> /
-                    <span id="gregorianDate" class="text-slate-300">--</span>
+
+                <div class="flex items-center gap-3">
+                    <div class="hidden md:flex items-center gap-2 font-mono text-[10px]">
+                        <span id="liveClock" class="text-white font-bold bg-slate-800/80 px-2 py-0.5 rounded">00:00:00</span> |
+                        <span id="solarDate" class="text-slate-200">--</span>
+                    </div>
+                    <!-- دکمه مستقل پخش و توقف صوت در هدر -->
+                    <button id="headerPlayToggleBtn" class="header-audio-btn" title="پخش / توقف موسیقی پس‌زمینه">
+                        <i class="fas fa-play" id="headerPlayIcon"></i>
+                    </button>
                 </div>
             </div>
 
-            <!-- ردیف پایین هدر: نوار اطلاع‌رسانی و تیکر اخبار -->
             <div class="bottom-ticker-bar">
                 <div class="flex items-center gap-2 overflow-hidden w-full">
                     <span class="text-amber-400 font-bold text-[10px] whitespace-nowrap"><i class="fas fa-bullhorn ml-1"></i> اخبار:</span>
@@ -117,10 +137,17 @@ class NovoSeasonalThemeEngine {
             </div>
         `;
         document.body.prepend(monitor);
+
+        // اتصال رویداد دکمه هدر به موتور صوت D07
+        document.getElementById('headerPlayToggleBtn').onclick = () => {
+            if (window.novoAudioEngine) {
+                window.novoAudioEngine.togglePlay();
+            }
+        };
     }
 
     initSnowfall() {
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 25; i++) {
             const flake = document.createElement('div');
             flake.className = 'snowflake';
             flake.innerHTML = Math.random() > 0.5 ? '❄' : '•';
@@ -137,10 +164,8 @@ class NovoSeasonalThemeEngine {
             const now = new Date();
             const c = document.getElementById('liveClock');
             const s = document.getElementById('solarDate');
-            const g = document.getElementById('gregorianDate');
             if (c) c.innerText = now.toLocaleTimeString('fa-IR');
             if (s) s.innerText = now.toLocaleDateString('fa-IR', { calendar: 'persian', year: 'numeric', month: '2-digit', day: '2-digit' });
-            if (g) g.innerText = now.toLocaleDateString('en-GB', { year: '2-digit', month: 'numeric', day: 'numeric' });
         };
         setInterval(update, 1000);
         update();
