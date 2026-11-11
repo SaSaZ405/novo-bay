@@ -26,9 +26,9 @@ class NovoSeasonalThemeEngine {
         this.initSnowfall();
         this.initDateTime();
         this.initNewsTicker();
-        this.setupBackgroundAudio();
     }
 
+    // تزریق استایل‌های مختص هدر و برف
     injectStyles() {
         if (document.getElementById('novo-seasonal-styles')) return;
         const style = document.createElement('style');
@@ -85,11 +85,6 @@ class NovoSeasonalThemeEngine {
                 justify-content: space-between;
             }
 
-            .grid-wrapper {
-                position: absolute !important;
-                inset: 12.5dvh 0 45px 0 !important;
-            }
-
             .christmas-seasonal-theme .ice-glass-card,
             .christmas-seasonal-theme .challenge-modal-card,
             .christmas-seasonal-theme div[id*="Modal"] > div {
@@ -106,6 +101,7 @@ class NovoSeasonalThemeEngine {
         document.body.classList.add('christmas-seasonal-theme');
     }
 
+    // ساخت مانیتور بالای صفحه با ویدیوی video1.mp4
     renderTopMonitor() {
         if (document.getElementById('topFestiveMonitor')) return;
 
@@ -139,34 +135,7 @@ class NovoSeasonalThemeEngine {
         document.body.prepend(monitor);
     }
 
-    setupBackgroundAudio() {
-        let bgAudio = document.getElementById('christmasBgAudio');
-        if (!bgAudio) {
-            bgAudio = document.createElement('audio');
-            bgAudio.id = 'christmasBgAudio';
-            bgAudio.src = 'christmas.mp3';
-            bgAudio.loop = true;
-            bgAudio.preload = 'auto';
-            document.body.appendChild(bgAudio);
-        }
-
-        const startPlayback = () => {
-            if (bgAudio.paused) {
-                bgAudio.volume = 0.5;
-                bgAudio.play().then(() => {
-                    console.log("موزیک مناسبتی زمستان با لمس کاربر فعال شد.");
-                }).catch(e => console.log("خطای پخش:", e));
-            }
-            window.removeEventListener('click', startPlayback);
-            window.removeEventListener('touchstart', startPlayback);
-            window.removeEventListener('pointerdown', startPlayback);
-        };
-
-        window.addEventListener('click', startPlayback);
-        window.addEventListener('touchstart', startPlayback);
-        window.addEventListener('pointerdown', startPlayback);
-    }
-
+    // بارش برف
     initSnowfall() {
         const snowCount = 40;
         for (let i = 0; i < snowCount; i++) {
@@ -181,6 +150,7 @@ class NovoSeasonalThemeEngine {
         }
     }
 
+    // ساعت و تاریخ‌های سه‌گانه
     initDateTime() {
         const update = () => {
             const now = new Date();
@@ -204,6 +174,7 @@ class NovoSeasonalThemeEngine {
         update();
     }
 
+    // اخبار متحرک
     initNewsTicker() {
         setInterval(() => {
             this.tickerIndex = (this.tickerIndex + 1) % this.newsItems.length;
