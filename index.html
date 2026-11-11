@@ -136,12 +136,9 @@
 </head>
 <body class="select-none bg-black relative" id="bodyRoot">
 
-    <!-- موزیک مستقل کریسمس (کاملاً جدا از لیست پلیر) -->
-    <audio id="christmasBgAudio" src="christmas.mp3" preload="auto" loop></audio>
-
-    <!-- پس‌زمینه اصلی ویدیو با نام video1.mp4 -->
+    <!-- ویدیو وال اصلی پس‌زمینه (در صورت عدم لود ویدیو، تصویر والپیپر نمایش داده می‌شود) -->
     <div class="absolute inset-0 z-1" style="top: 12.5dvh; bottom: 45px;">
-        <video autoplay muted loop playsinline class="w-full h-full object-cover">
+        <video autoplay muted loop playsinline preload="auto" class="w-full h-full object-cover">
             <source src="video1.mp4" type="video/mp4">
         </video>
         <div class="absolute inset-0 bg-black/20"></div>
@@ -152,7 +149,7 @@
         </main>
     </div>
 
-    <!-- نوار ابزار پایین صفحه -->
+    <!-- فوتر پایین صفحه -->
     <footer class="bottom-control-bar">
         <div class="flex items-center gap-3 text-[11px] text-slate-300 font-medium">
             <span><i class="fas fa-circle text-emerald-400 text-[8px] animate-ping ml-1"></i> سیستم ماتریکس فعال</span>
@@ -226,28 +223,10 @@
         function closeModal() {
             document.getElementById('iceGlassModal').classList.remove('active');
         }
-
-        // فعال‌سازی پخش آهنگ کریسمس با اولین لمس/کلیک کاربر روی هر جای صفحه
-        function triggerChristmasAudioOnce() {
-            const audio = document.getElementById('christmasBgAudio');
-            if (audio && audio.paused) {
-                audio.volume = 0.5;
-                audio.play().then(() => {
-                    console.log("آهنگ کریسمس با موفقیت شروع به پخش کرد.");
-                }).catch(err => {
-                    console.log("مرورگر اجازه پخش صوتی را نداد:", err);
-                });
-            }
-            window.removeEventListener('click', triggerChristmasAudioOnce);
-            window.removeEventListener('touchstart', triggerChristmasAudioOnce);
-        }
-
-        window.addEventListener('click', triggerChristmasAudioOnce);
-        window.addEventListener('touchstart', triggerChristmasAudioOnce);
     </script>
 
     <!-- فراخوانی ماژول‌ها -->
-    <script src="D09-seasonal-theme.js?v=10"></script>
+    <script src="D09-seasonal-theme.js?v=20"></script>
     <script src="D01-translate.js?v=75"></script>
     <script src="D05-sun-challenge.js?v=75"></script>
     <script src="D04-moon-gallery.js?v=75"></script>
