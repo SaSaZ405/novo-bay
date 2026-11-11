@@ -28,7 +28,7 @@ class NovoAudioEngine {
     }
 
     init() {
-        window.novoAudioEngine = this; // ثبت سراسری برای ارتباط با هدر
+        window.novoAudioEngine = this;
         this.injectAudioStyles();
         this.renderMiniClassicPlayer();
         this.renderInfoModal();
@@ -83,7 +83,6 @@ class NovoAudioEngine {
                 font-size: 10px !important;
                 font-weight: bold;
             }
-            /* مودال شیشه‌ای اطلاعات */
             .audio-glass-modal {
                 position: fixed;
                 inset: 0;
@@ -102,12 +101,12 @@ class NovoAudioEngine {
                 visibility: visible;
             }
             .audio-glass-card {
-                background: rgba(255, 255, 255, 0.92);
+                background: rgba(255, 255, 255, 0.94);
                 backdrop-filter: blur(20px);
                 border-radius: 1.5rem;
                 color: #0f172a;
                 width: 90%;
-                max-width: 420px;
+                max-width: 440px;
                 padding: 1.5rem;
                 box-shadow: 0 20px 40px rgba(0,0,0,0.3);
                 direction: rtl;
@@ -124,7 +123,7 @@ class NovoAudioEngine {
         playerDiv.id = 'classicMiniPlayer';
         playerDiv.className = 'classic-mini-player';
         playerDiv.innerHTML = `
-            <button id="audioInfoBtn" class="audio-info-btn" title="اطلاعات و جزئیات پلیر">i</button>
+            <button id="audioInfoBtn" class="audio-info-btn" title="راهنمای صوتی">i</button>
             <button id="audioPrevBtn" title="آهنگ قبلی"><i class="fas fa-backward-step"></i></button>
             <button id="audioPlayToggleBtn" title="پخش / توقف"><i class="fas fa-play" id="audioPlayIcon"></i></button>
             <button id="audioNextBtn" title="آهنگ بعدی"><i class="fas fa-forward-step"></i></button>
@@ -149,18 +148,31 @@ class NovoAudioEngine {
                 <button onclick="window.novoAudioEngine.closeInfoModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-800">
                     <i class="fas fa-times text-lg"></i>
                 </button>
-                <h3 class="text-base font-bold mb-2 text-slate-900 flex items-center gap-2">
-                    <i class="fas fa-compact-disc text-amber-500"></i> راهنمای صوتی نوو-بی (Audio Matrix)
+                <h3 class="text-sm font-bold mb-3 text-slate-900 flex items-center gap-2">
+                    <i class="fas fa-music text-amber-500"></i> راهنمای جامع پخش صوتی و آوای ملل (NOVO-BAY)
                 </h3>
-                <p class="text-xs text-slate-600 mb-3 leading-relaxed">
-                    <strong>توضیحات کوتاه:</strong> این پلیر به صورت کاملاً مستقل و شناور در تمامی بخش‌های ماتریکس فعال است و مدیریت ۹ ترک صوتی فستیوال زمستانی را بر عهده دارد.
+                <p class="text-[11px] text-slate-700 mb-2.5 leading-relaxed">
+                    در این بخش، نواها و قطعات موسیقی شاخص از سرزمین‌های مختلف جهان — که زبان‌های آن مناطق در این پلتفرم پشتیبانی می‌شوند — طنین‌انداز می‌گردد.
                 </p>
-                <div class="bg-slate-100 p-2.5 rounded-xl text-[11px] text-slate-700 mb-4 leading-relaxed border border-slate-200">
-                    <strong>توضیحات مفصل:</strong> با استفاده از دکمه‌های کنترل جلو و عقب، می‌توانید بین ۹ ترک صوتی جابجا شوید. همچنین دکمه مستقل هدر و پلیر کلاسیک پایین صفحه به صورت دوطرفه با یکدیگر همگام شده‌اند تا وضعیت پخش صدا در هر نقطه از پلتفرم به سادگی کنترل شود.
+                <p class="text-[11px] text-slate-700 mb-2.5 leading-relaxed">
+                    شما آزادانه می‌توانید نوایی خاص را به صورت مکرر بشنوید، اجازه دهید سلسله‌ای از نواها به نوبت نواخته شوند، یا جریان پخش صوتی را در بدو ورود به پلتفرم و یا در هر بخش دلخواه دیگر متوقف سازید.
+                </p>
+                <p class="text-[11px] text-slate-600 mb-4 leading-relaxed">
+                    هدف از ارائه این مجموعه گزیده، صرفاً معرفی اصالت‌های موسیقیایی ملل گوناگون است. چنانچه پیشنهاد ارزنده‌ای در خصوص قطعه‌ای خاص مدنظر دارید، با ما به اشتراک بگذارید؛ در صورت استقبال و فزونی درخواست‌ها، آن را به لیست پخش سراسری اضافه خواهیم کرد.
+                </p>
+                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-200">
+                    <button onclick="alert('پیشنهاد موسیقی شما ثبت شد. با تشکر!'); window.novoAudioEngine.closeInfoModal();" class="px-3 py-1.5 bg-amber-100 text-amber-800 rounded-xl text-[11px] font-semibold flex items-center gap-1 hover:bg-amber-200 transition">
+                        💡 پیشنهاد موسیقی
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <button onclick="window.novoAudioEngine.closeInfoModal()" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-xl text-[11px] font-medium hover:bg-slate-300 transition">
+                            انصراف
+                        </button>
+                        <button onclick="window.novoAudioEngine.closeInfoModal()" class="px-4 py-1.5 bg-amber-500 text-white rounded-xl text-[11px] font-bold shadow hover:bg-amber-600 transition">
+                            OK (ورود به لیست پخش)
+                        </button>
+                    </div>
                 </div>
-                <button onclick="window.novoAudioEngine.closeInfoModal()" class="w-full py-2 bg-amber-500 text-white rounded-xl text-xs font-bold shadow-md hover:bg-amber-600 transition">
-                    متوجه شدم
-                </button>
             </div>
         `;
         document.body.appendChild(modalDiv);
@@ -211,7 +223,6 @@ class NovoAudioEngine {
     }
 
     updateUIState() {
-        // به‌روزرسانی آیکون پلیر کلاسیک پایین
         const classicIcon = document.getElementById('audioPlayIcon');
         const title = document.getElementById('audioTrackTitle');
         if (classicIcon) {
@@ -221,7 +232,6 @@ class NovoAudioEngine {
             title.innerText = `Track ${this.currentTrackIndex + 1} / 9`;
         }
 
-        // به‌روزرسانی آیکون مستقل هدر
         const headerIcon = document.getElementById('headerPlayIcon');
         if (headerIcon) {
             headerIcon.className = this.isPlaying ? 'fas fa-pause' : 'fas fa-play';
