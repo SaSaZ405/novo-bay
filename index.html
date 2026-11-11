@@ -1,265 +1,89 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" id="htmlRoot">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NOVO-BAY - Master Grid Platform</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        html, body {
-            width: 100%;
-            height: 100dvh;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #000;
-        }
-
-        /* پس‌زمینه اصلی تصویر خورشید و ماه */
-        .bg-wallpaper-layer {
-            position: fixed;
-            inset: 0;
-            top: 12.5dvh;
-            bottom: 45px;
-            background-image: url('moonsun.jpg');
-            background-size: cover;
-            background-position: center;
-            z-index: 1;
-        }
-
-        .grid-wrapper {
-            position: absolute;
-            inset: 12.5dvh 0 45px 0;
-            padding: 4px;
-            box-sizing: border-box;
-            z-index: 10;
-        }
-
-        .master-coordinate-grid {
-            width: 100%;
-            height: 100%;
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            grid-template-rows: repeat(20, 1fr);
-            pointer-events: none;
-            box-sizing: border-box;
-        }
-
-        .grid-node-cell {
-            border: 1px dashed rgba(255, 255, 255, 0.04);
-            transition: all 0.25s ease;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: auto;
-            box-sizing: border-box;
-            overflow: visible !important; 
-        }
-
-        .grid-node-cell:hover {
-            background: rgba(245, 158, 11, 0.12);
-            border-color: rgba(245, 158, 11, 0.4);
-            box-shadow: inset 0 0 10px rgba(245, 158, 11, 0.15);
-        }
-
-        .grid-node-cell::after {
-            content: attr(data-coord);
-            font-size: 7px;
-            font-family: monospace;
-            color: rgba(255, 255, 255, 0.15);
-            font-weight: normal;
-            position: absolute;
-            bottom: 1px;
-            right: 2px;
-            pointer-events: none;
-        }
-
-        .balloon-element {
-            position: absolute;
-            pointer-events: auto;
-            z-index: 60;
-        }
-
+        html, body { width: 100%; height: 100dvh; margin: 0; padding: 0; overflow: hidden; background-color: #000; }
+        .bg-wallpaper { position: fixed; inset: 0; top: 12.5dvh; bottom: 45px; background: url('sun-moon.jpg') center/cover no-repeat; z-index: 1; }
+        .grid-wrapper { position: absolute; inset: 12.5dvh 0 45px 0; padding: 4px; z-index: 10; box-sizing: border-box; }
+        .master-coordinate-grid { width: 100%; height: 100%; display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(20, 1fr); pointer-events: none; }
+        .grid-node-cell { border: 1px dashed rgba(255,255,255,0.04); position: relative; display: flex; align-items: center; justify-content: center; pointer-events: auto; }
+        .grid-node-cell:hover { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.4); }
+        .grid-node-cell::after { content: attr(data-coord); font-size: 7px; font-family: monospace; color: rgba(255,255,255,0.15); position: absolute; bottom: 1px; right: 2px; }
+        .balloon-element { position: absolute; pointer-events: auto; z-index: 60; }
         #layer-D01 .balloon-element { top: 2px; right: 2px; }
         #layer-D05 .balloon-element { top: 2px; right: 2px; }
         #layer-D04 .balloon-element { top: 2px; left: 2px; }
         #layer-D07 .balloon-element { bottom: 2px; left: 2px; }
-
-        .bottom-control-bar {
-            position: fixed !important;
-            bottom: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            height: 45px !important;
-            background: rgba(15, 23, 42, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(245, 158, 11, 0.4);
-            z-index: 99999 !important;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1.25rem;
-            color: #f8fafc;
-            font-size: 11px;
-            direction: rtl;
-        }
-
-        .ice-glass-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            z-index: 100000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            pointer-events: none;
-        }
-
-        .ice-glass-overlay.active {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
-
-        .ice-glass-card {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.95);
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            border-radius: 1.5rem;
-            color: #0f172a;
-            max-width: 88vw;
-            width: 380px;
-            padding: 1.25rem;
-        }
+        .bottom-control-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 45px; background: rgba(15,23,42,0.92); border-top: 1px solid rgba(245,158,11,0.4); z-index: 99999; display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem; color: #f8fafc; font-size: 11px; }
+        .ice-glass-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(14px); z-index: 100000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .ice-glass-overlay.active { opacity: 1; visibility: visible; }
+        .ice-glass-card { background: rgba(255,255,255,0.92); backdrop-filter: blur(20px); border-radius: 1.5rem; color: #0f172a; width: 380px; padding: 1.25rem; }
     </style>
 </head>
-<body class="select-none bg-black relative" id="bodyRoot">
+<body class="select-none bg-black relative">
 
-    <!-- موزیک مستقل کریسمس -->
     <audio id="christmasBgAudio" src="christmas.mp3" preload="auto" loop></audio>
-
-    <!-- تصویر پس‌زمینه اصلی (خورشید و ماه) -->
-    <div class="bg-wallpaper-layer">
-        <div class="absolute inset-0 bg-black/20"></div>
-    </div>
+    <div class="bg-wallpaper"><div class="absolute inset-0 bg-black/20"></div></div>
 
     <div class="grid-wrapper">
-        <main class="master-coordinate-grid" id="masterGrid">
-        </main>
+        <main class="master-coordinate-grid" id="masterGrid"></main>
     </div>
 
-    <!-- نوار ابزار پایین صفحه -->
     <footer class="bottom-control-bar">
-        <div class="flex items-center gap-3 text-[11px] text-slate-300 font-medium">
-            <span><i class="fas fa-circle text-emerald-400 text-[8px] animate-ping ml-1"></i> سیستم ماتریکس فعال</span>
-            <span class="hidden sm:inline text-slate-500">|</span>
-            <span class="hidden sm:inline">پلتفرم جامع دیپلماسی و تحلیل فضایی نوو-بی</span>
-        </div>
-        <div class="flex items-center gap-3 text-[11px] font-mono text-amber-400">
-            <span>Grid: 20×10 Master</span>
-            <span class="text-slate-500">|</span>
-            <span>SEC: <span class="text-white">Active</span></span>
-        </div>
+        <div class="flex items-center gap-3"><i class="fas fa-circle text-emerald-400 text-[8px] animate-ping"></i> سیستم ماتریکس فعال</div>
+        <div class="font-mono text-amber-400">Grid: 20×10 Master | SEC: <span class="text-white">Active</span></div>
     </footer>
 
-    <!-- مودال عمومی شبکه -->
     <div id="iceGlassModal" class="ice-glass-overlay">
         <div class="ice-glass-card text-right relative">
-            <button onclick="closeModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-800 transition-colors cursor-pointer">
-                <i class="fas fa-times text-lg"></i>
-            </button>
+            <button onclick="closeModal()" class="absolute top-4 left-4 text-slate-400"><i class="fas fa-times text-lg"></i></button>
             <h3 id="modalTitle" class="text-lg font-bold mb-2 text-slate-900">اطلاعات سلول</h3>
-            <p id="modalDesc" class="text-xs leading-relaxed text-slate-600 mb-4">توضیحات مربوط به این بخش در این لایه قرار می‌گیرد.</p>
-            <div id="modalFooter" class="flex justify-end gap-2 pt-2 border-t border-slate-200/60">
-                <button onclick="closeModal()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer">متوجه شدم</button>
-            </div>
+            <p id="modalDesc" class="text-xs text-slate-600 mb-4">توضیحات مربوط به این بخش...</p>
+            <button onclick="closeModal()" class="px-4 py-1.5 bg-amber-500 text-white rounded-xl text-xs font-bold">متوجه شدم</button>
         </div>
     </div>
 
     <script>
-        // ساخت ماتریکس ۲۰x۱۰ و جای‌گذاری لایه‌ها (D01, D04, D05, D07)
-        const gridContainer = document.getElementById('masterGrid');
-        
+        const grid = document.getElementById('masterGrid');
         for (let r = 1; r <= 20; r++) {
             for (let c = 1; c <= 10; c++) {
                 const cell = document.createElement('div');
                 cell.className = 'grid-node-cell';
                 cell.setAttribute('data-coord', `R${r}:C${c}`);
-                
-                if (r === 1 && c === 1) {
-                    cell.id = 'layer-D01';
-                    const b = document.createElement('div'); b.className = 'balloon-element'; cell.appendChild(b);
-                } 
-                else if (r === 11 && c === 8) {
-                    cell.id = 'layer-D05';
-                    const b = document.createElement('div'); b.className = 'balloon-element'; cell.appendChild(b);
-                }
-                else if (r === 11 && c === 2) {
-                    cell.id = 'layer-D04';
-                    const b = document.createElement('div'); b.className = 'balloon-element'; cell.appendChild(b);
-                }
-                else if (r === 20 && c === 10) {
-                    cell.id = 'layer-D07';
-                    const b = document.createElement('div'); b.className = 'balloon-element'; cell.appendChild(b);
-                } 
+                if (r === 1 && c === 1) cell.id = 'layer-D01';
+                else if (r === 11 && c === 8) cell.id = 'layer-D05';
+                else if (r === 11 && c === 2) cell.id = 'layer-D04';
+                else if (r === 20 && c === 10) cell.id = 'layer-D07';
                 else {
                     cell.id = `node-R${r}-C${c}`;
-                    cell.addEventListener('click', () => {
-                        openModal(`مختصات سلول: R${r}:C${c}`, `این سلول در موقعیت سطر ${r} و ستون ${c} از شبکه فرماندهی نوو-بی قرار دارد.`);
-                    });
+                    cell.onclick = () => openModal(`مختصات: R${r}:C${c}`, `سلول سطر ${r} و ستون ${c}`);
                 }
-
-                gridContainer.appendChild(cell);
+                if(['layer-D01','layer-D05','layer-D04','layer-D07'].includes(cell.id)) {
+                    const b = document.createElement('div'); b.className = 'balloon-element'; cell.appendChild(b);
+                }
+                grid.appendChild(cell);
             }
         }
+        function openModal(t, d) { document.getElementById('modalTitle').innerText = t; document.getElementById('modalDesc').innerText = d; document.getElementById('iceGlassModal').classList.add('active'); }
+        function closeModal() { document.getElementById('iceGlassModal').classList.remove('active'); }
 
-        function openModal(title, desc) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalDesc').innerText = desc;
-            document.getElementById('iceGlassModal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('iceGlassModal').classList.remove('active');
-        }
-
-        // فعال‌سازی پخش آهنگ کریسمس با اولین لمس روی صفحه
-        function triggerChristmasAudioOnce() {
-            const audio = document.getElementById('christmasBgAudio');
-            if (audio && audio.paused) {
-                audio.volume = 0.5;
-                audio.play().then(() => {
-                    console.log("آهنگ کریسمس پخش شد.");
-                }).catch(err => {
-                    console.log("مرورگر مسدود کرد:", err);
-                });
-            }
-            window.removeEventListener('click', triggerChristmasAudioOnce);
-            window.removeEventListener('touchstart', triggerChristmasAudioOnce);
-        }
-
-        window.addEventListener('click', triggerChristmasAudioOnce);
-        window.addEventListener('touchstart', triggerChristmasAudioOnce);
+        // فعال‌سازی صدا با اولین لمس
+        window.addEventListener('click', () => {
+            const a = document.getElementById('christmasBgAudio');
+            if(a && a.paused) a.play().catch(() => {});
+        }, {once: true});
     </script>
 
-    <!-- فراخوانی ماژول‌ها -->
-    <script src="D09-seasonal-theme.js?v=50"></script>
-    <script src="D01-translate.js?v=75"></script>
-    <script src="D05-sun-challenge.js?v=75"></script>
-    <script src="D04-moon-gallery.js?v=75"></script>
-    <script src="D07-audio.js?v=75"></script>
+    <script src="D09-seasonal-theme.js?v=101"></script>
+    <script src="D01-translate.js?v=101"></script>
+    <script src="D05-sun-challenge.js?v=101"></script>
+    <script src="D04-moon-gallery.js?v=101"></script>
+    <script src="D07-audio.js?v=101"></script>
 </body>
 </html>
