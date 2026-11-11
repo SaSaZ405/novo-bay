@@ -19,9 +19,21 @@
             background-color: #000;
         }
 
+        /* پس‌زمینه اصلی تصویر خورشید و ماه */
+        .bg-wallpaper-layer {
+            position: fixed;
+            inset: 0;
+            top: 12.5dvh;
+            bottom: 45px;
+            background-image: url('wallpaper.jpg'); /* یا نام فایل تصویر خورشید و ماه شما */
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
         .grid-wrapper {
             position: absolute;
-            inset: 0;
+            inset: 12.5dvh 0 45px 0;
             padding: 4px;
             box-sizing: border-box;
             z-index: 10;
@@ -136,11 +148,11 @@
 </head>
 <body class="select-none bg-black relative" id="bodyRoot">
 
-    <!-- ویدیو وال اصلی پس‌زمینه (در صورت عدم لود ویدیو، تصویر والپیپر نمایش داده می‌شود) -->
-    <div class="absolute inset-0 z-1" style="top: 12.5dvh; bottom: 45px;">
-        <video autoplay muted loop playsinline preload="auto" class="w-full h-full object-cover">
-            <source src="video1.mp4" type="video/mp4">
-        </video>
+    <!-- موزیک مستقل کریسمس -->
+    <audio id="christmasBgAudio" src="christmas.mp3" preload="auto" loop></audio>
+
+    <!-- تصویر پس‌زمینه اصلی (خورشید و ماه) -->
+    <div class="bg-wallpaper-layer">
         <div class="absolute inset-0 bg-black/20"></div>
     </div>
 
@@ -149,7 +161,7 @@
         </main>
     </div>
 
-    <!-- فوتر پایین صفحه -->
+    <!-- نوار ابزار پایین صفحه -->
     <footer class="bottom-control-bar">
         <div class="flex items-center gap-3 text-[11px] text-slate-300 font-medium">
             <span><i class="fas fa-circle text-emerald-400 text-[8px] animate-ping ml-1"></i> سیستم ماتریکس فعال</span>
@@ -178,7 +190,7 @@
     </div>
 
     <script>
-        // ساخت ماتریکس ۲۰x۱۰
+        // ساخت ماتریکس ۲۰x۱۰ و جای‌گذاری لایه‌ها (D01, D04, D05, D07)
         const gridContainer = document.getElementById('masterGrid');
         
         for (let r = 1; r <= 20; r++) {
@@ -223,10 +235,28 @@
         function closeModal() {
             document.getElementById('iceGlassModal').classList.remove('active');
         }
+
+        // فعال‌سازی پخش آهنگ کریسمس با اولین لمس روی صفحه
+        function triggerChristmasAudioOnce() {
+            const audio = document.getElementById('christmasBgAudio');
+            if (audio && audio.paused) {
+                audio.volume = 0.5;
+                audio.play().then(() => {
+                    console.log("آهنگ کریسمس پخش شد.");
+                }).catch(err => {
+                    console.log("مرورگر مسدود کرد:", err);
+                });
+            }
+            window.removeEventListener('click', triggerChristmasAudioOnce);
+            window.removeEventListener('touchstart', triggerChristmasAudioOnce);
+        }
+
+        window.addEventListener('click', triggerChristmasAudioOnce);
+        window.addEventListener('touchstart', triggerChristmasAudioOnce);
     </script>
 
     <!-- فراخوانی ماژول‌ها -->
-    <script src="D09-seasonal-theme.js?v=20"></script>
+    <script src="D09-seasonal-theme.js?v=25"></script>
     <script src="D01-translate.js?v=75"></script>
     <script src="D05-sun-challenge.js?v=75"></script>
     <script src="D04-moon-gallery.js?v=75"></script>
