@@ -1,88 +1,151 @@
 /* ==========================================================
-   MODULE D07: AUDIO PLAYER (Tracks 1 to 9)
+   NOVO-BAY AUDIO MANAGEMENT ENGINE (D07)
    ========================================================== */
 
-(function() {
-    const layerCell = document.getElementById('layer-D07');
-    if (!layerCell) return;
+class NovoAudioEngine {
+    constructor() {
+        // لیست کامل ۹ ترک صوتی پروژه
+        this.tracks = [
+            'trac1.mp3', 'trac2.mp3', 'trac3.mp3', 
+            'trac4.mp3', 'trac5.mp3', 'trac6.mp3', 
+            'trac7.mp3', 'trac8.mp3', 'trac9.mp3'
+        ];
+        this.currentTrackIndex = 0;
+        this.isPlaying = false;
+        this.audioElement = document.getElementById('christmasBgAudio');
 
-    const balloon = layerCell.querySelector('.balloon-element');
-    if (!balloon) return;
-
-    balloon.innerHTML = `
-        <button id="audioTriggerBtn" class="w-7 h-7 bg-slate-900/90 hover:bg-amber-500 text-amber-400 hover:text-white rounded-lg flex items-center justify-center shadow-lg transition-all border border-amber-500/40 cursor-pointer">
-            <i class="fas fa-music text-xs"></i>
-        </button>
-    `;
-
-    const modalHTML = `
-        <div id="audioModalOverlay" class="ice-glass-overlay">
-            <div class="ice-glass-card text-right relative" style="width: 340px;">
-                <button id="closeAudioModal" class="absolute top-4 left-4 text-slate-400 hover:text-slate-800 transition-colors cursor-pointer">
-                    <i class="fas fa-times text-lg"></i>
-                </button>
-                <h3 class="text-base font-bold mb-3 text-slate-900 flex items-center gap-2">
-                    <i class="fas fa-headphones text-amber-500"></i> آرشیو صوتی (۹ ترک)
-                </h3>
-                
-                <div class="max-h-48 overflow-y-auto space-y-1.5 mb-4 pr-1 custom-scrollbar">
-                    ${Array.from({length: 9}, (_, i) => `
-                        <div class="flex items-center justify-between p-2 bg-slate-100 hover:bg-amber-50 rounded-xl border border-slate-200 transition-all">
-                            <span class="text-xs font-medium text-slate-700">ترک شماره ${i + 1} (trac${i + 1}.mp3)</span>
-                            <button onclick="playSpecificTrack(${i + 1})" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-[10px] font-bold shadow cursor-pointer transition-all">
-                                <i class="fas fa-play ml-1"></i> پخش
-                            </button>
-                        </div>
-                    `).join('')}
-                </div>
-
-                <div class="bg-slate-900 text-white p-3 rounded-xl flex items-center justify-between shadow-inner">
-                    <span id="currentPlayingLabel" class="text-[11px] text-amber-300 font-mono">در حال پخش: متوقف</span>
-                    <div class="flex items-center gap-2">
-                        <button onclick="toggleAudioPlayback()" class="w-8 h-8 bg-amber-500 hover:bg-amber-600 rounded-lg flex items-center justify-center text-white cursor-pointer transition-all shadow">
-                            <i id="playPauseIcon" class="fas fa-play text-xs"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <audio id="panelAudioPlayer" src="trac1.mp3" preload="none"></audio>
-            </div>
-        </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-
-    const triggerBtn = document.getElementById('audioTriggerBtn');
-    const overlay = document.getElementById('audioModalOverlay');
-    const closeBtn = document.getElementById('closeAudioModal');
-    const panelPlayer = document.getElementById('panelAudioPlayer');
-    const currentLabel = document.getElementById('currentPlayingLabel');
-    const playPauseIcon = document.getElementById('playPauseIcon');
-
-    triggerBtn.addEventListener('click', () => overlay.classList.add('active'));
-    closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('active'); });
-
-    window.playSpecificTrack = function(trackNum) {
-        panelPlayer.src = `trac${trackNum}.mp3`;
-        panelPlayer.play().then(() => {
-            playPauseIcon.className = 'fas fa-pause text-xs';
-            currentLabel.innerText = `در حال پخش: ترک ${trackNum}`;
-        }).catch(e => {
-            currentLabel.innerText = `خطا در پخش ترک ${trackNum}`;
-        });
-    };
-
-    window.toggleAudioPlayback = function() {
-        if (panelPlayer.paused) {
-            panelPlayer.play().then(() => {
-                playPauseIcon.className = 'fas fa-pause text-xs';
-                currentLabel.innerText = `در حال پخش`;
-            });
-        } else {
-            panelPlayer.pause();
-            playPauseIcon.className = 'fas fa-play text-xs';
-            currentLabel.innerText = `متوقف شد`;
+        if (!this.audioElement) {
+            this.audioElement = document.createElement('audio');
+            this.audioElement.id = 'christmasBgAudio';
+            this.audioElement.loop = true;
+            document.body.appendChild(this.audioElement);
         }
-    };
-})();
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.init());
+        } else {
+            this.init();
+        }
+    }
+
+    init() {
+        this.injectAudioStyles();
+        this.renderMiniClassicPlayer();
+        this.bindEvents();
+    }
+
+    injectAudioStyles() {
+        if (document.getElementById('novo-audio-styles')) return;
+        const style = document.createElement('style');
+        style.id = 'novo-audio-styles';
+        style.innerHTML = `
+            .classic-mini-player {
+                position: fixed;
+                bottom: 55px;
+                left: 15px;
+                z-index: 99998;
+                background: rgba(15, 23, 42, 0.88);
+                backdrop-filter: blur(12px);
+                border: 1px solid rgba(245, 158, 11, 0.4);
+                border-radius: 9999px;
+                padding: 6px 14px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: #f8fafc;
+                font-size: 11px;
+                box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+                direction: ltr;
+            }
+            .classic-mini-player button {
+                background: none;
+                border: none;
+                color: #f59e0b;
+                cursor: pointer;
+                font-size: 13px;
+                padding: 2px 4px;
+                transition: transform 0.2s;
+            }
+            .classic-mini-player button:hover {
+                transform: scale(1.15);
+                color: #fff;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    renderMiniClassicPlayer() {
+        if (document.getElementById('classicMiniPlayer')) return;
+
+        const playerDiv = document.createElement('div');
+        playerDiv.id = 'classicMiniPlayer';
+        playerDiv.className = 'classic-mini-player';
+        playerDiv.innerHTML = `
+            <button id="audioPrevBtn" title="آهنگ قبلی"><i class="fas fa-backward-step"></i></button>
+            <button id="audioPlayToggleBtn" title="پخش / توقف"><i class="fas fa-play" id="audioPlayIcon"></i></button>
+            <button id="audioNextBtn" title="آهنگ بعدی"><i class="fas fa-forward-step"></i></button>
+            <span id="audioTrackTitle" class="font-mono text-[10px] text-amber-300 max-w-[110px] truncate">Track 1 / 9</span>
+        `;
+        document.body.appendChild(playerDiv);
+
+        document.getElementById('audioPlayToggleBtn').onclick = () => this.togglePlay();
+        document.getElementById('audioNextBtn').onclick = () => this.nextTrack();
+        document.getElementById('audioPrevBtn').onclick = () => this.prevTrack();
+    }
+
+    togglePlay() {
+        if (this.audioElement.paused) {
+            if (!this.audioElement.src || this.audioElement.src === '') {
+                this.audioElement.src = this.tracks[this.currentTrackIndex];
+            }
+            this.audioElement.play().then(() => {
+                this.isPlaying = true;
+                this.updateUIState();
+            }).catch(e => console.log(e));
+        } else {
+            this.audioElement.pause();
+            this.isPlaying = false;
+            this.updateUIState();
+        }
+    }
+
+    nextTrack() {
+        this.currentTrackIndex = (this.currentTrackIndex + 1) % this.tracks.length;
+        this.playCurrentTrack();
+    }
+
+    prevTrack() {
+        this.currentTrackIndex = (this.currentTrackIndex - 1 + this.tracks.length) % this.tracks.length;
+        this.playCurrentTrack();
+    }
+
+    playCurrentTrack() {
+        this.audioElement.src = this.tracks[this.currentTrackIndex];
+        this.audioElement.play().then(() => {
+            this.isPlaying = true;
+            this.updateUIState();
+        }).catch(e => console.log(e));
+    }
+
+    updateUIState() {
+        const icon = document.getElementById('audioPlayIcon');
+        const title = document.getElementById('audioTrackTitle');
+        if (icon) {
+            icon.className = this.isPlaying ? 'fas fa-pause' : 'fas fa-play';
+        }
+        if (title) {
+            title.innerText = `Track ${this.currentTrackIndex + 1} / 9`;
+        }
+
+        const headerAudioBtn = document.getElementById('headerAudioToggleBtn');
+        if (headerAudioBtn) {
+            headerAudioBtn.innerHTML = this.isPlaying ? '<i class="fas fa-volume-high text-emerald-400"></i>' : '<i class="fas fa-volume-xmark text-red-400"></i>';
+        }
+    }
+
+    bindEvents() {
+        this.audioElement.onended = () => this.nextTrack();
+    }
+}
+
+const novoAudioEngine = new NovoAudioEngine();
