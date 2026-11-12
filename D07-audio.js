@@ -1,10 +1,14 @@
 /* ==========================================================
-   NOVO-BAY AUDIO ENGINE (D07 - Clean & Optimized)
+   NOVO-BAY 9-TRACK AUDIO ENGINE (D07 - Fully Restored)
    ========================================================== */
 
 class NovoAudioEngine {
     constructor() {
-        this.tracks = ['trac1.mp3', 'trac2.mp3', 'trac3.mp3', 'trac4.mp3', 'trac5.mp3', 'trac6.mp3', 'trac7.mp3', 'trac8.mp3', 'trac9.mp3'];
+        this.tracks = [
+            'trac1.mp3', 'trac2.mp3', 'trac3.mp3', 
+            'trac4.mp3', 'trac5.mp3', 'trac6.mp3', 
+            'trac7.mp3', 'trac8.mp3', 'trac9.mp3'
+        ];
         this.currentTrackIndex = 0;
         this.isPlaying = false;
         
@@ -13,11 +17,15 @@ class NovoAudioEngine {
             this.audioElement = document.createElement('audio');
             this.audioElement.id = 'novoPlayerAudio';
             this.audioElement.preload = 'auto';
-            this.audioElement.loop = false;
+            this.audioElement.loop = false; // برای اینکه بعد از اتمام هر ترک، برود ترک بعدی
             document.body.appendChild(this.audioElement);
         }
 
-        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', () => this.init()) : this.init();
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.init());
+        } else {
+            this.init();
+        }
     }
 
     init() {
@@ -64,7 +72,7 @@ class NovoAudioEngine {
             .modal-control-btn {
                 width: 28px; height: 28px; border-radius: 50%; display: flex;
                 align-items: center; justify-content: center; background: rgba(0,0,0,0.05);
-                color: #64748b; transition: all 0.2s;
+                color: #64748b; transition: all 0.2s; cursor: pointer; border: none;
             }
             .modal-control-btn:hover { background: rgba(245, 158, 11, 0.2); color: #0f172a; }
             .novo-input-field {
@@ -110,17 +118,17 @@ class NovoAudioEngine {
                         </button>
                     </div>
                     <h3 class="text-sm font-bold mb-3 text-slate-900 flex items-center gap-2 pl-12">
-                        <i class="fas fa-music text-amber-500"></i> راهنمای آوای ملل (پلیر اختصاصی)
+                        <i class="fas fa-music text-amber-500"></i> راهنمای آوای ملل (پلیر اختصاصی ۹ ترکه)
                     </h3>
                     <p class="text-[11px] text-slate-700 mb-3 leading-relaxed">
-                        این بخش مختص پخش قطعات گزیده از سراسر جهان است. می‌توانید ترک‌ها را به دلخواه عوض کنید و در طول حضور در پلتفرم بشنوید.
+                        در این پلیر مستقل، ۹ قطعه موسیقی گزیده از سراسر جهان قرار دارد. شما می‌توانید در هر زمان که خواستید ترک‌ها را عوض کنید یا متوقف سازید و در طول حضور در پلتفرم از شنیدن آن‌ها لذت ببرید.
                     </p>
                     <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-200">
                         <button onclick="window.novoAudioEngine.openSuggestionModal()" class="px-3 py-1.5 bg-amber-100 text-amber-800 rounded-xl text-[11px] font-semibold hover:bg-amber-200 transition">
                             💡 پیشنهاد موسیقی
                         </button>
                         <button onclick="window.novoAudioEngine.closeInfoModal()" class="px-4 py-1.5 bg-amber-500 text-white rounded-xl text-[11px] font-bold shadow hover:bg-amber-600 transition">
-                            متوجه شدم
+                            متوجه شدم (×)
                         </button>
                     </div>
                 </div>
@@ -155,7 +163,7 @@ class NovoAudioEngine {
                             <input type="text" id="sugArtistName" class="novo-input-field" placeholder="نام هنرمند...">
                         </div>
                     </div>
-                    <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-200">
                         <button onclick="window.novoAudioEngine.closeSuggestionModal()" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-xl text-[11px]">انصراف</button>
                         <button onclick="window.novoAudioEngine.submitSuggestion()" class="px-4 py-1.5 bg-amber-500 text-white rounded-xl text-[11px] font-bold shadow">ارسال پیشنهاد</button>
                     </div>
@@ -200,7 +208,7 @@ class NovoAudioEngine {
             this.audioElement.play().then(() => {
                 this.isPlaying = true;
                 this.updateUI();
-            }).catch(e => console.log(e));
+            }).catch(e => console.log("Player play error:", e));
         } else {
             this.audioElement.pause();
             this.isPlaying = false;
