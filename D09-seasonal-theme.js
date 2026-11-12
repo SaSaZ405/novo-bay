@@ -14,12 +14,12 @@ class NovoSeasonalThemeEngine {
         this.tickerIndex = 0;
         this.isLandingAudioPlaying = false;
         
-        // نام دقیق فایل صوتی بک‌گراند با استاندارد فاصله URL (معادل NOVO Background Audio.mp3)
+        // نام دقیق فایل صوتی بک‌گراند لندینگ
         this.landingAudio = document.getElementById('landingBgAudio');
         if (!this.landingAudio) {
             this.landingAudio = document.createElement('audio');
             this.landingAudio.id = 'landingBgAudio';
-            this.landingAudio.src = 'NOVO%20Background%20Audio.mp3';[cite: 2]
+            this.landingAudio.src = 'NOVO‌‍ـBackground‌‍ـAudio.mp3';
             this.landingAudio.preload = 'auto';
             this.landingAudio.loop = true;
             document.body.appendChild(this.landingAudio);
