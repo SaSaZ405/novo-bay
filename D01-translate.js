@@ -1,19 +1,19 @@
 /* ==========================================================
-   NOVO-BAY TRANSLATION & LANGUAGE ENGINE (D01 - 8 Languages & Elegant Intro)
+   NOVO-BAY TRANSLATION & LANGUAGE ENGINE (D01 - Global Dispatcher)
    ========================================================== */
 
 class NovoTranslateEngine {
     constructor() {
-        this.currentLang = 'fa';
+        this.currentLang = localStorage.getItem('novo_lang') || 'fa';
         this.languages = [
-            { code: 'fa', name: 'فارسی (Persian)', flag: '🇮🇷' },
-            { code: 'en', name: 'English (UK/US)', flag: '🇬🇧' },
-            { code: 'ru', name: 'Русский (Russian)', flag: '🇷🇺' },
-            { code: 'ar', name: 'العربية (UAE Arabic)', flag: '🇦🇪' },
-            { code: 'zh', name: '中文 (Chinese)', flag: '🇨🇳' },
-            { code: 'fr', name: 'Français (French)', flag: '🇫🇷' },
-            { code: 'de', name: 'Deutsch (German)', flag: '🇩🇪' },
-            { code: 'it', name: 'Italiano (Italian)', flag: '🇮🇹' }
+            { code: 'fa', name: 'فارسی (Persian)', flag: '🇮🇷', dir: 'rtl' },
+            { code: 'en', name: 'English (UK/US)', flag: '🇬🇧', dir: 'ltr' },
+            { code: 'ru', name: 'Русский (Russian)', flag: '🇷🇺', dir: 'ltr' },
+            { code: 'ar', name: 'العربية (UAE Arabic)', flag: '🇦🇪', dir: 'rtl' },
+            { code: 'zh', name: '中文 (Chinese)', flag: '🇨🇳', dir: 'ltr' },
+            { code: 'fr', name: 'Français (French)', flag: '🇫🇷', dir: 'ltr' },
+            { code: 'de', name: 'Deutsch (German)', flag: '🇩🇪', dir: 'ltr' },
+            { code: 'it', name: 'Italiano (Italian)', flag: '🇮🇹', dir: 'ltr' }
         ];
 
         if (document.readyState === 'loading') {
@@ -28,6 +28,7 @@ class NovoTranslateEngine {
         this.injectStyles();
         this.renderTranslateNode();
         this.renderModals();
+        this.applyLanguage(this.currentLang, false); // اعمال زبان ذخیره شده اولیه
     }
 
     injectStyles() {
@@ -93,7 +94,7 @@ class NovoTranslateEngine {
     renderModals() {
         if (document.getElementById('transIntroModal')) return;
 
-        // مودال معرفی کوتاه با متن جدید و فاخر (مرحله اول)
+        // مودال معرفی کوتاه
         const introDiv = document.createElement('div');
         introDiv.id = 'transIntroModal';
         introDiv.className = 'translate-glass-modal';
@@ -122,7 +123,7 @@ class NovoTranslateEngine {
         `;
         document.body.appendChild(introDiv);
 
-        // مودال اصلی با لیست کامل ۸ زبان
+        // مودال انتخاب زبان
         const mainDiv = document.createElement('div');
         mainDiv.id = 'transMainModal';
         mainDiv.className = 'translate-glass-modal';
@@ -186,8 +187,25 @@ class NovoTranslateEngine {
 
     setLanguage(code, name) {
         this.currentLang = code;
-        alert(`زبان پلتفرم با موفقیت روی "${name}" تنظیم شد.`);
+        localStorage.setItem('novo_lang', code);
+        this.applyLanguage(code, true);
         this.closeAllModals();
+    }
+
+    applyLanguage(code, notify = true) {
+        const langObj = this.languages.find(l => l.code === code) || this.languages[0];
+        
+        // تنظیم جهت صفحه (RTL یا LTR)
+        document.documentElement.lang = code;
+        document.documentElement.dir = langObj.dir;
+
+        // انتشار سیگنال سراسری برای سایر فایل‌ها (D02, D03, D04, D05, D07, D09 و...)
+        const event = new CustomEvent('novoLanguageChanged', { detail: { lang: code, langData: langObj } });
+        window.dispatchEvent(event);
+
+        if (notify) {
+            alert(`زبان پلتفرم با موفقیت روی "${langObj.name}" تنظیم شد و بر کل ماتریکس اعمال گردید.`);
+        }
     }
 }
 
