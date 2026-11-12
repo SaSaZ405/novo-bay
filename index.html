@@ -28,7 +28,6 @@
 </head>
 <body class="select-none bg-black relative">
 
-    <audio id="christmasBgAudio" src="christmas.mp3" preload="auto" loop></audio>
     <div class="bg-wallpaper"><div class="absolute inset-0 bg-black/20"></div></div>
 
     <div class="grid-wrapper">
@@ -72,18 +71,13 @@
         }
         function openModal(t, d) { document.getElementById('modalTitle').innerText = t; document.getElementById('modalDesc').innerText = d; document.getElementById('iceGlassModal').classList.add('active'); }
         function closeModal() { document.getElementById('iceGlassModal').classList.remove('active'); }
-
-        // فعال‌سازی صدا با اولین لمس
-        window.addEventListener('click', () => {
-            const a = document.getElementById('christmasBgAudio');
-            if(a && a.paused) a.play().catch(() => {});
-        }, {once: true});
     </script>
 
-    <script src="D09-seasonal-theme.js?v=101"></script>
-    <script src="D01-translate.js?v=101"></script>
-    <script src="D05-sun-challenge.js?v=101"></script>
-    <script src="D04-moon-gallery.js?v=101"></script>
-    <script src="D07-audio.js?v=101"></script>
+    <!-- اسکریپت‌های ماژولار پلتفرم -->
+    <script src="D09-seasonal-theme.js?v=102"></script>
+    <script src="D01-translate.js?v=102"></script>
+    <script src="D05-sun-challenge.js?v=102"></script>
+    <script src="D04-moon-gallery.js?v=102"></script>
+    <script src="D07-audio.js?v=102"></script>
 </body>
 </html>
