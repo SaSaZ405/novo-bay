@@ -1,5 +1,6 @@
 /* ==========================================================
    NOVO-BAY AUDIO MANAGEMENT ENGINE (D07)
+   GLOBAL BACKGROUND AUDIO EDITION
    ========================================================== */
 
 class NovoAudioEngine {
@@ -11,11 +12,13 @@ class NovoAudioEngine {
         ];
         this.currentTrackIndex = 0;
         this.isPlaying = false;
-        this.audioElement = document.getElementById('christmasBgAudio');
+        
+        // نام عمومی تگ صوت پس‌زمینه
+        this.audioElement = document.getElementById('novoBgAudio');
 
         if (!this.audioElement) {
             this.audioElement = document.createElement('audio');
-            this.audioElement.id = 'christmasBgAudio';
+            this.audioElement.id = 'novoBgAudio';
             this.audioElement.loop = true;
             document.body.appendChild(this.audioElement);
         }
@@ -86,7 +89,7 @@ class NovoAudioEngine {
             .audio-glass-modal {
                 position: fixed;
                 inset: 0;
-                background: rgba(0, 0, 0, 0.6);
+                background: rgba(0, 0, 0, 0.65);
                 backdrop-filter: blur(12px);
                 z-index: 100000;
                 display: flex;
@@ -108,9 +111,24 @@ class NovoAudioEngine {
                 width: 90%;
                 max-width: 440px;
                 padding: 1.5rem;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.35);
                 direction: rtl;
                 text-align: right;
+            }
+            .modal-control-btn {
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(0,0,0,0.05);
+                color: #64748b;
+                transition: all 0.2s;
+            }
+            .modal-control-btn:hover {
+                background: rgba(245, 158, 11, 0.2);
+                color: #0f172a;
             }
         `;
         document.head.appendChild(style);
@@ -145,10 +163,17 @@ class NovoAudioEngine {
         modalDiv.className = 'audio-glass-modal';
         modalDiv.innerHTML = `
             <div class="audio-glass-card relative">
-                <button onclick="window.novoAudioEngine.closeInfoModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-800">
-                    <i class="fas fa-times text-lg"></i>
-                </button>
-                <h3 class="text-sm font-bold mb-3 text-slate-900 flex items-center gap-2">
+                <!-- دکمه‌های کنترلی بالای مودال: برگشت به مرحله قبل + بستن -->
+                <div class="absolute top-4 left-4 flex items-center gap-1.5">
+                    <button onclick="window.novoAudioEngine.goBackStep()" class="modal-control-btn" title="بازگشت به مرحله قبل">
+                        <i class="fas fa-arrow-right text-xs"></i>
+                    </button>
+                    <button onclick="window.novoAudioEngine.closeInfoModal()" class="modal-control-btn" title="بستن">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                </div>
+
+                <h3 class="text-sm font-bold mb-3 text-slate-900 flex items-center gap-2 pl-16">
                     <i class="fas fa-music text-amber-500"></i> راهنمای جامع پخش صوتی و آوای ملل (NOVO-BAY)
                 </h3>
                 <p class="text-[11px] text-slate-700 mb-2.5 leading-relaxed">
@@ -186,6 +211,11 @@ class NovoAudioEngine {
     closeInfoModal() {
         const modal = document.getElementById('audioInfoModal');
         if (modal) modal.classList.remove('active');
+    }
+
+    goBackStep() {
+        // بازگشت به مرحله قبل (بستن مودال و برگشت به پلیر)
+        this.closeInfoModal();
     }
 
     togglePlay() {
