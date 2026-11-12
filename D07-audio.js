@@ -1,31 +1,23 @@
 /* ==========================================================
-   NOVO-BAY AUDIO MANAGEMENT & MODAL ENGINE (D07 - Clean & Unified)
+   NOVO-BAY AUDIO ENGINE (D07 - Clean & Optimized)
    ========================================================== */
 
 class NovoAudioEngine {
     constructor() {
-        this.tracks = [
-            'trac1.mp3', 'trac2.mp3', 'trac3.mp3', 
-            'trac4.mp3', 'trac5.mp3', 'trac6.mp3', 
-            'trac7.mp3', 'trac8.mp3', 'trac9.mp3'
-        ];
+        this.tracks = ['trac1.mp3', 'trac2.mp3', 'trac3.mp3', 'trac4.mp3', 'trac5.mp3', 'trac6.mp3', 'trac7.mp3', 'trac8.mp3', 'trac9.mp3'];
         this.currentTrackIndex = 0;
         this.isPlaying = false;
         
-        this.audioElement = document.getElementById('novoBgAudio');
+        this.audioElement = document.getElementById('novoPlayerAudio');
         if (!this.audioElement) {
             this.audioElement = document.createElement('audio');
-            this.audioElement.id = 'novoBgAudio';
+            this.audioElement.id = 'novoPlayerAudio';
             this.audioElement.preload = 'auto';
-            this.audioElement.loop = true;
+            this.audioElement.loop = false;
             document.body.appendChild(this.audioElement);
         }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.init());
-        } else {
-            this.init();
-        }
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', () => this.init()) : this.init();
     }
 
     init() {
@@ -37,9 +29,9 @@ class NovoAudioEngine {
     }
 
     injectStyles() {
-        if (document.getElementById('novo-audio-unified-styles')) return;
+        if (document.getElementById('novo-audio-styles')) return;
         const style = document.createElement('style');
-        style.id = 'novo-audio-unified-styles';
+        style.id = 'novo-audio-styles';
         style.innerHTML = `
             .classic-mini-player {
                 position: fixed; bottom: 55px; left: 15px; z-index: 99998;
@@ -118,17 +110,17 @@ class NovoAudioEngine {
                         </button>
                     </div>
                     <h3 class="text-sm font-bold mb-3 text-slate-900 flex items-center gap-2 pl-12">
-                        <i class="fas fa-music text-amber-500"></i> راهنمای جامع پخش صوتی و آوای ملل (NOVO-BAY)
+                        <i class="fas fa-music text-amber-500"></i> راهنمای آوای ملل (پلیر اختصاصی)
                     </h3>
-                    <p class="text-[11px] text-slate-700 mb-2.5 leading-relaxed">
-                        در این بخش، نواها و قطعات موسیقی شاخص از سرزمین‌های مختلف جهان طنین‌انداز می‌گردد. شما آزادانه می‌توانید نوایی خاص را بشنوید، یا جریان پخش صوتی را متوقف سازید.
+                    <p class="text-[11px] text-slate-700 mb-3 leading-relaxed">
+                        این بخش مختص پخش قطعات گزیده از سراسر جهان است. می‌توانید ترک‌ها را به دلخواه عوض کنید و در طول حضور در پلتفرم بشنوید.
                     </p>
                     <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-200">
-                        <button onclick="window.novoAudioEngine.openSuggestionModal()" class="px-3 py-1.5 bg-amber-100 text-amber-800 rounded-xl text-[11px] font-semibold flex items-center gap-1 hover:bg-amber-200 transition">
+                        <button onclick="window.novoAudioEngine.openSuggestionModal()" class="px-3 py-1.5 bg-amber-100 text-amber-800 rounded-xl text-[11px] font-semibold hover:bg-amber-200 transition">
                             💡 پیشنهاد موسیقی
                         </button>
                         <button onclick="window.novoAudioEngine.closeInfoModal()" class="px-4 py-1.5 bg-amber-500 text-white rounded-xl text-[11px] font-bold shadow hover:bg-amber-600 transition">
-                            OK (ورود به لیست پخش)
+                            متوجه شدم
                         </button>
                     </div>
                 </div>
@@ -153,8 +145,7 @@ class NovoAudioEngine {
                     <h3 class="text-sm font-bold mb-2 text-slate-900 flex items-center gap-2 pl-16">
                         <i class="fas fa-lightbulb text-amber-500"></i> ثبت پیشنهاد قطعه موسیقی
                     </h3>
-                    <p class="text-[11px] text-slate-600 mb-3">مشخصات اثر مد نظر خود را وارد نمایید:</p>
-                    <div class="space-y-2.5 mb-4">
+                    <div class="space-y-2.5 my-3">
                         <div>
                             <label class="block text-[10px] font-semibold text-slate-700 mb-1">نام قطعه:</label>
                             <input type="text" id="sugTrackName" class="novo-input-field" placeholder="نام قطعه...">
@@ -238,10 +229,8 @@ class NovoAudioEngine {
     updateUI() {
         const icon = document.getElementById('audioPlayIcon');
         const title = document.getElementById('audioTrackTitle');
-        const headerIcon = document.getElementById('headerPlayIcon');
         if (icon) icon.className = this.isPlaying ? 'fas fa-pause' : 'fas fa-play';
         if (title) title.innerText = `Track ${this.currentTrackIndex + 1} / 9`;
-        if (headerIcon) headerIcon.className = this.isPlaying ? 'fas fa-pause' : 'fas fa-play';
     }
 }
 
