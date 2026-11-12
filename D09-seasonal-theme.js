@@ -1,14 +1,15 @@
 /* ==========================================================
    NOVO-BAY SEASONAL & THEME MANAGEMENT ENGINE (D09)
+   AUTUMN FESTIVAL EDITION
    ========================================================== */
 
 class NovoSeasonalThemeEngine {
     constructor() {
         this.newsItems = [
-            "🎄 Merry Christmas & Happy New Year 2027 | آستانه سال نو میلادی و فستیوال زمستانی ❄️",
-            "✨ رویدادهای فرهنگی، دیپلماسی و گردشگری زمستانه در سراسر مگا-شهرها فعال شد.",
+            "🍂 فستیوال پاییزی نوو-بی | آوای ملل و دیپلماسی هوشمند مگا-شهرها 🍁",
+            "✨ رویدادهای فرهنگی، پژوهشی و دیپلماسی پاییزی در سراسر هاب‌های بین‌المللی فعال شد.",
             "🎁 چالش‌های تعاملی و هوشمند تحلیل شبکه در بخش خورشید (NOVO-SUN) برقرار است.",
-            "🌐 Multilingual cultural events and winter festive coordination across 8 global hubs."
+            "🌐 Multilingual cultural events and autumn festive coordination across global hubs."
         ];
         this.tickerIndex = 0;
         document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', () => this.init()) : this.init();
@@ -17,7 +18,7 @@ class NovoSeasonalThemeEngine {
     init() {
         this.injectStyles();
         this.renderTopMonitor();
-        this.initSnowfall();
+        this.initAutumnLeaves();
         this.initDateTime();
         this.initNewsTicker();
     }
@@ -27,8 +28,21 @@ class NovoSeasonalThemeEngine {
         const style = document.createElement('style');
         style.id = 'novo-seasonal-styles';
         style.innerHTML = `
-            .snowflake { position: fixed; top: -10px; z-index: 99; user-select: none; pointer-events: none; animation: fall linear infinite; color: #fff; text-shadow: 0 0 6px rgba(255,255,255,0.9); }
-            @keyframes fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(105dvh) rotate(360deg); opacity: 0.35; } }
+            .autumn-leaf { 
+                position: fixed; 
+                top: -20px; 
+                z-index: 99; 
+                user-select: none; 
+                pointer-events: none; 
+                animation: fallAndSway linear infinite; 
+                font-size: 14px;
+                opacity: 0.85;
+            }
+            @keyframes fallAndSway { 
+                0% { transform: translateY(-20px) rotate(0deg) translateX(0px); opacity: 0.9; } 
+                50% { transform: translateY(50dvh) rotate(180deg) translateX(25px); opacity: 0.7; }
+                100% { transform: translateY(105dvh) rotate(360deg) translateX(-20px); opacity: 0.2; } 
+            }
             
             .top-festive-monitor { 
                 position: fixed !important; 
@@ -36,8 +50,8 @@ class NovoSeasonalThemeEngine {
                 left: 0 !important; 
                 right: 0 !important; 
                 height: 12.5dvh !important; 
-                background: rgba(10,15,30,0.92); 
-                border-bottom: 1px solid rgba(255, 255, 255, 0.15); 
+                background: rgba(15, 23, 42, 0.92); 
+                border-bottom: 1px solid rgba(245, 158, 11, 0.25); 
                 z-index: 99999 !important; 
                 display: flex; 
                 flex-direction: column;
@@ -52,7 +66,7 @@ class NovoSeasonalThemeEngine {
                 width: 100%; 
                 height: 100%; 
                 object-fit: cover; 
-                opacity: 0.4; 
+                opacity: 0.35; 
                 z-index: 1; 
             }
             .top-monitor-content { 
@@ -67,7 +81,7 @@ class NovoSeasonalThemeEngine {
                 position: relative;
                 z-index: 2;
                 width: 100%;
-                background: rgba(15, 23, 42, 0.65);
+                background: rgba(15, 23, 42, 0.7);
                 backdrop-filter: blur(6px);
                 padding: 2px 10px;
                 border-radius: 4px;
@@ -75,9 +89,10 @@ class NovoSeasonalThemeEngine {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
+                border-top: 1px solid rgba(245, 158, 11, 0.15);
             }
             .header-audio-btn {
-                background: rgba(255, 255, 255, 0.12);
+                background: rgba(245, 158, 11, 0.15);
                 border: 1px solid rgba(245, 158, 11, 0.4);
                 border-radius: 50%;
                 width: 30px;
@@ -90,13 +105,13 @@ class NovoSeasonalThemeEngine {
                 transition: all 0.2s;
             }
             .header-audio-btn:hover {
-                background: rgba(245, 158, 11, 0.25);
+                background: rgba(245, 158, 11, 0.3);
                 color: #fff;
                 transform: scale(1.08);
             }
         `;
         document.head.appendChild(style);
-        document.body.classList.add('christmas-seasonal-theme');
+        document.body.classList.add('autumn-seasonal-theme');
     }
 
     renderTopMonitor() {
@@ -109,15 +124,15 @@ class NovoSeasonalThemeEngine {
             
             <div class="top-monitor-content">
                 <div class="flex items-center gap-2">
-                    <span class="bg-red-600/80 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow">
-                        <i class="fas fa-snowflake"></i> نوو-بی
+                    <span class="bg-amber-600/80 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow">
+                        <i class="fas fa-leaf"></i> نوو-بی
                     </span>
-                    <span class="text-xs font-semibold text-slate-200 hidden sm:inline">فستیوال زمستانه و دیپلماسی</span>
+                    <span class="text-xs font-semibold text-amber-100 hidden sm:inline">فستیوال پاییزی و دیپلماسی ملل</span>
                 </div>
 
                 <div class="flex items-center gap-3">
                     <div class="hidden md:flex items-center gap-2 font-mono text-[10px]">
-                        <span id="liveClock" class="text-white font-bold bg-slate-800/80 px-2 py-0.5 rounded">00:00:00</span> |
+                        <span id="liveClock" class="text-amber-300 font-bold bg-slate-900/80 px-2 py-0.5 rounded border border-amber-500/20">00:00:00</span> |
                         <span id="solarDate" class="text-slate-200">--</span>
                     </div>
                     <!-- دکمه مستقل پخش و توقف صوت در هدر -->
@@ -138,7 +153,6 @@ class NovoSeasonalThemeEngine {
         `;
         document.body.prepend(monitor);
 
-        // اتصال رویداد دکمه هدر به موتور صوت D07
         document.getElementById('headerPlayToggleBtn').onclick = () => {
             if (window.novoAudioEngine) {
                 window.novoAudioEngine.togglePlay();
@@ -146,16 +160,17 @@ class NovoSeasonalThemeEngine {
         };
     }
 
-    initSnowfall() {
-        for (let i = 0; i < 25; i++) {
-            const flake = document.createElement('div');
-            flake.className = 'snowflake';
-            flake.innerHTML = Math.random() > 0.5 ? '❄' : '•';
-            flake.style.left = Math.random() * 100 + 'vw';
-            flake.style.fontSize = (Math.random() * 10 + 8) + 'px';
-            flake.style.animationDuration = (Math.random() * 5 + 4) + 's';
-            flake.style.animationDelay = (Math.random() * 5) + 's';
-            document.body.appendChild(flake);
+    initAutumnLeaves() {
+        const leafSymbols = ['🍁', '🍂', '🍃'];
+        for (let i = 0; i < 22; i++) {
+            const leaf = document.createElement('div');
+            leaf.className = 'autumn-leaf';
+            leaf.innerHTML = leafSymbols[Math.floor(Math.random() * leafSymbols.length)];
+            leaf.style.left = Math.random() * 100 + 'vw';
+            leaf.style.fontSize = (Math.random() * 8 + 12) + 'px';
+            leaf.style.animationDuration = (Math.random() * 6 + 6) + 's';
+            leaf.style.animationDelay = (Math.random() * 5) + 's';
+            document.body.appendChild(leaf);
         }
     }
 
