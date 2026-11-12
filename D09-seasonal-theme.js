@@ -1,6 +1,5 @@
 /* ==========================================================
-   NOVO-BAY SEASONAL & THEME MANAGEMENT ENGINE (D09)
-   AUTUMN FESTIVAL & LANDING AUDIO EDITION
+   NOVO-BAY SEASONAL & THEME MANAGEMENT ENGINE (D09 - Clean)
    ========================================================== */
 
 class NovoSeasonalThemeEngine {
@@ -14,12 +13,11 @@ class NovoSeasonalThemeEngine {
         this.tickerIndex = 0;
         this.isLandingAudioPlaying = false;
         
-        // نام دقیق فایل صوتی بک‌گراند لندینگ
         this.landingAudio = document.getElementById('landingBgAudio');
         if (!this.landingAudio) {
             this.landingAudio = document.createElement('audio');
             this.landingAudio.id = 'landingBgAudio';
-            this.landingAudio.src = 'NOVO‌‍ـBackground‌‍ـAudio.mp3';
+            this.landingAudio.src = 'audio.mp3';
             this.landingAudio.preload = 'auto';
             this.landingAudio.loop = true;
             document.body.appendChild(this.landingAudio);
@@ -45,7 +43,7 @@ class NovoSeasonalThemeEngine {
                     this.updateHeaderAudioIcon();
                     window.removeEventListener('click', trigger);
                     window.removeEventListener('touchstart', trigger);
-                }).catch(e => console.log("Landing audio waiting for touch:", e));
+                }).catch(e => console.log("Waiting for user interaction:", e));
             }
         };
         window.addEventListener('click', trigger, { once: true });
@@ -117,7 +115,6 @@ class NovoSeasonalThemeEngine {
                         <span id="liveClock" class="text-amber-300 font-bold bg-slate-900/80 px-2 py-0.5 rounded border border-amber-500/20">00:00:00</span> |
                         <span id="solarDate" class="text-slate-200">--</span>
                     </div>
-                    <!-- دکمه هدر اختصاصی قطع و وصل موسیقی بک‌گراند لندینگ -->
                     <button id="headerLandingPlayBtn" class="header-audio-btn" title="پخش / توقف موسیقی بک‌گراند">
                         <i class="fas fa-play" id="headerLandingIcon"></i>
                     </button>
