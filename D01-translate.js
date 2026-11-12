@@ -1,10 +1,21 @@
 /* ==========================================================
-   NOVO-BAY TRANSLATION & LANGUAGE ENGINE (D01 - Interactive)
+   NOVO-BAY TRANSLATION & LANGUAGE ENGINE (D01 - 8 Languages Matrix)
    ========================================================== */
 
 class NovoTranslateEngine {
     constructor() {
         this.currentLang = 'fa';
+        this.languages = [
+            { code: 'fa', name: 'فارسی (Persian)', flag: '🇮🇷' },
+            { code: 'en', name: 'English (UK/US)', flag: '🇬🇧' },
+            { code: 'ru', name: 'Русский (Russian)', flag: '🇷🇺' },
+            { code: 'ar', name: 'العربية (UAE Arabic)', flag: '🇦🇪' },
+            { code: 'zh', name: '中文 (Chinese)', flag: '🇨🇳' },
+            { code: 'fr', name: 'Français (French)', flag: '🇫🇷' },
+            { code: 'de', name: 'Deutsch (German)', flag: '🇩🇪' },
+            { code: 'it', name: 'Italiano (Italian)', flag: '🇮🇹' }
+        ];
+
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.init());
         } else {
@@ -28,9 +39,7 @@ class NovoTranslateEngine {
                 0% { transform: rotate(0deg); }
                 100% { transform: rotate(360deg); }
             }
-            .globe-spinning {
-                animation: spinGlobe 12s linear infinite;
-            }
+            .globe-spinning { animation: spinGlobe 12s linear infinite; }
             .translate-glass-modal {
                 position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(12px);
                 z-index: 100000; display: flex; align-items: center; justify-content: center;
@@ -39,7 +48,7 @@ class NovoTranslateEngine {
             .translate-glass-modal.active { opacity: 1; visibility: visible; }
             .translate-glass-card {
                 background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
-                border-radius: 1.5rem; color: #0f172a; width: 90%; max-width: 400px;
+                border-radius: 1.5rem; color: #0f172a; width: 90%; max-width: 420px;
                 padding: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.35); direction: rtl; text-align: right;
             }
             .trans-ctrl-btn {
@@ -48,6 +57,11 @@ class NovoTranslateEngine {
                 color: #64748b; transition: all 0.2s; cursor: pointer; border: none;
             }
             .trans-ctrl-btn:hover { background: rgba(245, 158, 11, 0.2); color: #0f172a; }
+            .lang-scroll-box {
+                max-height: 210px; overflow-y: auto; padding-right: 4px;
+            }
+            .lang-scroll-box::-webkit-scrollbar { width: 4px; }
+            .lang-scroll-box::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         `;
         document.head.appendChild(style);
     }
@@ -55,31 +69,23 @@ class NovoTranslateEngine {
     renderTranslateNode() {
         const targetCell = document.getElementById('layer-D01');
         if (!targetCell) return;
-        targetCell.innerHTML = ''; // پاکسازی سلول برای جلوگیری از تداخل با مختصات پیش‌فرض
+        targetCell.innerHTML = '';
+        targetCell.style.position = 'relative';
 
         const container = document.createElement('div');
-        container.className = 'balloon-element cursor-pointer flex items-center gap-2 bg-slate-900/80 border border-amber-500/40 px-3 py-1.5 rounded-xl shadow-lg hover:border-amber-400 transition';
-        container.title = 'جهت معرفی کلیک کنید، برای باز کردن منو دابل‌کلیک کنید';
+        container.className = 'absolute inset-1 cursor-pointer flex items-center justify-center gap-1.5 bg-slate-900/90 border border-amber-500/50 rounded-lg shadow-md hover:border-amber-400 transition';
+        container.title = 'برای معرفی کلیک کنید، برای منوی زبان دابل‌کلیک کنید';
         
         container.innerHTML = `
-            <div class="text-right">
-                <div class="text-[10px] font-bold text-amber-300">زبان /</div>
-                <div class="text-[9px] text-slate-300">Translation</div>
+            <div class="text-right truncate">
+                <div class="text-[9px] font-bold text-amber-300 leading-tight">زبان</div>
+                <div class="text-[8px] text-slate-300 leading-tight">Lang</div>
             </div>
-            <i class="fas fa-globe text-amber-400 text-base globe-spinning" id="globeIcon"></i>
+            <i class="fas fa-globe text-amber-400 text-sm globe-spinning" id="globeIcon"></i>
         `;
 
-        // اولین کلیک: باز شدن توضیحات کوتاه و معرفی
-        container.onclick = (e) => {
-            e.stopPropagation();
-            this.openIntroModal();
-        };
-
-        // دابل کلیک: باز شدن پنل اصلی انتخاب زبان
-        container.ondblclick = (e) => {
-            e.stopPropagation();
-            this.openMainModal();
-        };
+        container.onclick = (e) => { e.stopPropagation(); this.openIntroModal(); };
+        container.ondblclick = (e) => { e.stopPropagation(); this.openMainModal(); };
 
         targetCell.appendChild(container);
     }
@@ -102,7 +108,7 @@ class NovoTranslateEngine {
                     <i class="fas fa-globe text-amber-500 globe-spinning"></i> معرفی سیستم آوای ملل و زبان‌ها
                 </h3>
                 <p class="text-[11px] text-slate-700 mb-4 leading-relaxed">
-                    این بخش دروازه ارتباطی پلتفرم مگا-شهر نوو-بی با مخاطبین بین‌المللی است. با انتخاب زبان‌های مختلف، ساختار فرامین و محتوا متناسب با هاب منطقه‌ای تنظیم می‌گردد.
+                    این بخش دروازه ارتباطی پلتفرم مگا-شهر نوو-بی با مخاطبین بین‌المللی است. با انتخاب هر یک از ۸ زبان مرجع، ساختار و فرامین پلتفرم تنظیم می‌گردد.
                 </p>
                 <div class="flex items-center justify-between pt-2 border-t border-slate-200">
                     <button onclick="window.novoTranslateEngine.closeAllModals()" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-xl text-[11px] font-medium hover:bg-slate-300">
@@ -116,10 +122,21 @@ class NovoTranslateEngine {
         `;
         document.body.appendChild(introDiv);
 
-        // مودال اصلی انتخاب زبان و توضیحات مفصل (مرحله دوم / دابل کلیک)
+        // مودال اصلی با لیست کامل ۸ زبان
         const mainDiv = document.createElement('div');
         mainDiv.id = 'transMainModal';
         mainDiv.className = 'translate-glass-modal';
+        
+        let langButtonsHTML = '';
+        this.languages.forEach(l => {
+            langButtonsHTML += `
+                <button onclick="window.novoTranslateEngine.setLanguage('${l.code}', '${l.name}')" class="p-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 text-[11px] font-semibold hover:border-amber-500 hover:bg-amber-50 transition flex items-center gap-2 text-right">
+                    <span class="text-base">${l.flag}</span>
+                    <span class="truncate">${l.name}</span>
+                </button>
+            `;
+        });
+
         mainDiv.innerHTML = `
             <div class="translate-glass-card relative">
                 <div class="absolute top-4 left-4 flex items-center gap-1.5">
@@ -130,20 +147,15 @@ class NovoTranslateEngine {
                         <i class="fas fa-times text-xs"></i>
                     </button>
                 </div>
-                <h3 class="text-sm font-bold mb-2 text-slate-900 flex items-center gap-2 pl-16">
-                    <i class="fas fa-language text-amber-500"></i> انتخاب زبان پلتفرم (Language Matrix)
+                <h3 class="text-sm font-bold mb-1 text-slate-900 flex items-center gap-2 pl-16">
+                    <i class="fas fa-language text-amber-500"></i> انتخاب زبان پلتفرم (۸ هاب فعال)
                 </h3>
-                <p class="text-[11px] text-slate-600 mb-4 leading-relaxed">
-                    زبان مد نظر خود را برای پویایی در مگا-پلتفرم نوو-بی انتخاب کنید:
-                </p>
-                <div class="grid grid-cols-2 gap-2 mb-4">
-                    <button onclick="window.novoTranslateEngine.setLanguage('fa')" class="p-2.5 rounded-xl border border-amber-500/40 bg-amber-50 text-amber-900 text-xs font-bold hover:bg-amber-100 transition flex items-center justify-center gap-2">
-                        🇮🇷 فارسی (Fa)
-                    </button>
-                    <button onclick="window.novoTranslateEngine.setLanguage('en')" class="p-2.5 rounded-xl border border-slate-300 bg-slate-50 text-slate-800 text-xs font-bold hover:bg-slate-100 transition flex items-center justify-center gap-2">
-                        🇬🇧 English (En)
-                    </button>
+                <p class="text-[10px] text-slate-500 mb-3">زبان مد نظر خود را انتخاب نمایید:</p>
+                
+                <div class="lang-scroll-box grid grid-cols-2 gap-2 mb-3">
+                    ${langButtonsHTML}
                 </div>
+
                 <div class="flex items-center justify-between pt-2 border-t border-slate-200">
                     <button onclick="window.novoTranslateEngine.openIntroModal()" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-xl text-[11px]">
                         بازگشت
@@ -172,9 +184,9 @@ class NovoTranslateEngine {
         document.getElementById('transMainModal')?.classList.remove('active');
     }
 
-    setLanguage(lang) {
-        this.currentLang = lang;
-        alert(lang === 'fa' ? 'زبان پلتفرم روی فارسی تنظیم شد.' : 'Platform language set to English.');
+    setLanguage(code, name) {
+        this.currentLang = code;
+        alert(`زبان پلتفرم با موفقیت روی "${name}" تنظیم شد.`);
         this.closeAllModals();
     }
 }
