@@ -1,6 +1,5 @@
 /* ==========================================================
-   NOVO-BAY AUDIO MANAGEMENT ENGINE (D07)
-   GLOBAL BACKGROUND AUDIO EDITION
+   NOVO-BAY AUDIO MANAGEMENT & MODAL ENGINE (D07 - Clean & Unified)
    ========================================================== */
 
 class NovoAudioEngine {
@@ -13,12 +12,11 @@ class NovoAudioEngine {
         this.currentTrackIndex = 0;
         this.isPlaying = false;
         
-        // نام عمومی تگ صوت پس‌زمینه
         this.audioElement = document.getElementById('novoBgAudio');
-
         if (!this.audioElement) {
             this.audioElement = document.createElement('audio');
             this.audioElement.id = 'novoBgAudio';
+            this.audioElement.preload = 'auto';
             this.audioElement.loop = true;
             document.body.appendChild(this.audioElement);
         }
@@ -32,122 +30,74 @@ class NovoAudioEngine {
 
     init() {
         window.novoAudioEngine = this;
-        this.injectAudioStyles();
-        this.renderMiniClassicPlayer();
-        this.renderInfoModal();
-        this.bindEvents();
+        this.injectStyles();
+        this.renderPlayer();
+        this.renderModals();
+        this.audioElement.onended = () => this.nextTrack();
     }
 
-    injectAudioStyles() {
-        if (document.getElementById('novo-audio-styles')) return;
+    injectStyles() {
+        if (document.getElementById('novo-audio-unified-styles')) return;
         const style = document.createElement('style');
-        style.id = 'novo-audio-styles';
+        style.id = 'novo-audio-unified-styles';
         style.innerHTML = `
             .classic-mini-player {
-                position: fixed;
-                bottom: 55px;
-                left: 15px;
-                z-index: 99998;
-                background: rgba(15, 23, 42, 0.9);
-                backdrop-filter: blur(14px);
-                border: 1px solid rgba(245, 158, 11, 0.5);
-                border-radius: 9999px;
-                padding: 6px 14px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                color: #f8fafc;
-                font-size: 11px;
-                box-shadow: 0 10px 25px -5px rgba(0,0,0,0.6);
-                direction: ltr;
+                position: fixed; bottom: 55px; left: 15px; z-index: 99998;
+                background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(14px);
+                border: 1px solid rgba(245, 158, 11, 0.5); border-radius: 9999px;
+                padding: 6px 14px; display: flex; align-items: center; gap: 10px;
+                color: #f8fafc; font-size: 11px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.6); direction: ltr;
             }
             .classic-mini-player button {
-                background: none;
-                border: none;
-                color: #f59e0b;
-                cursor: pointer;
-                font-size: 13px;
-                padding: 2px 5px;
-                transition: transform 0.2s, color 0.2s;
+                background: none; border: none; color: #f59e0b; cursor: pointer;
+                font-size: 13px; padding: 2px 5px; transition: transform 0.2s, color 0.2s;
             }
-            .classic-mini-player button:hover {
-                transform: scale(1.15);
-                color: #fff;
-            }
+            .classic-mini-player button:hover { transform: scale(1.15); color: #fff; }
             .audio-info-btn {
-                background: rgba(245, 158, 11, 0.15) !important;
-                border: 1px solid rgba(245, 158, 11, 0.4) !important;
-                border-radius: 50% !important;
-                width: 22px;
-                height: 22px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 10px !important;
-                font-weight: bold;
+                background: rgba(245, 158, 11, 0.15) !important; border: 1px solid rgba(245, 158, 11, 0.4) !important;
+                border-radius: 50% !important; width: 22px; height: 22px; display: flex;
+                align-items: center; justify-content: center; font-size: 10px !important; font-weight: bold;
             }
             .audio-glass-modal {
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.65);
-                backdrop-filter: blur(12px);
-                z-index: 100000;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                opacity: 0;
-                visibility: hidden;
-                transition: all 0.3s ease;
+                position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(12px);
+                z-index: 100000; display: flex; align-items: center; justify-content: center;
+                opacity: 0; visibility: hidden; transition: all 0.3s ease;
             }
-            .audio-glass-modal.active {
-                opacity: 1;
-                visibility: visible;
-            }
+            .audio-glass-modal.active { opacity: 1; visibility: visible; }
             .audio-glass-card {
-                background: rgba(255, 255, 255, 0.94);
-                backdrop-filter: blur(20px);
-                border-radius: 1.5rem;
-                color: #0f172a;
-                width: 90%;
-                max-width: 440px;
-                padding: 1.5rem;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-                direction: rtl;
-                text-align: right;
+                background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
+                border-radius: 1.5rem; color: #0f172a; width: 90%; max-width: 440px;
+                padding: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.35); direction: rtl; text-align: right;
             }
             .modal-control-btn {
-                width: 28px;
-                height: 28px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: rgba(0,0,0,0.05);
-                color: #64748b;
-                transition: all 0.2s;
+                width: 28px; height: 28px; border-radius: 50%; display: flex;
+                align-items: center; justify-content: center; background: rgba(0,0,0,0.05);
+                color: #64748b; transition: all 0.2s;
             }
-            .modal-control-btn:hover {
-                background: rgba(245, 158, 11, 0.2);
-                color: #0f172a;
+            .modal-control-btn:hover { background: rgba(245, 158, 11, 0.2); color: #0f172a; }
+            .novo-input-field {
+                width: 100%; background: rgba(241, 245, 249, 0.8);
+                border: 1px solid rgba(203, 213, 225, 0.8); border-radius: 0.75rem;
+                padding: 0.5rem 0.75rem; font-size: 11px; color: #0f172a; outline: none; transition: border-color 0.2s;
             }
+            .novo-input-field:focus { border-color: #f59e0b; background: #fff; }
         `;
         document.head.appendChild(style);
     }
 
-    renderMiniClassicPlayer() {
+    renderPlayer() {
         if (document.getElementById('classicMiniPlayer')) return;
-
-        const playerDiv = document.createElement('div');
-        playerDiv.id = 'classicMiniPlayer';
-        playerDiv.className = 'classic-mini-player';
-        playerDiv.innerHTML = `
+        const div = document.createElement('div');
+        div.id = 'classicMiniPlayer';
+        div.className = 'classic-mini-player';
+        div.innerHTML = `
             <button id="audioInfoBtn" class="audio-info-btn" title="راهنمای صوتی">i</button>
             <button id="audioPrevBtn" title="آهنگ قبلی"><i class="fas fa-backward-step"></i></button>
             <button id="audioPlayToggleBtn" title="پخش / توقف"><i class="fas fa-play" id="audioPlayIcon"></i></button>
             <button id="audioNextBtn" title="آهنگ بعدی"><i class="fas fa-forward-step"></i></button>
             <span id="audioTrackTitle" class="font-mono text-[10px] text-amber-300 max-w-[100px] truncate">Track 1 / 9</span>
         `;
-        document.body.appendChild(playerDiv);
+        document.body.appendChild(div);
 
         document.getElementById('audioPlayToggleBtn').onclick = () => this.togglePlay();
         document.getElementById('audioNextBtn').onclick = () => this.nextTrack();
@@ -155,121 +105,143 @@ class NovoAudioEngine {
         document.getElementById('audioInfoBtn').onclick = () => this.openInfoModal();
     }
 
-    renderInfoModal() {
-        if (document.getElementById('audioInfoModal')) return;
-
-        const modalDiv = document.createElement('div');
-        modalDiv.id = 'audioInfoModal';
-        modalDiv.className = 'audio-glass-modal';
-        modalDiv.innerHTML = `
-            <div class="audio-glass-card relative">
-                <!-- دکمه‌های کنترلی بالای مودال: برگشت به مرحله قبل + بستن -->
-                <div class="absolute top-4 left-4 flex items-center gap-1.5">
-                    <button onclick="window.novoAudioEngine.goBackStep()" class="modal-control-btn" title="بازگشت به مرحله قبل">
-                        <i class="fas fa-arrow-right text-xs"></i>
-                    </button>
-                    <button onclick="window.novoAudioEngine.closeInfoModal()" class="modal-control-btn" title="بستن">
-                        <i class="fas fa-times text-xs"></i>
-                    </button>
-                </div>
-
-                <h3 class="text-sm font-bold mb-3 text-slate-900 flex items-center gap-2 pl-16">
-                    <i class="fas fa-music text-amber-500"></i> راهنمای جامع پخش صوتی و آوای ملل (NOVO-BAY)
-                </h3>
-                <p class="text-[11px] text-slate-700 mb-2.5 leading-relaxed">
-                    در این بخش، نواها و قطعات موسیقی شاخص از سرزمین‌های مختلف جهان — که زبان‌های آن مناطق در این پلتفرم پشتیبانی می‌شوند — طنین‌انداز می‌گردد.
-                </p>
-                <p class="text-[11px] text-slate-700 mb-2.5 leading-relaxed">
-                    شما آزادانه می‌توانید نوایی خاص را به صورت مکرر بشنوید، اجازه دهید سلسله‌ای از نواها به نوبت نواخته شوند، یا جریان پخش صوتی را در بدو ورود به پلتفرم و یا در هر بخش دلخواه دیگر متوقف سازید.
-                </p>
-                <p class="text-[11px] text-slate-600 mb-4 leading-relaxed">
-                    هدف از ارائه این مجموعه گزیده، صرفاً معرفی اصالت‌های موسیقیایی ملل گوناگون است. چنانچه پیشنهاد ارزنده‌ای در خصوص قطعه‌ای خاص مدنظر دارید، با ما به اشتراک بگذارید؛ در صورت استقبال و فزونی درخواست‌ها، آن را به لیست پخش سراسری اضافه خواهیم کرد.
-                </p>
-                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-200">
-                    <button onclick="alert('پیشنهاد موسیقی شما ثبت شد. با تشکر!'); window.novoAudioEngine.closeInfoModal();" class="px-3 py-1.5 bg-amber-100 text-amber-800 rounded-xl text-[11px] font-semibold flex items-center gap-1 hover:bg-amber-200 transition">
-                        💡 پیشنهاد موسیقی
-                    </button>
-                    <div class="flex items-center gap-2">
-                        <button onclick="window.novoAudioEngine.closeInfoModal()" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-xl text-[11px] font-medium hover:bg-slate-300 transition">
-                            انصراف
+    renderModals() {
+        if (!document.getElementById('audioInfoModal')) {
+            const infoDiv = document.createElement('div');
+            infoDiv.id = 'audioInfoModal';
+            infoDiv.className = 'audio-glass-modal';
+            infoDiv.innerHTML = `
+                <div class="audio-glass-card relative">
+                    <div class="absolute top-4 left-4 flex items-center gap-1.5">
+                        <button onclick="window.novoAudioEngine.closeInfoModal()" class="modal-control-btn" title="بستن">
+                            <i class="fas fa-times text-xs"></i>
+                        </button>
+                    </div>
+                    <h3 class="text-sm font-bold mb-3 text-slate-900 flex items-center gap-2 pl-12">
+                        <i class="fas fa-music text-amber-500"></i> راهنمای جامع پخش صوتی و آوای ملل (NOVO-BAY)
+                    </h3>
+                    <p class="text-[11px] text-slate-700 mb-2.5 leading-relaxed">
+                        در این بخش، نواها و قطعات موسیقی شاخص از سرزمین‌های مختلف جهان طنین‌انداز می‌گردد. شما آزادانه می‌توانید نوایی خاص را بشنوید، یا جریان پخش صوتی را متوقف سازید.
+                    </p>
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-200">
+                        <button onclick="window.novoAudioEngine.openSuggestionModal()" class="px-3 py-1.5 bg-amber-100 text-amber-800 rounded-xl text-[11px] font-semibold flex items-center gap-1 hover:bg-amber-200 transition">
+                            💡 پیشنهاد موسیقی
                         </button>
                         <button onclick="window.novoAudioEngine.closeInfoModal()" class="px-4 py-1.5 bg-amber-500 text-white rounded-xl text-[11px] font-bold shadow hover:bg-amber-600 transition">
                             OK (ورود به لیست پخش)
                         </button>
                     </div>
                 </div>
-            </div>
-        `;
-        document.body.appendChild(modalDiv);
+            `;
+            document.body.appendChild(infoDiv);
+        }
+
+        if (!document.getElementById('audioSuggestionModal')) {
+            const sugDiv = document.createElement('div');
+            sugDiv.id = 'audioSuggestionModal';
+            sugDiv.className = 'audio-glass-modal';
+            sugDiv.innerHTML = `
+                <div class="audio-glass-card relative">
+                    <div class="absolute top-4 left-4 flex items-center gap-1.5">
+                        <button onclick="window.novoAudioEngine.openInfoModal()" class="modal-control-btn" title="بازگشت به راهنما">
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </button>
+                        <button onclick="window.novoAudioEngine.closeSuggestionModal()" class="modal-control-btn" title="بستن">
+                            <i class="fas fa-times text-xs"></i>
+                        </button>
+                    </div>
+                    <h3 class="text-sm font-bold mb-2 text-slate-900 flex items-center gap-2 pl-16">
+                        <i class="fas fa-lightbulb text-amber-500"></i> ثبت پیشنهاد قطعه موسیقی
+                    </h3>
+                    <p class="text-[11px] text-slate-600 mb-3">مشخصات اثر مد نظر خود را وارد نمایید:</p>
+                    <div class="space-y-2.5 mb-4">
+                        <div>
+                            <label class="block text-[10px] font-semibold text-slate-700 mb-1">نام قطعه:</label>
+                            <input type="text" id="sugTrackName" class="novo-input-field" placeholder="نام قطعه...">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-semibold text-slate-700 mb-1">خواننده / گروه:</label>
+                            <input type="text" id="sugArtistName" class="novo-input-field" placeholder="نام هنرمند...">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
+                        <button onclick="window.novoAudioEngine.closeSuggestionModal()" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-xl text-[11px]">انصراف</button>
+                        <button onclick="window.novoAudioEngine.submitSuggestion()" class="px-4 py-1.5 bg-amber-500 text-white rounded-xl text-[11px] font-bold shadow">ارسال پیشنهاد</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(sugDiv);
+        }
     }
 
     openInfoModal() {
-        const modal = document.getElementById('audioInfoModal');
-        if (modal) modal.classList.add('active');
+        document.getElementById('audioSuggestionModal')?.classList.remove('active');
+        document.getElementById('audioInfoModal')?.classList.add('active');
     }
 
     closeInfoModal() {
-        const modal = document.getElementById('audioInfoModal');
-        if (modal) modal.classList.remove('active');
+        document.getElementById('audioInfoModal')?.classList.remove('active');
     }
 
-    goBackStep() {
-        // بازگشت به مرحله قبل (بستن مودال و برگشت به پلیر)
-        this.closeInfoModal();
+    openSuggestionModal() {
+        document.getElementById('audioInfoModal')?.classList.remove('active');
+        document.getElementById('audioSuggestionModal')?.classList.add('active');
+    }
+
+    closeSuggestionModal() {
+        document.getElementById('audioSuggestionModal')?.classList.remove('active');
+    }
+
+    submitSuggestion() {
+        const name = document.getElementById('sugTrackName').value.trim();
+        if (!name) { alert('لطفاً نام قطعه را وارد کنید.'); return; }
+        alert(`پیشنهاد "${name}" با موفقیت ثبت شد.`);
+        document.getElementById('sugTrackName').value = '';
+        document.getElementById('sugArtistName').value = '';
+        this.closeSuggestionModal();
     }
 
     togglePlay() {
         if (this.audioElement.paused) {
-            if (!this.audioElement.src || this.audioElement.src === '') {
+            if (!this.audioElement.src || this.audioElement.src.endsWith('/')) {
                 this.audioElement.src = this.tracks[this.currentTrackIndex];
             }
             this.audioElement.play().then(() => {
                 this.isPlaying = true;
-                this.updateUIState();
+                this.updateUI();
             }).catch(e => console.log(e));
         } else {
             this.audioElement.pause();
             this.isPlaying = false;
-            this.updateUIState();
+            this.updateUI();
         }
     }
 
     nextTrack() {
         this.currentTrackIndex = (this.currentTrackIndex + 1) % this.tracks.length;
-        this.playCurrentTrack();
+        this.playCurrent();
     }
 
     prevTrack() {
         this.currentTrackIndex = (this.currentTrackIndex - 1 + this.tracks.length) % this.tracks.length;
-        this.playCurrentTrack();
+        this.playCurrent();
     }
 
-    playCurrentTrack() {
+    playCurrent() {
         this.audioElement.src = this.tracks[this.currentTrackIndex];
         this.audioElement.play().then(() => {
             this.isPlaying = true;
-            this.updateUIState();
+            this.updateUI();
         }).catch(e => console.log(e));
     }
 
-    updateUIState() {
-        const classicIcon = document.getElementById('audioPlayIcon');
+    updateUI() {
+        const icon = document.getElementById('audioPlayIcon');
         const title = document.getElementById('audioTrackTitle');
-        if (classicIcon) {
-            classicIcon.className = this.isPlaying ? 'fas fa-pause' : 'fas fa-play';
-        }
-        if (title) {
-            title.innerText = `Track ${this.currentTrackIndex + 1} / 9`;
-        }
-
         const headerIcon = document.getElementById('headerPlayIcon');
-        if (headerIcon) {
-            headerIcon.className = this.isPlaying ? 'fas fa-pause' : 'fas fa-play';
-        }
-    }
-
-    bindEvents() {
-        this.audioElement.onended = () => this.nextTrack();
+        if (icon) icon.className = this.isPlaying ? 'fas fa-pause' : 'fas fa-play';
+        if (title) title.innerText = `Track ${this.currentTrackIndex + 1} / 9`;
+        if (headerIcon) headerIcon.className = this.isPlaying ? 'fas fa-pause' : 'fas fa-play';
     }
 }
 
