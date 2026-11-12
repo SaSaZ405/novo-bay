@@ -1,5 +1,5 @@
 /* ==========================================================
-   NOVO-BAY TRANSLATION & LANGUAGE ENGINE (D01 - 8 Languages Matrix)
+   NOVO-BAY TRANSLATION & LANGUAGE ENGINE (D01 - 8 Languages & Elegant Intro)
    ========================================================== */
 
 class NovoTranslateEngine {
@@ -93,7 +93,7 @@ class NovoTranslateEngine {
     renderModals() {
         if (document.getElementById('transIntroModal')) return;
 
-        // مودال معرفی کوتاه (مرحله اول)
+        // مودال معرفی کوتاه با متن جدید و فاخر (مرحله اول)
         const introDiv = document.createElement('div');
         introDiv.id = 'transIntroModal';
         introDiv.className = 'translate-glass-modal';
@@ -105,10 +105,10 @@ class NovoTranslateEngine {
                     </button>
                 </div>
                 <h3 class="text-sm font-bold mb-2 text-slate-900 flex items-center gap-2 pl-12">
-                    <i class="fas fa-globe text-amber-500 globe-spinning"></i> معرفی سیستم آوای ملل و زبان‌ها
+                    <i class="fas fa-globe text-amber-500 globe-spinning"></i> معرفی درگاه آوای ملل و زبان‌ها
                 </h3>
                 <p class="text-[11px] text-slate-700 mb-4 leading-relaxed">
-                    این بخش دروازه ارتباطی پلتفرم مگا-شهر نوو-بی با مخاطبین بین‌المللی است. با انتخاب هر یک از ۸ زبان مرجع، ساختار و فرامین پلتفرم تنظیم می‌گردد.
+                    این پلتفرم با هدف پیوند میان فرهنگ‌ها و توسعه همکاری‌های بین‌المللی، به <b>هشت زبان زنده دنیا</b> مجهز شده است. زبان انتخابی شما در تمامی صفحات همراهتان خواهد بود. همچنین نواهای اصیل ملل در صفحه نخست طنین‌انداز است؛ شنیدن یا عبور از آن، به انتخاب شماست.
                 </p>
                 <div class="flex items-center justify-between pt-2 border-t border-slate-200">
                     <button onclick="window.novoTranslateEngine.closeAllModals()" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-xl text-[11px] font-medium hover:bg-slate-300">
