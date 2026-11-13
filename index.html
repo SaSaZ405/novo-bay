@@ -11,7 +11,7 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- هسته مرکزی مدیریت زبان و اتاق فرمان (Global Language Controller) -->
+    <!-- ۱. اتاق فرمان و هسته مرکزی مدیریت زبان (به عنوان اولین دستور اجرایی) -->
     <script>
         window.NovoI18n = {
             currentLang: localStorage.getItem('novo_lang') || 'fa',
@@ -35,7 +35,6 @@
                 document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
                 document.documentElement.lang = langCode;
 
-                // ارسال سیگنال همگانی به تمام فایل‌های ماژولار پلتفرم
                 window.dispatchEvent(new CustomEvent('novoLanguageChanged', { detail: { lang: langCode } }));
                 console.log(`[Central Command] Global language switched to: ${langCode}`);
             },
@@ -46,7 +45,6 @@
             }
         };
 
-        // اعمال جهت صفحه در لحظه بارگذاری اولیه
         document.addEventListener('DOMContentLoaded', () => {
             const savedLang = localStorage.getItem('novo_lang') || 'fa';
             const isRtl = ['fa', 'ar'].includes(savedLang);
@@ -64,7 +62,7 @@
             margin: 0;
             padding: 0;
         }
-        /* گرید مستر ۲۰ در ۱۰ */
+        /* استایل‌های گرید اصلی و سلول‌ها */
         .master-grid-container {
             display: grid;
             grid-template-columns: repeat(10, minmax(0, 1fr));
@@ -93,7 +91,7 @@
 
     <!-- ماتریکس اصلی صفحه (20 در 10) -->
     <main class="master-grid-container pt-[12.5dvh] pb-[50px]">
-        <!-- سلول‌های ماتریکس اصلی (D01 تا لایه‌های دیگر) -->
+        <!-- سلول‌های کلیدی ماتریکس -->
         <div id="layer-D01" class="grid-cell relative"></div>
         <div id="layer-D02" class="grid-cell relative"></div>
         <div id="layer-D03" class="grid-cell relative"></div>
@@ -104,19 +102,17 @@
         <div id="layer-D08" class="grid-cell relative"></div>
         <div id="layer-D09" class="grid-cell relative"></div>
         <div id="layer-D10" class="grid-cell relative"></div>
-        <!-- (و مابقی سلول‌های گرید اصلی شما...) -->
     </main>
 
-    <!-- بارگذاری ماژول‌های مستقل پروژه‌تان (در پایین صفحه برای جلوگیری از اختلال در لایه‌ها) -->
+    <!-- ۲. لود فایل‌های ماژولار در انتهای بدنه برای حفظ امنیت تصویر زمینه و تاچ سلول‌ها -->
     <script src="D09-seasonal-theme.js"></script>
     <script src="D07-audio.js"></script>
     <script src="D01-translate.js"></script>
 
-    <!-- اسکریپت هماهنگ‌ساز با اتاق فرمان -->
+    <!-- ۳. هماهنگ‌ساز سراسری زبان -->
     <script>
         window.addEventListener('novoLanguageChanged', (e) => {
-            const lang = e.detail.lang;
-            console.log("Language updated globally:", lang);
+            console.log("Global language updated across matrix:", e.detail.lang);
         });
     </script>
 </body>
