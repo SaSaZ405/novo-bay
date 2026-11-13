@@ -64,7 +64,7 @@
             margin: 0;
             padding: 0;
         }
-        /* ساختار ماتریکس و سلول‌ها */
+        /* گرید مستر ۲۰ در ۱۰ */
         .master-grid-container {
             display: grid;
             grid-template-columns: repeat(10, minmax(0, 1fr));
@@ -72,6 +72,7 @@
             width: 100vw;
             height: 100vh;
             position: relative;
+            z-index: 10;
         }
         .grid-cell {
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -92,44 +93,30 @@
 
     <!-- ماتریکس اصلی صفحه (20 در 10) -->
     <main class="master-grid-container pt-[12.5dvh] pb-[50px]">
-        <!-- سلول کلیدی ترجمه (D01) -->
-        <div id="layer-D01" class="grid-cell relative">R1:C1</div>
-        
-        <!-- سایر سلول‌های نمونه ماتریکس -->
-        <div class="grid-cell">R1:C2</div>
-        <div class="grid-cell">R1:C3</div>
-        <div class="grid-cell">R1:C4</div>
-        <div class="grid-cell">R1:C5</div>
-        <div class="grid-cell">R1:C6</div>
-        <div class="grid-cell">R1:C7</div>
-        <div class="grid-cell">R1:C8</div>
-        <div class="grid-cell">R1:C9</div>
-        <div class="grid-cell">R1:C10</div>
-        <!-- (سایر سلول‌های ماتریکس طبق ساختار اصلی شما...) -->
+        <!-- سلول‌های ماتریکس اصلی (D01 تا لایه‌های دیگر) -->
+        <div id="layer-D01" class="grid-cell relative"></div>
+        <div id="layer-D02" class="grid-cell relative"></div>
+        <div id="layer-D03" class="grid-cell relative"></div>
+        <div id="layer-D04" class="grid-cell relative"></div>
+        <div id="layer-D05" class="grid-cell relative"></div>
+        <div id="layer-D06" class="grid-cell relative"></div>
+        <div id="layer-D07" class="grid-cell relative"></div>
+        <div id="layer-D08" class="grid-cell relative"></div>
+        <div id="layer-D09" class="grid-cell relative"></div>
+        <div id="layer-D10" class="grid-cell relative"></div>
+        <!-- (و مابقی سلول‌های گرید اصلی شما...) -->
     </main>
 
-    <!-- نوار وضعیت پایین صفحه -->
-    <footer class="fixed bottom-0 left-0 right-0 h-[45px] bg-slate-950/90 border-t border-amber-500/20 px-4 flex items-center justify-between z-[9999] text-[10px] font-mono">
-        <span class="text-amber-400">Grid: 20×10 Master | SEC: Active</span>
-        <div class="flex items-center gap-2">
-            <span id="footerStatusText" class="text-slate-300">سیستم ماتریکس فعال</span>
-            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-        </div>
-    </footer>
-
-    <!-- بارگذاری ماژول‌های مستقل پروژه‌تان -->
+    <!-- بارگذاری ماژول‌های مستقل پروژه‌تان (در پایین صفحه برای جلوگیری از اختلال در لایه‌ها) -->
     <script src="D09-seasonal-theme.js"></script>
     <script src="D07-audio.js"></script>
     <script src="D01-translate.js"></script>
 
-    <!-- اسکریپت هماهنگ‌ساز پایین صفحه با اتاق فرمان -->
+    <!-- اسکریپت هماهنگ‌ساز با اتاق فرمان -->
     <script>
         window.addEventListener('novoLanguageChanged', (e) => {
             const lang = e.detail.lang;
-            const statusEl = document.getElementById('footerStatusText');
-            if (statusEl) {
-                statusEl.innerText = window.NovoI18n.t('systemActive');
-            }
+            console.log("Language updated globally:", lang);
         });
     </script>
 </body>
